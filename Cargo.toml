@@ -1,0 +1,11 @@
+[workspace]
+members = ["crates/renderer", "crates/wasm"]
+resolver = "2"
+
+[workspace.package]
+edition = "2024"
+license = "Apache-2.0"
+
+[profile.release]
+opt-level = "s"
+lto = true
