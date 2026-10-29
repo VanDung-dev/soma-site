@@ -25,6 +25,8 @@ const omittedStructures = new Set([
   'Hyoid bone',
   'Thyroid cartilage',
   'Cricoid cartilage',
+  'Arytenoid cartilage',
+  'Corniculate cartilage',
   'Lateral process of nasal septal cartilage',
   'Nasal septal cartilage',
   'Major alar cartilage',

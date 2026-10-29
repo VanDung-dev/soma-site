@@ -51,6 +51,8 @@ test('model hides the requested structures on both sides', () => {
   hideOmittedStructures(model);
   const hidden = model.children.filter((object) => !object.visible).map((object) => object.userData.source_name).sort();
   assert.deepEqual(hidden, [
+    'Arytenoid cartilage', 'Arytenoid cartilage',
+    'Corniculate cartilage', 'Corniculate cartilage',
     'Cricoid cartilage', 'Hyoid bone',
     'Lateral process of nasal septal cartilage', 'Lateral process of nasal septal cartilage',
     'Major alar cartilage', 'Major alar cartilage',

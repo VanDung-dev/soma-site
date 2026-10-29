@@ -1,20 +1,20 @@
 use glam::{Mat4, Vec3};
 
 const POSES: [[f64; 5]; 8] = [
-    [1.59, 0.26, -1.57, 0.0, -0.27],
-    [0.87, 2.30, 0.0, 0.0, -0.18],
-    [1.59, 0.32, 0.0, 0.0, -0.20],
-    [1.19, 0.96, 0.22, 0.0, -0.18],
-    [1.25, 0.50, 0.0, 0.0, -0.20],
-    [1.06, 0.98, 0.0, 0.0, -0.17],
-    [0.51, 1.10, 0.0, 0.0, -0.17],
-    [1.59, 0.26, 1.57, 0.0, 0.27],
+    [1.59, 0.26, -1.57, 0.0, -0.18],
+    [0.87, 2.109, 0.0, 0.0, -0.12],
+    [1.59, 0.26, 0.0, 0.0, 0.0],
+    [1.19, 0.898, 0.22, 0.0, 0.0],
+    [1.25, 0.485, 0.0, 0.0, 0.0],
+    [1.06, 0.903, 0.0, 0.0, 0.0],
+    [0.51, 1.246, 0.0, 0.0, 0.0],
+    [1.59, 0.26, 1.57, 0.0, 0.22],
 ];
 
 const FOCUS_GROUPS: [Option<usize>; 8] = [None, None, Some(1), Some(2), Some(0), Some(3), Some(4), None];
 
 fn emphasis(chapter: usize, group: usize) -> f64 {
-    if FOCUS_GROUPS[chapter].is_none_or(|focused| focused == group) { 1.0 } else { 0.08 }
+    if FOCUS_GROUPS[chapter].is_none_or(|focused| focused == group) { 1.0 } else { 0.03 }
 }
 
 #[derive(Default)]
@@ -180,14 +180,14 @@ mod tests {
             let frame = ScrollCamera::default().frame(chapter as f64, true, 1.0);
             assert!(frame[3] * 2.0 < POSES[1][1]);
             for group in 0..6 {
-                assert_eq!(frame[10 + group], if group == focused { 1.0 } else { 0.08 });
+                assert_eq!(frame[10 + group], if group == focused { 1.0 } else { 0.03 });
             }
         }
         for chapter in [0.0, 1.0, 7.0] {
             assert_eq!(&ScrollCamera::default().frame(chapter, false, 1.0)[10..], &[1.0; 6]);
         }
         for progress in [2.1, 2.5, 3.5, 5.5, 6.9] {
-            assert!(ScrollCamera::default().frame(progress, false, 1.0)[10..].iter().all(|alpha| *alpha >= 0.08 && *alpha <= 1.0));
+            assert!(ScrollCamera::default().frame(progress, false, 1.0)[10..].iter().all(|alpha| *alpha >= 0.03 && *alpha <= 1.0));
         }
     }
 
