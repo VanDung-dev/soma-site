@@ -1,0 +1,18 @@
+Human Atlas Site
+Copyright (c) 2026 Nguyễn Lê Văn Dũng
+
+Original website source code is licensed under Apache-2.0. See LICENSE.
+Design tokens, fonts, skull preview, app icon and skeletal model were copied
+from Human Atlas Rust. No other anatomy model packages are included.
+
+Model: Z-Anatomy, Gauthier Kervyn and contributors, based on BodyParts3D
+by the Database Center for Life Science. Model-derived media retain their
+upstream licenses and component-specific conditions. See public/models/
+z-anatomy/ATTRIBUTION.md, public/home/ATTRIBUTION.md and public/icons/ATTRIBUTION.md.
+Fonts: SIL Open Font License. See public/fonts/*-OFL.txt.
+Three.js: MIT. See public/licenses/three-MIT.txt.
+
+Material Line Icons (line-md)
+Copyright 2020 Vjacheslav Trushkin. MIT License.
+See public/licenses/line-md-MIT.txt.
+https://github.com/cyberalien/line-md/blob/main/license.txt
