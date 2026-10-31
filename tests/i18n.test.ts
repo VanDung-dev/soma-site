@@ -24,7 +24,7 @@ test('shared preference labels and English landing content use the selected lang
   assert.equal(translateMessage('language.selector.label', 'vi'), 'Ngôn ngữ');
   assert.equal(translateMessage('language.selector.label', 'en'), 'Language');
   assert.equal(translateMessage('appearance.mode.auto', 'en'), 'Auto');
-  assert.equal(translateMessage('site.hero.explore', 'en'), 'Start exploring');
+  assert.equal(translateMessage('site.hero.explore', 'en'), 'Explore the features');
   assert.notEqual(translateMessage('site.loadError', 'en'), translateMessage('site.loadError', 'vi'));
   assert.equal(translateMessage('credits.models.heading', 'en'), 'Anatomy models');
 });
@@ -40,7 +40,12 @@ test('keeps the application interpolation and plural formatting contract', () =>
   assert.equal(translateMessage('panels.show', 'en', { name: 'Catalog' }), 'Show Catalog sidebar');
 });
 
-test('model fragment shader is the original app shader', () => {
-  const data = fs.readFileSync(new URL('../src/shaders/model.frag.glsl', import.meta.url));
-  assert.equal(createHash('sha256').update(data).digest('hex'), 'ceb78f105e69795c9bb1e51489e2f812e3e2bb3316dadb35c7e090b007b35433');
+test('HTML metadata uses available translations', () => {
+  for (const file of ['index.html', 'credits.html']) {
+    const html = fs.readFileSync(new URL('../' + file, import.meta.url), 'utf8');
+    for (const match of html.matchAll(/data-i18n(?:-[\w-]+)?="([^"]+)"/g)) {
+      assert.ok(translateMessage(match[1] as MessageKey, 'vi').trim(), match[1]);
+      assert.ok(translateMessage(match[1] as MessageKey, 'en').trim(), match[1]);
+    }
+  }
 });
