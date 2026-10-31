@@ -3,6 +3,7 @@ precision highp float;
 in vec2 ndc;
 uniform mat4 inverse_projection;
 uniform vec4 sphere_origin;
+uniform float backdrop_opacity;
 out vec4 output_color;
 void main() {
     vec4 near_point = inverse_projection * vec4(ndc, -1.0, 1.0);
@@ -26,5 +27,5 @@ void main() {
     float equator = 1.0 - smoothstep(0.0, width * 0.2618, abs(normal.y));
     float pole_fade = smoothstep(0.0, 0.15, 1.0 - abs(normal.y));
     vec3 color = mix(vec3(0.56, 0.64, 0.58), vec3(0.36, 0.46, 0.40), equator);
-    output_color = vec4(color, max(grid * pole_fade * 0.50, equator * 0.65));
+    output_color = vec4(color, max(grid * pole_fade * 0.50, equator * 0.65) * backdrop_opacity);
 }

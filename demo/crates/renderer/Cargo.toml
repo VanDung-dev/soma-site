@@ -1,0 +1,12 @@
+[package]
+name = "renderer"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+brotli-decompressor = "6.2"
+glam = { workspace = true, features = ["serde"] }
+serde.workspace = true
+gltf = { version = "1.4", default-features = false, features = ["utils", "extras"] }
+serde_json.workspace = true
