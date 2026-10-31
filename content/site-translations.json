@@ -5,179 +5,297 @@
   "scope": "Website landing and credits copy in Vietnamese and English; shared application text remains in ui-translations.json and anatomy names in anatomy-terminology.json.",
   "message_format": "ICU MessageFormat 1",
   "messages": {
-    "site.title": {"vi": "Human Atlas — Một góc nhìn mới về cơ thể người", "en": "Human Atlas — A new perspective on the human body"},
-    "site.description": {"vi": "Khám phá giải phẫu người qua những góc nhìn ba chiều. Một cấu trúc, một mối liên hệ và những điều chờ bạn khám phá qua từng nhịp cuộn.", "en": "Explore human anatomy in three dimensions. A structure, a connection, and more to discover with every scroll."},
-    "site.skip": {"vi": "Đến nội dung chính", "en": "Skip to main content"},
-    "site.brand": {"vi": "Human Atlas", "en": "Human Atlas"},
-    "site.stage.system": {"vi": "HỆ XƯƠNG NGƯỜI", "en": "THE HUMAN SKELETON"},
-    "site.figure.01": {"vi": "Cranium", "en": "Cranium"},
-    "site.figure.02": {"vi": "Systema skeletale", "en": "Systema skeletale"},
-    "site.figure.03": {"vi": "Bộ xương đầu", "en": "Head skeleton"},
-    "site.figure.04": {"vi": "Bộ xương cột sống", "en": "Vertebral column"},
-    "site.loading": {"vi": "Đang chuẩn bị mô hình 3D…", "en": "Preparing the 3D model…"},
-    "site.loadError": {"vi": "Chưa thể hiển thị 3D. Bạn vẫn có thể cuộn để khám phá nội dung.", "en": "The 3D model could not be displayed. You can still scroll to explore the content."},
-    "site.contextLost": {"vi": "Kết nối đồ họa bị gián đoạn. Bạn có thể tải lại mô hình.", "en": "The graphics connection was interrupted. You can reload the model."},
-    "site.retry": {"vi": "Thử tải lại mô hình", "en": "Retry loading the model"},
-    "site.hero.eyebrow": {"vi": "GIẢI PHẪU. MỞ RA TỪNG GÓC NHÌN.", "en": "ANATOMY. A NEW VIEW WITH EVERY TURN."},
-    "site.hero.title1": {"vi": "Cơ thể người.", "en": "The human body."},
-    "site.hero.title2": {"vi": "Một góc nhìn", "en": "A new"},
-    "site.hero.title3": {"vi": "mới.", "en": "perspective."},
-    "site.hero.description": {"vi": "Đến gần một cấu trúc, rồi khám phá những mối liên hệ phía sau nó. Một hành trình qua cơ thể người, theo từng nhịp cuộn.", "en": "Look closer at a structure, then discover the relationships beyond it. A journey through the human body, one scroll at a time."},
-    "site.hero.explore": {"vi": "Bắt đầu khám phá", "en": "Start exploring"},
-    "site.hero.note": {"vi": "Cuộn chậm. Quan sát kỹ hơn.", "en": "Scroll slowly. Look a little closer."},
-    "site.scroll": {"vi": "CUỘN ĐỂ KHÁM PHÁ", "en": "SCROLL TO EXPLORE"},
-    "site.hero.bottom": {"vi": "HÀNH TRÌNH NHẬP MÔN · HỆ XƯƠNG", "en": "AN INTRODUCTORY JOURNEY · THE SKELETON"},
-    "site.structure.eyebrow": {"vi": "CẤU TRÚC VÀ LIÊN HỆ", "en": "STRUCTURE AND CONNECTION"},
-    "site.structure.title1": {"vi": "Bộ xương trục.", "en": "The axial skeleton."},
-    "site.structure.title2": {"vi": "Bộ xương chi.", "en": "The appendicular skeleton."},
-    "site.structure.description": {"vi": "Bắt đầu bằng hai phần lớn trước khi đi sâu vào từng vùng. Hình bên thể hiện bộ xương nhìn từ phía trước.", "en": "Start with the two main divisions before exploring each region. The model shows an anterior view of the skeleton."},
-    "site.structure.detailTitle": {"vi": "Không gian để hiểu rõ hơn", "en": "Room to understand more"},
-    "site.structure.detail": {"vi": "Đến gần một chi tiết, rồi lùi lại để thấy nó thuộc về đâu.", "en": "Move closer to a detail, then step back to see where it belongs."},
-    "site.structure.bottom": {"vi": "THAY ĐỔI KHOẢNG CÁCH. MỞ RỘNG GÓC NHÌN.", "en": "CHANGE THE DISTANCE. WIDEN YOUR VIEW."},
-    "site.whole.eyebrow": {"vi": "GÓC NHÌN KHÁC", "en": "ANOTHER PERSPECTIVE"},
-    "site.whole.title1": {"vi": "Cùng một cấu trúc.", "en": "The same structure."},
-    "site.whole.title2": {"vi": "Một góc nhìn khác.", "en": "Another perspective."},
-    "site.whole.description": {"vi": "Đổi góc nhìn để tìm lại những đường nét quen thuộc. Bạn có nhận ra chúng từ phía bên kia?", "en": "Change your viewpoint and find familiar contours again. Can you recognize them from the other side?"},
-    "site.backStart": {"vi": "TRỞ LẠI ĐIỂM BẮT ĐẦU", "en": "BACK TO THE BEGINNING"},
-    "site.copyright": {"vi": "© 2026 Nguyễn Lê Văn Dũng", "en": "© 2026 Nguyễn Lê Văn Dũng"},
-    "site.modelCredit": {"vi": "Mô hình: Z-Anatomy / BodyParts3D", "en": "Models: Z-Anatomy / BodyParts3D"},
-    "site.credits": {"vi": "Nguồn tài nguyên & giấy phép", "en": "Asset sources & licenses"},
-    "site.top": {"vi": "Về đầu trang", "en": "Back to top"},
-    "credits.title": {"vi": "Nguồn tài nguyên — Human Atlas", "en": "Asset credits — Human Atlas"},
-    "credits.back": {"vi": "Trở về Human Atlas", "en": "Back to Human Atlas"},
-    "credits.heading1": {"vi": "Nguồn tài nguyên", "en": "Asset sources"},
-    "credits.heading2": {"vi": "& giấy phép.", "en": "& licenses."},
-    "credits.code": {"vi": "Human Atlas © 2026 Nguyễn Lê Văn Dũng. Mã nguồn gốc của trang được cấp phép theo Apache License 2.0. Mô hình, ảnh và font giữ giấy phép riêng.", "en": "Human Atlas © 2026 Nguyễn Lê Văn Dũng. Original website source code is licensed under Apache License 2.0. Models, images and fonts retain their own licenses."},
-    "credits.codeLink": {"vi": "Giấy phép mã nguồn Apache-2.0", "en": "Apache-2.0 source code license"},
-    "credits.models.heading": {"vi": "Mô hình giải phẫu", "en": "Anatomy models"},
-    "credits.models.source": {"vi": "Mô hình hệ xương được sao chép từ bộ tài nguyên Human Atlas, có nguồn gốc từ Z-Anatomy. Ghi công Gauthier Kervyn và các cộng tác viên Z-Anatomy; dựa trên BodyParts3D của Database Center for Life Science.", "en": "The skeletal model was copied from Human Atlas assets derived from Z-Anatomy. Credit: Gauthier Kervyn and the Z-Anatomy contributors, based on BodyParts3D by the Database Center for Life Science."},
-    "credits.models.terms": {"vi": "Tài nguyên Z-Anatomy được phân phối theo CC BY-SA 4.0; đầu vào BodyParts3D gốc theo CC BY-SA 2.1 Japan. Các thành phần có thể có điều kiện riêng. Trang chỉ dùng gói hệ xương, không kèm các gói cơ quan khác. Chưa có ánh xạ độc lập đầy đủ từ từng đối tượng đến giấy phép thành phần.", "en": "Z-Anatomy assets are distributed under CC BY-SA 4.0; the original BodyParts3D inputs use CC BY-SA 2.1 Japan. Individual components may have additional terms. This site includes only the skeletal package. A complete, independently verified object-to-license mapping is not available."},
-    "credits.models.link": {"vi": "Ghi công đầy đủ và điều khoản từng thành phần", "en": "Full credits and component terms"},
-    "credits.models.changes": {"vi": "Gói GLB được giải nén từ bản Brotli, giữ nguyên hình học, tên và metadata nguồn. Camera và cách trình bày được điều chỉnh cho trang giới thiệu. Không bổ sung hay tái tạo bề mặt giải phẫu.", "en": "The GLB package was decompressed from Brotli, preserving source geometry, names and metadata. Camera and presentation are adapted for this site. No anatomical surfaces were added or reconstructed."},
-    "credits.images.heading": {"vi": "Ảnh và biểu tượng", "en": "Images and icons"},
-    "credits.images.description": {"vi": "Biểu tượng ứng dụng được sao chép từ Human Atlas, có nguồn gốc từ ảnh sọ của mô hình Z-Anatomy và giữ điều khoản tài nguyên nguồn.", "en": "The app icon was copied from Human Atlas. It is derived from the Z-Anatomy skull preview and retains the terms of its source assets."},
-    "credits.images.preview": {"vi": "Ghi công ảnh sọ", "en": "Skull image credits"},
-    "credits.images.icon": {"vi": "Ghi công biểu tượng ứng dụng", "en": "App icon credits"},
-    "credits.fonts.heading": {"vi": "Kiểu chữ và thư viện", "en": "Fonts and libraries"},
-    "credits.fonts.description": {"vi": "Lato và Merriweather được sao chép từ ứng dụng, lưu tại trang và giữ SIL Open Font License. Các icon giao diện dùng đúng tài nguyên Material Line Icons (line-md) của ứng dụng, theo MIT License.", "en": "Lato and Merriweather are copied from the application, served locally and retain the SIL Open Font License. Interface icons use the application's Material Line Icons (line-md) assets under the MIT License."},
-    "credits.lato": {"vi": "Lato — giấy phép font", "en": "Lato — font license"},
-    "credits.merriweather": {"vi": "Merriweather — giấy phép font", "en": "Merriweather — font license"},
-    "credits.icons": {"vi": "Material Line Icons — MIT License", "en": "Material Line Icons — MIT License"},
-    "credits.three": {"vi": "Three.js — MIT License", "en": "Three.js — MIT License"},
-    "credits.scope.heading": {"vi": "Phạm vi sử dụng", "en": "Scope of use"},
-    "credits.scope.description": {"vi": "Tài nguyên thể hiện giải phẫu tham chiếu nam trưởng thành. Nội dung dùng cho giáo dục; chưa được thẩm định y khoa độc lập và không thay thế tư vấn y khoa. Danh pháp tiếng Việt là bản nháp đang chờ thẩm định.", "en": "The assets depict adult male reference anatomy. This educational content has not received independent medical review and does not replace medical advice. Vietnamese terminology is a draft awaiting review."},
-    "site.figure.index.01": {"vi": "HÌNH 01", "en": "FIG. 01"},
-    "site.figure.index.02": {"vi": "HÌNH 02", "en": "FIG. 02"},
-    "site.figure.index.03": {"vi": "HÌNH 03", "en": "FIG. 03"},
-    "site.figure.index.04": {"vi": "HÌNH 04", "en": "FIG. 04"},
-    "site.overview.head": {"vi": "Hộp sọ", "en": "Skull"},
-    "site.overview.chest": {"vi": "Lồng ngực", "en": "Rib cage"},
-    "site.overview.pelvis": {"vi": "Khung chậu", "en": "Pelvis"},
-    "site.figure.05": {"vi": "Bộ xương ngực", "en": "Thoracic skeleton"},
-    "site.figure.06": {"vi": "Bộ xương chi trên", "en": "Upper-limb skeleton"},
-    "site.figure.index.05": {"vi": "HÌNH 05", "en": "FIG. 05"},
-    "site.figure.index.06": {"vi": "HÌNH 06", "en": "FIG. 06"},
-    "site.skeleton.thorax": {"vi": "Bộ xương ngực", "en": "Thoracic skeleton"},
-    "site.skeleton.head": {"vi": "Bộ xương đầu", "en": "Head skeleton"},
-    "site.skeleton.spine": {"vi": "Bộ xương cột sống", "en": "Vertebral column"},
-    "site.skeleton.upper": {"vi": "Bộ xương chi trên", "en": "Upper-limb skeleton"},
-    "site.skeleton.lower": {"vi": "Bộ xương chi dưới", "en": "Lower-limb skeleton"},
-    "site.head.eyebrow": {"vi": "BỘ XƯƠNG ĐẦU", "en": "HEAD SKELETON"},
-    "site.head.title1": {"vi": "Sọ não", "en": "The brain case"},
-    "site.head.title2": {"vi": "và sọ mặt.", "en": "and facial bones."},
-    "site.head.description": {"vi": "Quan sát phần bao quanh não, rồi tìm các xương tạo nên khuôn mặt.", "en": "Observe the brain case, then locate the bones of the face."},
-    "site.head.bottom": {"vi": "BỘ XƯƠNG ĐẦU", "en": "HEAD SKELETON"},
-    "site.spine.eyebrow": {"vi": "BỘ XƯƠNG CỘT SỐNG", "en": "VERTEBRAL COLUMN"},
-    "site.spine.title1": {"vi": "Năm vùng.", "en": "Five regions."},
-    "site.spine.title2": {"vi": "Một trục nâng đỡ.", "en": "One supporting column."},
-    "site.spine.description": {"vi": "Lần từ vùng cổ xuống xương cùng và xương cụt để định hướng các vùng cột sống.", "en": "Trace the spine from the neck to the sacrum and coccyx."},
-    "site.spine.bottom": {"vi": "BỘ XƯƠNG CỘT SỐNG", "en": "VERTEBRAL COLUMN"},
-    "site.thorax.eyebrow": {"vi": "BỘ XƯƠNG NGỰC", "en": "THORACIC SKELETON"},
-    "site.thorax.title1": {"vi": "Lồng ngực.", "en": "The thoracic cage."},
-    "site.thorax.title2": {"vi": "Sườn và xương ức.", "en": "Ribs and sternum."},
-    "site.thorax.description": {"vi": "Nhận diện xương ức ở phía trước và các xương sườn ở hai bên.", "en": "Identify the sternum anteriorly and the ribs on either side."},
-    "site.thorax.bottom": {"vi": "BỘ XƯƠNG NGỰC", "en": "THORACIC SKELETON"},
-    "site.upper.eyebrow": {"vi": "BỘ XƯƠNG CHI TRÊN", "en": "UPPER-LIMB SKELETON"},
-    "site.upper.title1": {"vi": "Từ đai vai", "en": "From the shoulders"},
-    "site.upper.title2": {"vi": "đến bàn tay.", "en": "to the hands."},
-    "site.upper.description": {"vi": "Theo thứ tự từ cánh tay qua cẳng tay đến bàn tay. Đai vai cũng được nhấn trong hình.", "en": "Follow the arm, forearm and hand. The shoulder girdle is also highlighted."},
-    "site.upper.bottom": {"vi": "BỘ XƯƠNG CHI TRÊN", "en": "UPPER-LIMB SKELETON"},
-    "site.lower.eyebrow": {"vi": "BỘ XƯƠNG CHI DƯỚI", "en": "LOWER-LIMB SKELETON"},
-    "site.lower.title1": {"vi": "Từ đai chậu", "en": "From the pelvis"},
-    "site.lower.title2": {"vi": "đến bàn chân.", "en": "to the feet."},
-    "site.lower.description": {"vi": "Quan sát xương đùi, các xương cẳng chân và bàn chân. Đai chậu cũng được nhấn trong hình.", "en": "Observe the femur, leg bones and foot. The pelvic girdle is also highlighted."},
-    "site.lower.bottom": {"vi": "BỘ XƯƠNG CHI DƯỚI", "en": "LOWER-LIMB SKELETON"},
-    "site.figure.07": {"vi": "Bộ xương chi dưới", "en": "Lower-limb skeleton"},
-    "site.figure.index.07": {"vi": "HÌNH 07", "en": "FIG. 07"},
-    "site.figure.08": {"vi": "Cranium", "en": "Cranium"},
-    "site.figure.index.08": {"vi": "HÌNH 08", "en": "FIG. 08"},
-    "study.index": {"vi": "Mục lục bài học", "en": "Lesson index"},
-    "study.nav.structure": {"vi": "01 Tổng quan", "en": "01 Overview"},
-    "study.nav.head": {"vi": "02 Đầu", "en": "02 Head"},
-    "study.nav.spine": {"vi": "03 Cột sống", "en": "03 Spine"},
-    "study.nav.thorax": {"vi": "04 Lồng ngực", "en": "04 Thorax"},
-    "study.nav.upper": {"vi": "05 Chi trên", "en": "05 Upper limb"},
-    "study.nav.lower": {"vi": "06 Chi dưới", "en": "06 Lower limb"},
-    "study.nav.whole": {"vi": "07 Ôn tập", "en": "07 Review"},
-    "study.goal": {"vi": "MỤC TIÊU", "en": "LEARNING GOAL"},
-    "study.check": {"vi": "Tự kiểm tra", "en": "Check your knowledge"},
-    "study.answer": {"vi": "Xem đáp án và giải thích", "en": "Reveal answer and explanation"},
-    "study.source": {"vi": "Đọc tiếp", "en": "Read further"},
-    "study.newTab": {"vi": " (mở trong tab mới)", "en": " (opens in a new tab)"},
-    "study.experimental": {"vi": "Bản thử nghiệm · Phạm vi & cách học", "en": "Experimental · Scope & study approach"},
-    "site.structure.objective": {"vi": "Phân biệt bộ xương trục với bộ xương chi.", "en": "Distinguish the axial from the appendicular skeleton."},
-    "site.structure.fact1": {"vi": "Bộ xương trục gồm xương đầu, cột sống và lồng ngực.", "en": "The axial skeleton includes the skull, vertebral column and thoracic cage."},
-    "site.structure.fact2": {"vi": "Bộ xương chi gồm các đai vai, đai chậu và xương của các chi.", "en": "The appendicular skeleton includes the girdles and limb bones."},
-    "site.structure.question": {"vi": "Cột sống thuộc bộ xương trục hay bộ xương chi?", "en": "Does the vertebral column belong to the axial or appendicular skeleton?"},
-    "site.structure.answer": {"vi": "Bộ xương trục. Hãy lần theo vị trí trung tâm của cột sống trên mô hình.", "en": "The axial skeleton. Trace the central position of the vertebral column on the model."},
-    "site.head.objective": {"vi": "Phân biệt sọ não với sọ mặt.", "en": "Distinguish the brain case from the facial skeleton."},
-    "site.head.fact1": {"vi": "Sọ não bao quanh và bảo vệ não; sọ mặt tạo khung cho khuôn mặt.", "en": "The brain case protects the brain; facial bones form the framework of the face."},
-    "site.head.fact2": {"vi": "Các đường khớp nối phần lớn xương sọ. Xương hàm dưới có thể chuyển động.", "en": "Sutures unite most skull bones. The mandible is movable."},
-    "site.head.question": {"vi": "Xương nào tạo nên hàm dưới và có thể chuyển động?", "en": "Which movable bone forms the lower jaw?"},
-    "site.head.answer": {"vi": "Xương hàm dưới. Hãy xác định nó bên dưới hàm trên trên mô hình.", "en": "The mandible. Locate it below the upper jaw on the model."},
-    "site.spine.objective": {"vi": "Nhận biết thứ tự các vùng của cột sống.", "en": "Identify the regions of the vertebral column in order."},
-    "site.spine.fact1": {"vi": "Từ trên xuống: cổ, ngực, thắt lưng, cùng và cụt.", "en": "From above: cervical, thoracic, lumbar, sacral and coccygeal regions."},
-    "site.spine.fact2": {"vi": "Các vùng cổ, ngực và thắt lưng lần lượt có 7, 12 và 5 đốt sống.", "en": "The cervical, thoracic and lumbar regions have 7, 12 and 5 vertebrae respectively."},
-    "site.spine.question": {"vi": "Vùng nào nằm giữa cột sống ngực và xương cùng?", "en": "Which region lies between the thoracic spine and the sacrum?"},
-    "site.spine.answer": {"vi": "Vùng thắt lưng, gồm các đốt L1–L5.", "en": "The lumbar region, comprising L1–L5."},
-    "site.thorax.objective": {"vi": "Nhận biết xương ức và quan hệ của sườn với cột sống ngực.", "en": "Identify the sternum and the relationship of ribs to the thoracic spine."},
-    "site.thorax.fact1": {"vi": "Lồng ngực góp phần bảo vệ tim và phổi.", "en": "The thoracic cage helps protect the heart and lungs."},
-    "site.thorax.fact2": {"vi": "Sườn liên hệ phía sau với các đốt sống ngực. Cột sống được làm mờ để dễ quan sát sườn.", "en": "Ribs attach posteriorly to thoracic vertebrae. The spine is faded here to emphasize the ribs."},
-    "site.thorax.question": {"vi": "Xương nào nằm ở đường giữa phía trước lồng ngực?", "en": "Which bone lies in the anterior midline of the thoracic cage?"},
-    "site.thorax.answer": {"vi": "Xương ức. Hãy tìm nơi các sườn hướng về đường giữa phía trước.", "en": "The sternum. Find where the ribs approach the anterior midline."},
-    "site.upper.objective": {"vi": "Phân biệt xương cánh tay, xương quay và xương trụ.", "en": "Distinguish the humerus, radius and ulna."},
-    "site.upper.fact1": {"vi": "Cánh tay có xương cánh tay; cẳng tay có xương quay và xương trụ.", "en": "The arm contains the humerus; the forearm contains the radius and ulna."},
-    "site.upper.fact2": {"vi": "Ở tư thế giải phẫu, xương quay nằm phía ngoài, xương trụ nằm phía trong.", "en": "In anatomical position, the radius lies laterally and the ulna medially."},
-    "site.upper.question": {"vi": "Hai xương của cẳng tay là những xương nào?", "en": "Which two bones form the forearm?"},
-    "site.upper.answer": {"vi": "Xương quay và xương trụ. Xương cánh tay nằm phía trên khuỷu.", "en": "The radius and ulna. The humerus lies above the elbow."},
-    "site.lower.objective": {"vi": "Phân biệt xương đùi, xương chày và xương mác.", "en": "Distinguish the femur, tibia and fibula."},
-    "site.lower.fact1": {"vi": "Xương đùi nằm giữa háng và gối. Xương chày và xương mác nằm ở cẳng chân.", "en": "The femur lies between hip and knee. The tibia and fibula form the leg."},
-    "site.lower.fact2": {"vi": "Xương chày lớn hơn, nằm phía trong và chịu trọng lượng; xương mác mảnh hơn, nằm phía ngoài.", "en": "The tibia is larger, medial and weight-bearing; the fibula is slender and lateral."},
-    "site.lower.question": {"vi": "Xương nào lớn hơn và nằm phía trong cẳng chân?", "en": "Which larger bone lies medially in the leg?"},
-    "site.lower.answer": {"vi": "Xương chày. Đối chiếu với xương mác mảnh hơn ở phía ngoài.", "en": "The tibia. Compare it with the slender fibula laterally."},
-    "site.whole.objective": {"vi": "Tự trình bày lại cách chia bộ xương bằng lời của mình.", "en": "Explain the divisions of the skeleton in your own words."},
-    "site.whole.fact1": {"vi": "Tự kể lại các vùng vừa học, sau đó quay lại mô hình để kiểm tra.", "en": "Recall the regions you studied, then revisit the model to check."},
-    "site.whole.fact2": {"vi": "Với mỗi cấu trúc, tự hỏi: tên gì, ở đâu và liên hệ với phần nào?", "en": "For each structure, ask: what is it, where is it, and what is it related to?"},
-    "site.whole.question": {"vi": "Xương đùi và cột sống có thuộc cùng một phần của bộ xương không?", "en": "Do the femur and vertebral column belong to the same skeletal division?"},
-    "site.whole.answer": {"vi": "Xương đùi thuộc bộ xương chi; cột sống thuộc bộ xương trục.", "en": "The femur belongs to the appendicular skeleton; the vertebral column to the axial skeleton."},
-    "study.method.eyebrow": {"vi": "PHƯƠNG PHÁP HỌC", "en": "STUDY APPROACH"},
-    "study.method.title": {"vi": "Học một vùng. Hiểu đến nơi.", "en": "One region. A clearer understanding."},
-    "study.method.step1.title": {"vi": "Nhận diện", "en": "Identify"},
-    "study.method.step1.body": {"vi": "Đọc mục tiêu, tìm cấu trúc trên hình và gọi tên. Nếu chưa xác định được, quay lại góc nhìn tổng quan.", "en": "Read the goal, locate the structure and name it. Return to the overview if you cannot place it."},
-    "study.method.step2.title": {"vi": "Kết nối", "en": "Connect"},
-    "study.method.step2.body": {"vi": "Mô tả vị trí và quan hệ bằng lời của mình. Đọc tiếp mục sách được dẫn để tìm hiểu các mốc giải phẫu chi tiết.", "en": "Describe positions and relationships in your own words. Follow the linked textbook section to study detailed landmarks."},
-    "study.method.step3.title": {"vi": "Tự nhớ lại", "en": "Recall"},
-    "study.method.step3.body": {"vi": "Trả lời câu hỏi trước khi mở đáp án. Quay lại bài sau một thời gian và thử gọi tên mà không nhìn phần giải thích.", "en": "Answer before revealing the explanation. Return later and try naming structures without looking at the text."},
-    "study.scope.title": {"vi": "Phạm vi của học liệu thử nghiệm", "en": "Scope of this experimental resource"},
-    "study.scope.body": {"vi": "Hành trình này giới thiệu hệ xương cho học sinh, sinh viên; chưa bao quát toàn bộ môn giải phẫu, mô học hay giải phẫu lâm sàng. Mô hình tham chiếu nam trưởng thành không đại diện cho mọi biến thể cơ thể.", "en": "This journey introduces skeletal anatomy for students; it does not cover the full anatomy curriculum, histology or clinical anatomy. The adult male reference model does not represent all anatomical variation."},
-    "study.scope.review": {"vi": "Nội dung do dự án biên soạn dựa trên các mục OpenStax được dẫn tại từng chương. Nội dung, mô hình và danh pháp tiếng Việt chưa được thẩm định y khoa độc lập. Hãy dùng cùng giáo trình và hướng dẫn của thầy cô.", "en": "The project authors prepared the text using the OpenStax sections linked in each chapter. Content, models and Vietnamese terminology have not received independent medical review. Use this resource alongside your course materials and teachers’ guidance."},
-    "study.restart": {"vi": "Quay lại bài tổng quan", "en": "Return to the overview"},
-    "study.heroTitle": {"vi": "Cơ thể người. Một góc nhìn mới.", "en": "The human body. A new perspective."},
-    "study.discover": {"vi": "Quan sát kỹ hơn", "en": "Take a closer look"},
-    "site.download.eyebrow": {"vi": "HUMAN ATLAS CHO MÁY TÍNH", "en": "HUMAN ATLAS FOR DESKTOP"},
-    "site.download.title1": {"vi": "Tiếp tục hành trình.", "en": "Continue the journey."},
-    "site.download.title2": {"vi": "Trên máy của bạn.", "en": "On your computer."},
-    "site.download.description": {"vi": "Khám phá giải phẫu cùng Human Atlas trên máy tính. Khi bản cài đặt được phát hành, bạn sẽ tìm thấy bản tải cho Windows và macOS tại đây.", "en": "Explore anatomy with Human Atlas on your computer. Once the installers are released, you will find downloads for Windows and macOS here."},
-    "site.download.unavailable": {"vi": "Chưa phát hành", "en": "Not yet released"}
+    "site.skip": {
+      "vi": "Đến nội dung chính",
+      "en": "Skip to main content"
+    },
+    "site.brand": {
+      "vi": "Human Atlas",
+      "en": "Human Atlas"
+    },
+    "site.loading": {
+      "vi": "Đang chuẩn bị mô hình 3D…",
+      "en": "Preparing the 3D model…"
+    },
+    "site.loadError": {
+      "vi": "Chưa thể hiển thị 3D. Bạn vẫn có thể cuộn để khám phá nội dung.",
+      "en": "The 3D model could not be displayed. You can still scroll to explore the content."
+    },
+    "site.contextLost": {
+      "vi": "Kết nối đồ họa bị gián đoạn. Bạn có thể tải lại mô hình.",
+      "en": "The graphics connection was interrupted. You can reload the model."
+    },
+    "site.retry": {
+      "vi": "Thử tải lại mô hình",
+      "en": "Retry loading the model"
+    },
+    "site.hero.eyebrow": {
+      "vi": "HUMAN ATLAS · ỨNG DỤNG GIẢI PHẪU 3D",
+      "en": "HUMAN ATLAS · THE 3D ANATOMY APP"
+    },
+    "site.hero.title1": {
+      "vi": "Học giải phẫu.",
+      "en": "Study anatomy."
+    },
+    "site.hero.title2": {
+      "vi": "Trong không gian 3D.",
+      "en": "In 3D."
+    },
+    "site.hero.description": {
+      "vi": "Human Atlas giúp bạn tìm cấu trúc, quan sát vị trí và mối liên hệ trên mô hình 3D, rồi mở tài liệu để đọc tiếp. Một công cụ dùng cùng giáo trình và buổi thực hành giải phẫu của bạn.",
+      "en": "Human Atlas helps you find structures, explore their positions and relationships on a 3D model, and open related readings. A tool to use alongside your anatomy textbook and practical classes."
+    },
+    "site.hero.explore": {
+      "vi": "Tìm hiểu tính năng",
+      "en": "Explore the features"
+    },
+    "site.hero.note": {
+      "vi": "Ứng dụng đang phát triển · Giao diện Việt / Anh",
+      "en": "In development · Vietnamese / English interface"
+    },
+    "site.copyright": {
+      "vi": "© 2026 Nguyễn Lê Văn Dũng",
+      "en": "© 2026 Nguyễn Lê Văn Dũng"
+    },
+    "site.modelCredit": {
+      "vi": "Mô hình: Z-Anatomy / BodyParts3D",
+      "en": "Models: Z-Anatomy / BodyParts3D"
+    },
+    "site.credits": {
+      "vi": "Nguồn tài nguyên & giấy phép",
+      "en": "Asset sources & licenses"
+    },
+    "credits.back": {
+      "vi": "Trở về Human Atlas",
+      "en": "Back to Human Atlas"
+    },
+    "credits.heading1": {
+      "vi": "Nguồn tài nguyên",
+      "en": "Asset sources"
+    },
+    "credits.heading2": {
+      "vi": "& giấy phép.",
+      "en": "& licenses."
+    },
+    "credits.code": {
+      "vi": "Human Atlas © 2026 Nguyễn Lê Văn Dũng. Mã nguồn gốc của trang được cấp phép theo Apache License 2.0. Mô hình, ảnh và font giữ giấy phép riêng.",
+      "en": "Human Atlas © 2026 Nguyễn Lê Văn Dũng. Original website source code is licensed under Apache License 2.0. Models, images and fonts retain their own licenses."
+    },
+    "credits.codeLink": {
+      "vi": "Giấy phép mã nguồn Apache-2.0",
+      "en": "Apache-2.0 source code license"
+    },
+    "credits.models.heading": {
+      "vi": "Mô hình giải phẫu",
+      "en": "Anatomy models"
+    },
+    "credits.models.source": {
+      "vi": "Mô hình xương trên trang được lấy từ tài nguyên Human Atlas có nguồn gốc Z-Anatomy. Ghi công Gauthier Kervyn và các cộng tác viên Z-Anatomy; dựa trên BodyParts3D của Database Center for Life Science.",
+      "en": "The skeleton displayed here comes from Human Atlas assets derived from Z-Anatomy. Credit: Gauthier Kervyn and the Z-Anatomy contributors, based on BodyParts3D by the Database Center for Life Science."
+    },
+    "credits.models.terms": {
+      "vi": "Tài nguyên giữ các điều khoản và ghi công nguồn trong liên kết dưới. Các điều khoản riêng của từng thành phần được giữ trong ghi công đầy đủ.",
+      "en": "Assets retain the source terms and credits linked below, including the component-specific terms in the full attribution."
+    },
+    "credits.models.link": {
+      "vi": "Ghi công đầy đủ và điều khoản từng thành phần",
+      "en": "Full credits and component terms"
+    },
+    "credits.models.changes": {
+      "vi": "Bộ xương được giải nén nguyên bản, giữ hình học, vật liệu và biến đổi nguồn. Trang thay đổi góc nhìn và độ đậm của các nhóm xương để minh họa tính năng ứng dụng; không thay đổi hình học nguồn.",
+      "en": "The skeletal package is decompressed unchanged, retaining source geometry, materials and transforms. The page changes views and group visibility to illustrate app features without modifying source geometry."
+    },
+    "credits.images.heading": {
+      "vi": "Ảnh và biểu tượng",
+      "en": "Images and icons"
+    },
+    "credits.images.description": {
+      "vi": "Biểu tượng ứng dụng được sao chép từ Human Atlas, có nguồn gốc từ ảnh sọ của mô hình Z-Anatomy và giữ điều khoản tài nguyên nguồn.",
+      "en": "The app icon was copied from Human Atlas. It is derived from the Z-Anatomy skull preview and retains the terms of its source assets."
+    },
+    "credits.images.preview": {
+      "vi": "Ghi công ảnh sọ",
+      "en": "Skull image credits"
+    },
+    "credits.images.icon": {
+      "vi": "Ghi công biểu tượng ứng dụng",
+      "en": "App icon credits"
+    },
+    "credits.fonts.heading": {
+      "vi": "Kiểu chữ và thư viện",
+      "en": "Fonts and libraries"
+    },
+    "credits.fonts.description": {
+      "vi": "Lato và Merriweather được sao chép từ ứng dụng, lưu tại trang và giữ SIL Open Font License. Các icon giao diện dùng đúng tài nguyên Material Line Icons (line-md) của ứng dụng, theo MIT License.",
+      "en": "Lato and Merriweather are copied from the application, served locally and retain the SIL Open Font License. Interface icons use the application's Material Line Icons (line-md) assets under the MIT License."
+    },
+    "credits.lato": {
+      "vi": "Lato — giấy phép font",
+      "en": "Lato — font license"
+    },
+    "credits.merriweather": {
+      "vi": "Merriweather — giấy phép font",
+      "en": "Merriweather — font license"
+    },
+    "credits.icons": {
+      "vi": "Material Line Icons — MIT License",
+      "en": "Material Line Icons — MIT License"
+    },
+    "credits.scope.heading": {
+      "vi": "Phạm vi sử dụng",
+      "en": "Scope of use"
+    },
+    "credits.scope.description": {
+      "vi": "Tài nguyên thể hiện giải phẫu tham chiếu nam trưởng thành. Nội dung dùng cho giáo dục; chưa được thẩm định y khoa độc lập và không thay thế tư vấn y khoa. Danh pháp tiếng Việt là bản nháp đang chờ thẩm định.",
+      "en": "The assets depict adult male reference anatomy. This educational content has not received independent medical review and does not replace medical advice. Vietnamese terminology is a draft awaiting review."
+    },
+    "study.heroTitle": {
+      "vi": "Học giải phẫu. Trong không gian 3D.",
+      "en": "Study anatomy. In 3D."
+    },
+    "site.download.unavailable": {
+      "vi": "Chưa phát hành",
+      "en": "Not yet released"
+    },
+    "product.learn.action": {
+      "vi": "Xem giao diện Human Atlas",
+      "en": "See the Human Atlas interface"
+    },
+    "product.essentials.eyebrow": {
+      "vi": "TRƯỚC KHI BẮT ĐẦU",
+      "en": "BEFORE YOU BEGIN"
+    },
+    "product.essentials.title": {
+      "vi": "Biết rõ công cụ bạn sẽ dùng.",
+      "en": "Know the tool you’re choosing."
+    },
+    "product.essentials.description": {
+      "vi": "Bạn vừa xem bản demo giới hạn ở hệ xương. App đầy đủ đang phát triển; dưới đây là phạm vi và thông tin sử dụng.",
+      "en": "You have seen a demo limited to the skeletal system. The full app is in development; here is its coverage and practical information."
+    },
+    "product.essentials.scope.title": {
+      "vi": "Nội dung giải phẫu",
+      "en": "Anatomy coverage"
+    },
+    "product.essentials.scope.body": {
+      "vi": "App có các nhóm mô hình xương, cơ, khớp, thần kinh, tim mạch và hệ tạng. Tài nguyên tham chiếu nam trưởng thành; trang giới thiệu hiện hiển thị mô hình hệ xương.",
+      "en": "The app includes skeletal, muscular, joint, nervous, cardiovascular and visceral model groups. The assets depict adult male reference anatomy; this introduction currently displays the skeleton."
+    },
+    "product.essentials.language.title": {
+      "vi": "Ngôn ngữ và tên gọi",
+      "en": "Languages and terminology"
+    },
+    "product.essentials.language.body": {
+      "vi": "Giao diện Việt/Anh, kèm tên Latin khi nguồn có dữ liệu. Danh pháp tiếng Việt là bản nháp đang chờ thẩm định.",
+      "en": "Vietnamese and English interface, with Latin names where supplied by the source. Vietnamese terminology is a draft awaiting review."
+    },
+    "product.essentials.platform.title": {
+      "vi": "Nền tảng",
+      "en": "Platforms"
+    },
+    "product.essentials.platform.body": {
+      "vi": "Hướng tới trình duyệt và máy tính. Bản cài Windows/macOS và đường dẫn web công khai chưa có tại đây; trải nghiệm trên thiết bị di động chưa được xác nhận đầy đủ.",
+      "en": "Designed for the browser and desktop. Windows/macOS installers and a public web app link are not available here yet; the mobile experience has not been fully verified."
+    },
+    "product.essentials.network.title": {
+      "vi": "Kết nối Internet",
+      "en": "Internet access"
+    },
+    "product.essentials.network.body": {
+      "vi": "Các mục đọc OpenStax và Wikipedia cần kết nối Internet. Khả năng dùng ngoại tuyến của bản phát hành chưa được xác nhận.",
+      "en": "OpenStax and Wikipedia readings require an Internet connection. Offline availability for a release has not been confirmed."
+    },
+    "product.essentials.requirements.title": {
+      "vi": "Cấu hình máy",
+      "en": "System requirements"
+    },
+    "product.essentials.requirements.body": {
+      "vi": "Chưa công bố cấu hình tối thiểu đã được kiểm chứng cho bản phát hành.",
+      "en": "Verified minimum system requirements for a release have not been published yet."
+    },
+    "product.essentials.cost.title": {
+      "vi": "Chi phí",
+      "en": "Cost"
+    },
+    "product.essentials.cost.body": {
+      "vi": "Chưa công bố thông tin chi phí cho bản phát hành.",
+      "en": "Cost information for a release has not been announced yet."
+    },
+    "product.trust.title": {
+      "vi": "Nguồn dữ liệu và giới hạn",
+      "en": "Sources and limitations"
+    },
+    "product.trust.body": {
+      "vi": "Mô hình có nguồn gốc Z-Anatomy/BodyParts3D; bảng thông tin dẫn tới các mục đọc OpenStax và Wikipedia. Nội dung và mô hình chưa được thẩm định y khoa độc lập. Hãy sử dụng cùng giáo trình và hướng dẫn của giảng viên.",
+      "en": "Models are derived from Z-Anatomy/BodyParts3D; the information panel links to OpenStax and Wikipedia readings. The content and models have not received independent medical review. Use them alongside your textbook and instructor’s guidance."
+    },
+    "product.trust.action": {
+      "vi": "Xem nguồn và phạm vi sử dụng",
+      "en": "View sources and scope of use"
+    },
+    "product.release.eyebrow": {
+      "vi": "TRẠNG THÁI PHÁT HÀNH",
+      "en": "RELEASE STATUS"
+    },
+    "product.release.title": {
+      "vi": "Human Atlas đang được hoàn thiện.",
+      "en": "Human Atlas is taking shape."
+    },
+    "product.release.description": {
+      "vi": "Bản cài đặt và đường dẫn dùng app công khai sẽ được bổ sung khi sẵn sàng. Hiện bạn có thể tìm hiểu tính năng, phạm vi nội dung và thông tin sử dụng trên trang này.",
+      "en": "Installers and a public app link will be added when ready. You can currently explore the features, anatomy coverage and practical information on this page."
+    },
+    "product.release.platforms": {
+      "vi": "Bản cài đặt đang chờ phát hành",
+      "en": "Installers awaiting release"
+    },
+    "product.release.action": {
+      "vi": "Về giới thiệu Human Atlas",
+      "en": "Back to Human Atlas"
+    },
+    "product.essentials.action": {
+      "vi": "Xem trạng thái phát hành",
+      "en": "View release status"
+    },
+    "demo.title": {
+      "vi": "Một cửa sổ. Nhiều cách quan sát.",
+      "en": "One window. Many ways to explore."
+    },
+    "demo.scope": {
+      "vi": "Hệ xương · Human Atlas",
+      "en": "Skeletal system · Human Atlas"
+    },
+    "demo.continue": {
+      "vi": "Tiếp tục",
+      "en": "Continue"
+    },
+    "demo.hint": {
+      "vi": "Bản minh họa thay đổi theo từng phần khi cuộn trang. Các thao tác trực tiếp sẽ có trong ứng dụng.",
+      "en": "This preview changes with each section as you scroll. Direct controls are available in the application."
+    },
+    "demo.overview": {
+      "vi": "Tìm cấu trúc, điều chỉnh góc nhìn và xem tên gọi trong cùng một không gian. Human Atlas giữ mô hình ở trung tâm để bạn theo dõi vùng đang học.",
+      "en": "Find structures, adjust the view and read their names in one workspace. Human Atlas keeps the model at the center so you can follow the region you are studying."
+    },
+    "site.title": {
+      "vi": "Human Atlas — Ứng dụng học giải phẫu 3D",
+      "en": "Human Atlas — The 3D anatomy study app"
+    },
+    "site.description": {
+      "vi": "Tìm cấu trúc, quan sát mô hình 3D và đọc tài liệu cùng Human Atlas. Tìm hiểu tính năng, không gian ứng dụng và thông tin sử dụng.",
+      "en": "Find structures, explore 3D models and follow reference readings with Human Atlas. Explore the app’s features, workspace and practical details."
+    },
+    "credits.title": {
+      "vi": "Nguồn tài nguyên — Human Atlas",
+      "en": "Asset credits — Human Atlas"
+    },
+    "demo.spread.title": {
+      "vi": "Từng xương. Một cái nhìn toàn cảnh.",
+      "en": "Every bone. One overview."
+    },
+    "demo.spread.body": {
+      "vi": "Tách các cấu trúc thành từng hàng để so sánh hình dạng và kích thước. Trong app, bạn có thể đưa chúng trở lại vị trí lắp ráp.",
+      "en": "Arrange structures in rows to compare their shapes and sizes. In the app, return them to their assembled positions."
+    }
   }
 }

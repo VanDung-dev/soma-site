@@ -1,0 +1,227 @@
+{
+  "repository": "human-atlas-rs",
+  "commit": "be6ace3e7fa02dd06e31ce828f444f1b77055ba3",
+  "files": {
+    "crates/core/src/lib.rs": "907c9be19c3540f8e2189c7f3d65051aefcf8f1919b1742d2d8af63d4032841a",
+    "crates/core/Cargo.toml": "3905271c86eba60cc5ad49bc568d5fc9dccdb3aef36d6aa1ab3e077e9a77f184",
+    "crates/content/src/bindings.rs": "9a74e48142bb5be5bb9cfd6ea3f464ac113329fba68b9da65a843d728d0f9edb",
+    "crates/content/src/data.rs": "eaf91f7bff274fb254e31dc4425e7f391b86d9692fa4f9f6c32af1fc02e39958",
+    "crates/content/src/lib.rs": "5b3ddc7e7560d616bda29dc4f3b4d7bda54554779fdeb8461ab7e51cf845930a",
+    "crates/content/Cargo.toml": "8ffc29b2d0d1c35214d10ce5ec8500aacb607f4a275a12a2940dcd67266f64d0",
+    "crates/renderer/src/camera.rs": "58a0496201d3271fe833186ccff11e3625cb7f84c8ebeda06ffc66db538641ca",
+    "crates/renderer/src/explosion.rs": "779ca6461e503d1efb857a21e3cfe5e62057e72c23af306479e1c992a0c0a822",
+    "crates/renderer/src/geometry.rs": "9df723a564c3224728782bb8258e9cd1006f1e7490cd2e9a3c6c1876172070e3",
+    "crates/renderer/src/glb.rs": "c81406df2f227addeb7108be7ece168340e8ed6474bb4ccd440a0f295acbb102",
+    "crates/renderer/src/hand_input.rs": "170c51b9faa4dd3c05a1feda8bcf022b4954a88966870cfeae83b4635c028f06",
+    "crates/renderer/src/lib.rs": "71804d25e36ae6a86a81b8c45bd50b9f79a999862a3fb67e333c503b243d109f",
+    "crates/renderer/src/packed.rs": "df64e4fc745fb066fc740abb422dfb3815399475c3ff6c1fb54da30777c029d1",
+    "crates/renderer/src/reconstruction.rs": "5e17b374ba1be9994ccb2a933609615262890a8acdee495907e7ad19f1e2730d",
+    "crates/renderer/src/scene.rs": "520014348def2fb9dce64309223b4011f5e27f2e285cd458401417b76db935e2",
+    "crates/renderer/src/separation.rs": "9afb023a2776a51b996674a25ccbe3b4d764f09bba8792db77884872c01bc35c",
+    "crates/renderer/Cargo.toml": "27fbd1f5c3ed016bca3d0637949e95720b5b2598e16427d01ce24e32ee84ac83",
+    "crates/wasm/src/lib.rs": "e25ffc56031901ab55e197b1ab5923c133edddc4504b987eaacabad30134fdfb",
+    "crates/wasm/src/renderer/api.rs": "ce7244236a334599be15668d68939bab0b32a7a6072c048356757ab7fe8ce50d",
+    "crates/wasm/src/renderer/camera.rs": "4525c1bdd01f12ab7a1a90c4c9c17772ad3388ee6bd2d5ca0ab46b13b147c86e",
+    "crates/wasm/src/renderer/draw.rs": "56fdd9fbe4f2ddf64deacda43b3bcd0461760cb405988b1f53e04b4946279615",
+    "crates/wasm/src/renderer/explosion.rs": "dd658b4d9a8f159768ebcdb742ac181eed1e7de73c563ea7d2110907d37d6ac6",
+    "crates/wasm/src/renderer/graphics.rs": "e5f19ebd1701ad2e8e074e6f055d1619c6fdc2828cdc0fc087af51cccab27a22",
+    "crates/wasm/src/renderer/io.rs": "b860f364e2ddd4cc1ea26052cbc715a7cac41d3877213dae8491c5c23edfb422",
+    "crates/wasm/src/renderer/resources.rs": "681526ef55f10d3055190fc3f0005b3e0461fd22a6575171a4f4f6c3e79f4eb5",
+    "crates/wasm/src/renderer/scene.rs": "0b2045783489f54e1ee452a2248812312bd0dd0a73c804bd0c99496a1105e2a6",
+    "crates/wasm/src/renderer/separation.rs": "300a975afe3d3bebae6860049e898fa291c71209922358367913d731b19fe594",
+    "crates/wasm/src/renderer/shaders.rs": "2fe1a6c1b9f926e3ee579ebfb9e0b1082a0be2ffee955170eec22ee5aded3e58",
+    "crates/wasm/src/renderer/uniforms.rs": "58b4a0f6866d1700e543861fba46d9c4ed7949c9e12353cb3e837135bd9ed1ed",
+    "crates/wasm/src/renderer/util.rs": "b1c7f36797eb9dcaed4c3e01a0511b0e2b42c4d4513e9f4a2e8c793c181fb43d",
+    "crates/wasm/src/renderer.rs": "9d5d13fd72e2fda7bf4cb4b31a52ea0d931ffe974b763c9bffc817213a2e0808",
+    "crates/wasm/src/shaders/model.frag.glsl": "ceb78f105e69795c9bb1e51489e2f812e3e2bb3316dadb35c7e090b007b35433",
+    "crates/wasm/src/shaders/model.vert.glsl": "2da847bc03c762fee94ecde1aa6f75f1cadf238f9face7000d0db4aaa4381553",
+    "crates/wasm/src/shaders/outline.frag.glsl": "b8aa8bb29ec2299be8095782c81d39e9bf5921e3b219c618b5fc90e0863322bd",
+    "crates/wasm/src/shaders/outline.vert.glsl": "9b02db63d8ef6a608f7df2def4ca3a6f3b43261052e6bd3d964b75f29be359a6",
+    "crates/wasm/src/shaders/sphere.frag.glsl": "3069cccd12176a9190898d54aa74c4b0cc944bddd701fb7df60236cd247de3d7",
+    "crates/wasm/src/shaders/sphere.vert.glsl": "9db828e81ec10a1b40f97158e7e22aad687fa86995dcefa03a9e3274af1f2ea0",
+    "crates/wasm/Cargo.toml": "69f3b991f9a0c8a21a560a82abc29081f043b1ff2fbc07a7b892c8b474be0727",
+    "content/catalog.json": "127bc2842cc97634dbb647225ff22b6cdae02ff1136a1f2488df9de2127d3ffe",
+    "content/anatomy-terminology.json": "6cb6730f903929abf182589b4ccde97c2db5f20a79314d6299f584b0bf6af059",
+    "content/wikipedia-references.json": "3283795eb0df90b6725cad387b5d274a7a20ada775849f4aba00acf140f8ba8c",
+    "content/openstax-references.json": "d43085e358b3bd6f532991fc712c5530223b3d548fa6fe8efb0d4a99cd9b3c4e",
+    "apps/web/src/anatomy/core.ts": "e611c7b1f128e04264b92f6af9fdbffdf20d192c6babc5046e6c1221bf3ffa74",
+    "apps/web/src/anatomy/catalog/index.ts": "17e9a23ecba31f58ba4d9dded0517725b0c89f5a9a14d3a797d746dc4d4c06bd",
+    "apps/web/src/anatomy/catalog/types.ts": "2766a8f5c6214ac2c4fabd36f2ffaf68af2479c3721d8ad2b01d4e9d4a806aea",
+    "apps/web/src/anatomy/viewer/runtime.ts": "ac5a0a12094557ceae2f9b838c1c00131f4cd3906ef090f904160dc390d7138b",
+    "apps/web/src/anatomy/viewer/input.ts": "4075a25817973588f514119d93a86df3949f7974f5dc3b17de01b990f94a54ed",
+    "apps/web/src/anatomy/viewer/loader.ts": "58f89092ecc847fed8708fc1c9596a66f5ed8fe91c1547991a818a9a73f13f04",
+    "apps/web/src/anatomy/viewer/model-worker.ts": "31775e08628a1265ba55b54805863c3f2f1e508e770370b13a79cec8ecb3c279",
+    "apps/web/src/anatomy/viewer/contracts.ts": "a8621b4c811ed563ead3b1c2b9c9060eb6679f7d82953e3d4da69f28565935b2",
+    "apps/web/src/anatomy/viewer/graphics.ts": "784c42f89a9c0efd22de1b4056c95637deddf156eada3da6536186048f0ade93",
+    "apps/web/src/anatomy/study/session.ts": "d2addc0e7587628025a95c577cda9edf678ffe79dec2a6188b619b73951393f7",
+    "apps/web/src/anatomy/camera-controls.ts": "14a5813fd505363277c3775e3f25aea116cdf63e5c48873ac7935b300208e3bf",
+    "apps/web/src/shortcuts.ts": "3f34af7f1dea396c03b1e9877300587bdaa2a32cc2823822a1b6245c0ed91105",
+    "Cargo.lock": "406c82e1d49c643f609666a60786267d20d60b446aaa5777c27b2b6b7ab178f1",
+    "LICENSE": "d882400871d72c3e53ae82d21c0215ebcd5732d114285c540500e5d406c8f02d",
+    "NOTICE": "136acee4b150e92b52d4cc5d5f606973c714ca4c20d4f7df0eb1d39f2f96f1f7",
+    "apps/web/public/models/z-anatomy/skeletal-system.glb.br": "64468ce27a7b70e8ed0f179151cb61c8263321d5207fe1af9c410846dca5a922",
+    "apps/web/public/models/z-anatomy/skeletal-system.json": "31f1a458675ef13ba802bdecac1272671f9058c37c8e5cb65052f7f7700bd631",
+    "crates/renderer/tests/camera.rs": "98f1bad1e1ecd02844adbc6e03359e5298059e7663a8e10593d30dad00c8494c",
+    "crates/renderer/tests/assembly.rs": "0accee96d88d23267c205ae1985fdf48811424e1982d4914113928a2578537eb",
+    "crates/renderer/tests/explosion.rs": "492e479cd5f01906907ae94343c2267b684e698b9aa32aa7fb9028753f949085",
+    "crates/renderer/tests/hand_input.rs": "c5d8602c90809afb6821e2fae659fa4d67e490453d92ec26236e02371f3187dd"
+  },
+  "adaptations": [
+    {
+      "path": "demo/content/catalog.json",
+      "reason": "One skeletal root; intersect source folder membership with the IDs in its geometry package"
+    },
+    {
+      "path": "demo/crates/core/src/lib.rs",
+      "reason": "Keep upstream tests against the original catalog fixture and validate the demo catalog separately"
+    },
+    {
+      "path": "demo/crates/wasm/src/renderer/camera.rs",
+      "reason": "Add frame_region to compose guided regions and the demo workspace with the existing Rust camera"
+    },
+    {
+      "path": "demo/web/anatomy/core.ts",
+      "reason": "Initialize local WASM and catalog without Tauri"
+    },
+    {
+      "path": "demo/web/anatomy/viewer/runtime.ts",
+      "reason": "Passive presentation runtime: load, reconstruct, frame, resize, reduced motion, error and disposal callbacks"
+    },
+    {
+      "path": "demo/web/anatomy/viewer/loader.ts",
+      "reason": "Use a demo-only cache and preserve the original app cache"
+    },
+    {
+      "path": "demo/Cargo.lock",
+      "reason": "Resolve only the independent demo workspace dependencies"
+    },
+    {
+      "path": "demo/crates/content/src/bindings.rs",
+      "reason": "Keep only validated catalog membership and model source metadata needed by the presentation"
+    },
+    {
+      "path": "demo/crates/content/src/data.rs",
+      "reason": "Keep only validated catalog membership and model source metadata needed by the presentation"
+    },
+    {
+      "path": "demo/crates/content/Cargo.toml",
+      "reason": "Keep only validated catalog membership and model source metadata needed by the presentation"
+    },
+    {
+      "path": "demo/crates/renderer/src/lib.rs",
+      "reason": "Keep presentation, camera framing, source geometry and rendering; remove interaction APIs and GPU picking/outline resources"
+    },
+    {
+      "path": "demo/crates/wasm/src/lib.rs",
+      "reason": "Keep presentation, camera framing, source geometry and rendering; remove interaction APIs and GPU picking/outline resources"
+    },
+    {
+      "path": "demo/crates/wasm/src/renderer/api.rs",
+      "reason": "Keep presentation, camera framing, source geometry and rendering; remove interaction APIs and GPU picking/outline resources"
+    },
+    {
+      "path": "demo/crates/wasm/src/renderer/draw.rs",
+      "reason": "Keep presentation, camera framing, source geometry and rendering; remove interaction APIs and GPU picking/outline resources; project using the displayed canvas aspect ratio during CSS scroll transforms"
+    },
+    {
+      "path": "demo/crates/wasm/src/renderer/graphics.rs",
+      "reason": "Keep presentation, camera framing, source geometry and rendering; remove interaction APIs and GPU picking/outline resources"
+    },
+    {
+      "path": "demo/crates/wasm/src/renderer/io.rs",
+      "reason": "Keep presentation, camera framing, source geometry and rendering; remove interaction APIs and GPU picking/outline resources"
+    },
+    {
+      "path": "demo/crates/wasm/src/renderer/resources.rs",
+      "reason": "Keep presentation, camera framing, source geometry and rendering; remove interaction APIs and GPU picking/outline resources"
+    },
+    {
+      "path": "demo/crates/wasm/src/renderer/scene.rs",
+      "reason": "Keep presentation, camera framing, source geometry and rendering; remove interaction APIs and GPU picking/outline resources"
+    },
+    {
+      "path": "demo/crates/wasm/src/renderer/shaders.rs",
+      "reason": "Keep presentation, camera framing, source geometry and rendering; remove interaction APIs and GPU picking/outline resources"
+    },
+    {
+      "path": "demo/crates/wasm/src/renderer/uniforms.rs",
+      "reason": "Keep presentation, camera framing, source geometry and rendering; remove interaction APIs and GPU picking/outline resources"
+    },
+    {
+      "path": "demo/crates/wasm/src/renderer.rs",
+      "reason": "Keep presentation, camera framing, source geometry and rendering; remove interaction APIs and GPU picking/outline resources"
+    },
+    {
+      "path": "demo/crates/wasm/Cargo.toml",
+      "reason": "Keep presentation, camera framing, source geometry and rendering; remove interaction APIs and GPU picking/outline resources"
+    },
+    {
+      "path": "demo/web/anatomy/catalog/index.ts",
+      "reason": "Keep only the passive presentation lifecycle; remove study, input and interactive commands"
+    },
+    {
+      "path": "demo/web/anatomy/catalog/types.ts",
+      "reason": "Keep only the passive presentation lifecycle; remove study, input and interactive commands"
+    },
+    {
+      "path": "demo/web/anatomy/viewer/contracts.ts",
+      "reason": "Keep only the passive presentation lifecycle; remove study, input and interactive commands"
+    },
+    {
+      "path": "demo/crates/renderer/src/scene.rs",
+      "reason": "Remove manual selection and multi-package state while retaining source geometry and descriptor validation"
+    },
+    {
+      "path": "demo/crates/renderer/src/glb.rs",
+      "reason": "Remove manual selection and multi-package state while retaining source geometry and descriptor validation"
+    },
+    {
+      "path": "demo/crates/renderer/src/packed.rs",
+      "reason": "Remove manual selection and multi-package state while retaining source geometry and descriptor validation"
+    },
+    {
+      "path": "demo/crates/renderer/src/camera.rs",
+      "reason": "Retain presentation framing, interpolation and lighting math; remove manual camera and shadow-map helpers"
+    },
+    {
+      "path": "demo/crates/renderer/src/geometry.rs",
+      "reason": "Retain presentation framing, interpolation and lighting math; remove manual camera and shadow-map helpers"
+    },
+    {
+      "path": "demo/crates/renderer/tests/camera.rs",
+      "reason": "Test passive framing, validated rotations and camera interpolation instead of removed manual camera commands"
+    },
+    {
+      "path": "demo/web/anatomy/viewer/model-worker.ts",
+      "reason": "Prepare exactly one presentation model using the reduced WASM API"
+    },
+    {
+      "path": "demo/crates/renderer/src/inventory.rs",
+      "reason": "Retain the upstream shelf layout for the guided 100% separation scene; omit manual controls and intermediate explosion stages"
+    },
+    {
+      "path": "demo/crates/wasm/src/shaders/sphere.frag.glsl",
+      "reason": "Fade the app grid in after the model settles; omit it entirely on the opening chapter"
+    }
+  ],
+  "removed": [
+    "demo/crates/renderer/src/explosion.rs",
+    "demo/crates/renderer/src/hand_input.rs",
+    "demo/crates/renderer/src/separation.rs",
+    "demo/crates/wasm/src/renderer/explosion.rs",
+    "demo/crates/wasm/src/renderer/separation.rs",
+    "demo/crates/wasm/src/shaders/outline.frag.glsl",
+    "demo/crates/wasm/src/shaders/outline.vert.glsl",
+    "demo/content/anatomy-terminology.json",
+    "demo/content/wikipedia-references.json",
+    "demo/content/openstax-references.json",
+    "demo/web/anatomy/viewer/input.ts",
+    "demo/web/anatomy/viewer/graphics.ts",
+    "demo/web/anatomy/study/session.ts",
+    "demo/web/anatomy/camera-controls.ts",
+    "demo/web/shortcuts.ts",
+    "demo/crates/renderer/tests/assembly.rs",
+    "demo/crates/renderer/tests/explosion.rs",
+    "demo/crates/renderer/tests/hand_input.rs"
+  ]
+}
