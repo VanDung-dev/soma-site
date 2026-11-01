@@ -113,23 +113,29 @@ try {
     };
     await page.goto(baseUrl);
     await page.waitForSelector('.stage[data-ready][data-settled="true"]');
-    await page.waitForFunction(() => getComputedStyle(document.querySelector('#demo-viewer-host canvas')).opacity === '1');
+    await page.waitForFunction(() => getComputedStyle(document.querySelector('.stage>canvas')).opacity === '1');
     assert.equal(await page.locator('.product-section').count(), 5);
     const frame = page.locator('.demo-window');
     const heroFrame = await frame.boundingBox();
     let initialFrame;
     const checkResolution = async () => {
-      const raster = await page.locator('#demo-viewer-host canvas').evaluate(canvas => {
+      const raster = await page.locator('.stage>canvas').evaluate(canvas => {
         const display = canvas.getBoundingClientRect();
         const viewport = canvas.closest('.stage').getBoundingClientRect();
         const gl = canvas.getContext('webgl2');
         const limit = Math.min(4096, gl.getParameter(gl.MAX_RENDERBUFFER_SIZE));
         const density = Math.min(devicePixelRatio, 2, limit / viewport.width, limit / viewport.height);
+        const host = document.querySelector('#demo-viewer-host').getBoundingClientRect();
+        const [top, right = top, bottom = top, left = right] = getComputedStyle(canvas).clipPath.split('round')[0].match(/-?[\d.]+px/g)?.map(parseFloat) || [];
+        const clip = [top, right, bottom, left];
+        const expected = [host.top - viewport.top, viewport.right - host.right, viewport.bottom - host.bottom, host.left - viewport.left];
         return { sharp: canvas.width >= Math.round(display.width * density) - 1 && canvas.height >= Math.round(display.height * density) - 1,
-          clipped: display.x >= viewport.x - 1 && display.y >= viewport.y - 1 && display.right <= viewport.right + 1 && display.bottom <= viewport.bottom + 1 };
+          clipped: expected.every((value, i) => Math.abs(value - clip[i]) < 0.1),
+          fixed: Math.abs(display.x - viewport.x) < 1 && Math.abs(display.y - viewport.y) < 1 && Math.abs(display.width - viewport.width) < 1 && Math.abs(display.height - viewport.height) < 1 };
       });
       assert.ok(raster.sharp, 'Visible anatomy must render at screen pixel density even when the app is enlarged');
-      assert.ok(raster.clipped, 'The canvas must render only the visible part of the enlarged app');
+      assert.ok(raster.clipped, 'The fixed canvas must clip anatomy to the rounded app workspace');
+      assert.ok(raster.fixed, 'Canvas position and CSS dimensions must stay fixed throughout scroll');
     };
     const checkFrame = async (layout = 'split') => {
       await checkResolution();
@@ -141,14 +147,14 @@ try {
       }
       assert.ok(Math.abs(bounds.width / bounds.height - 1.5) < 0.01, 'App window must keep its 3:2 aspect ratio');
       if (['split', 'right'].includes(layout) && initialFrame) for (const key of ['y', 'width', 'height']) assert.ok(Math.abs(bounds[key] - initialFrame[key]) < 2, 'Split app window must keep its size and height');
-      const canvas = page.locator('#demo-viewer-host canvas');
+      const canvas = page.locator('.stage>canvas');
       assert.equal(await canvas.count(), 1);
       assert.equal(await canvas.getAttribute('tabindex'), '-1');
       assert.equal(await canvas.evaluate(el => getComputedStyle(el).pointerEvents), 'none');
       const model = await canvas.boundingBox();
       const projectionAspect = await page.evaluate(() => window.demoProjectionAspect);
       assert.ok(Math.abs(projectionAspect - model.width / model.height) < 0.005, `The camera projection must match the displayed canvas aspect ratio without stretching anatomy: ${projectionAspect} vs ${model.width / model.height}`);
-      assert.ok(model.x >= bounds.x - 0.5 && model.y >= bounds.y - 0.5 && model.x + model.width <= bounds.x + bounds.width + 0.5 && model.y + model.height <= bounds.y + bounds.height + 0.5, `Canvas must remain inside the app window: ${JSON.stringify({ bounds, model, layout })}`);
+      assert.equal(await canvas.evaluate(el => el.parentElement.matches('.stage')), true, 'The WebGL canvas must stay outside the scaled app window');
       assert.equal(await frame.evaluate(el => getComputedStyle(el).overflow), 'hidden');
       assert.equal(await frame.locator('button:not([hidden]),input,a').count(), 0);
       assert.equal(await frame.locator('nav,.demo-active,.demo-language,.demo-axis,.demo-model-status,.demo-search-preview,.demo-info').count(), 0);
@@ -246,7 +252,7 @@ try {
     await visit('learn', 1);
     await page.screenshot({ path: path.join(screenshots, name + '-english.png') });
     await visit('app-overview', 2);
-    assert.equal(await page.locator('#demo-viewer-host canvas').getAttribute('aria-label'), 'One window. Many ways to explore.');
+    assert.equal(await page.locator('.stage>canvas').getAttribute('aria-label'), 'One window. Many ways to explore.');
     assert.equal(await page.locator('#download .download-option:disabled').count(), 2);
     assert.equal(models.length, 1);
     assert.ok(models[0].endsWith('/models/z-anatomy/skeletal-system.glb.br'));
@@ -279,12 +285,12 @@ try {
   await failed.waitForSelector('.stage[data-scene="1"][data-settled="true"]');
   await failed.setViewportSize({ width: 620, height: 760 });
   await failed.waitForFunction(() => {
-    const canvas = document.querySelector('#demo-viewer-host canvas');
+    const canvas = document.querySelector('.stage>canvas');
     const viewport = document.querySelector('.stage').getBoundingClientRect();
     const ratio = Math.min(devicePixelRatio, 2, 4096 / viewport.width, 4096 / viewport.height);
     return canvas.width === Math.round(viewport.width * ratio) && canvas.height === Math.round(viewport.height * ratio);
   });
-  await failed.evaluate(() => document.querySelector('#demo-viewer-host canvas').getContext('webgl2').getExtension('WEBGL_lose_context').loseContext());
+  await failed.evaluate(() => document.querySelector('.stage>canvas').getContext('webgl2').getExtension('WEBGL_lose_context').loseContext());
   await failed.waitForSelector('#retry:not([hidden])');
   const retryPosition = await failed.locator('.site-scroll').evaluate(el => el.scrollTop);
   const retryBounds = await failed.locator('#retry').boundingBox();
@@ -323,7 +329,7 @@ try {
   await motion.emulateMedia({ reducedMotion: 'reduce' });
   await motion.waitForSelector('.stage[data-scene="2"][data-settled="true"]');
   await motion.waitForFunction(() => !document.querySelector('.demo-window').getAnimations().some(animation => animation.playState === 'running'), null, { timeout: 250 });
-  assert.equal(await motion.locator('#demo-viewer-host canvas').count(), 1);
+  assert.equal(await motion.locator('.stage>canvas').count(), 1);
   await motion.close();
   console.log('Direct links, reduced motion including live changes, resize, model/WASM/WebGL failure and retry, and credits passed');
   }

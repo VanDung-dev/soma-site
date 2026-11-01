@@ -85,7 +85,7 @@
     },
     {
       "path": "demo/web/anatomy/viewer/runtime.ts",
-      "reason": "Passive presentation runtime: load, reconstruct, frame, resize, reduced motion, error and disposal callbacks; viewport-sized pixel-dense buffer, visible-region projection and scroll transforms synchronized with model draws in one requestAnimationFrame loop at the display refresh rate"
+      "reason": "Passive presentation runtime: load, reconstruct, frame, resize, reduced motion, error and disposal callbacks; fixed viewport-sized pixel-dense canvas outside the scaled app window, clipped to the workspace and synchronized through projection with model draws in one requestAnimationFrame loop at the display refresh rate"
     },
     {
       "path": "demo/web/anatomy/viewer/loader.ts",
@@ -125,7 +125,7 @@
     },
     {
       "path": "demo/crates/wasm/src/renderer/graphics.rs",
-      "reason": "Keep presentation, camera framing, source geometry and rendering; remove interaction APIs and GPU picking/outline resources; validate normalized render regions independently of the drawing buffer size"
+      "reason": "Keep presentation, camera framing, source geometry and rendering; remove interaction APIs and GPU picking/outline resources; validate finite render regions including viewport margins beyond the app projection independently of the drawing buffer size"
     },
     {
       "path": "demo/crates/wasm/src/renderer/io.rs",

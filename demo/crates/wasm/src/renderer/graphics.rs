@@ -16,12 +16,8 @@ impl AnatomyViewer {
         if region.iter().any(|value| !value.is_finite())
             || !aspect.is_finite()
             || aspect <= 0.0
-            || left < 0.0
-            || top < 0.0
             || width <= 0.0
             || height <= 0.0
-            || left + width > 1.000001
-            || top + height > 1.000001
         {
             return Err(js_error("Invalid render region"));
         }

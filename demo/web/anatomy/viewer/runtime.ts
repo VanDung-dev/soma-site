@@ -10,6 +10,9 @@ export class ViewerRuntime {
   private viewer: AnatomyViewer | undefined;
   private canvas = document.createElement('canvas');
   private viewport: HTMLElement;
+  private viewportBounds = new DOMRect();
+  private hostWidth = 1;
+  private hostRadius = 0;
   private renderLimit = 4096;
   private abort = new AbortController();
   private motion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -36,7 +39,7 @@ export class ViewerRuntime {
     this.viewport = host.closest<HTMLElement>('.stage')!;
     this.canvas.setAttribute('role', 'img');
     this.canvas.tabIndex = -1;
-    host.appendChild(this.canvas);
+    this.viewport.appendChild(this.canvas);
     this.observer = new ResizeObserver(this.resize);
     this.observer.observe(host);
     this.observer.observe(this.viewport);
@@ -111,8 +114,12 @@ export class ViewerRuntime {
 
   private resizeCanvas() {
     this.resizePending = false;
-    const { width, height } = this.viewport.getBoundingClientRect();
+    this.viewportBounds = this.viewport.getBoundingClientRect();
+    const { width, height } = this.viewportBounds;
     if (width > 0 && height > 0) {
+      const style = getComputedStyle(this.host);
+      this.hostWidth = parseFloat(style.width);
+      this.hostRadius = parseFloat(style.borderTopLeftRadius);
       const ratio = Math.min(window.devicePixelRatio, 2, this.renderLimit / width, this.renderLimit / height);
       const renderWidth = Math.max(1, Math.round(width * ratio));
       const renderHeight = Math.max(1, Math.round(height * ratio));
@@ -132,18 +139,11 @@ export class ViewerRuntime {
 
   private updateRenderRegion() {
     const host = this.host.getBoundingClientRect();
-    const viewport = this.viewport.getBoundingClientRect();
-    const left = Math.max(host.left, viewport.left), top = Math.max(host.top, viewport.top);
-    const width = Math.min(host.right, viewport.right) - left;
-    const height = Math.min(host.bottom, viewport.bottom) - top;
-    if (width <= 0 || height <= 0 || host.width <= 0 || host.height <= 0) return;
-    const style = getComputedStyle(this.host);
-    const scaleX = host.width / parseFloat(style.width), scaleY = host.height / parseFloat(style.height);
-    this.canvas.style.left = `${(left - host.left) / scaleX}px`;
-    this.canvas.style.top = `${(top - host.top) / scaleY}px`;
-    this.canvas.style.width = `${width / scaleX}px`;
-    this.canvas.style.height = `${height / scaleY}px`;
-    this.viewer!.set_render_region((left - host.left) / host.width, (top - host.top) / host.height, width / host.width, height / host.height, host.width / host.height);
+    const viewport = this.viewportBounds;
+    if (host.width <= 0 || host.height <= 0) return;
+    const radius = this.hostRadius * host.width / this.hostWidth;
+    this.canvas.style.clipPath = `inset(${host.top - viewport.top}px ${viewport.right - host.right}px ${viewport.bottom - host.bottom}px ${host.left - viewport.left}px round ${radius}px)`;
+    this.viewer!.set_render_region((viewport.left - host.left) / host.width, (viewport.top - host.top) / host.height, viewport.width / host.width, viewport.height / host.height, host.width / host.height);
   }
 
   present(visible: string[], focus: string[], yaw: number, spread: boolean, viewport: Viewport) {
