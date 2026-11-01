@@ -56,6 +56,7 @@ pub struct AnatomyViewer {
     pub(crate) uniforms: Uniforms,
     pub(crate) sphere_uniforms: SphereUniforms,
     pub(crate) backdrop: f32,
+    pub(crate) render_region: [f32; 4],
     pub(crate) draws: Vec<(usize, i32, i32)>,
     pub(crate) reconstruction: Reconstruction,
     pub(crate) canvas: HtmlCanvasElement,
@@ -121,6 +122,7 @@ impl AnatomyViewer {
             uniforms,
             sphere_uniforms,
             backdrop: 0.0,
+            render_region: [0.0, 0.0, 1.0, 1.0],
             draws: draws
                 .into_iter()
                 .map(|(count, offset)| (0, count, offset))

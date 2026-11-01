@@ -41,12 +41,14 @@ impl AnatomyViewer {
     }
 
     pub(crate) fn draw(&self) {
-        let mut camera = self.camera.clone();
-        let bounds = self.canvas.get_bounding_client_rect();
-        if bounds.width() > 0.0 && bounds.height() > 0.0 {
-            camera.aspect = (bounds.width() / bounds.height()) as f32;
-        }
-        let matrix = camera.matrix();
+        let [left, top, width, height] = self.render_region;
+        let matrix = glam::Mat4::from_scale(glam::Vec3::new(1.0 / width, 1.0 / height, 1.0))
+            * glam::Mat4::from_translation(glam::Vec3::new(
+                1.0 - 2.0 * left - width,
+                2.0 * top + height - 1.0,
+                0.0,
+            ))
+            * self.camera.matrix();
         let gl = &self.gpu.gl;
         let u = &self.uniforms;
         gl.viewport(

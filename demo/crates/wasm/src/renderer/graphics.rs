@@ -4,6 +4,32 @@ use web_sys::WebGl2RenderingContext as Gl;
 
 #[wasm_bindgen]
 impl AnatomyViewer {
+    pub fn set_render_region(
+        &mut self,
+        left: f32,
+        top: f32,
+        width: f32,
+        height: f32,
+        aspect: f32,
+    ) -> Result<(), JsValue> {
+        let region = [left, top, width, height];
+        if region.iter().any(|value| !value.is_finite())
+            || !aspect.is_finite()
+            || aspect <= 0.0
+            || left < 0.0
+            || top < 0.0
+            || width <= 0.0
+            || height <= 0.0
+            || left + width > 1.000001
+            || top + height > 1.000001
+        {
+            return Err(js_error("Invalid render region"));
+        }
+        self.render_region = region;
+        self.camera.aspect = aspect;
+        Ok(())
+    }
+
     pub fn resize(&mut self, width: u32, height: u32) -> Result<(), JsValue> {
         let limit = self
             .gpu
