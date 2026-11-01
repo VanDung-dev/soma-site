@@ -42,7 +42,7 @@ function releaseSection(): string {
 export function renderLandingPage(root: HTMLElement): void {
   root.innerHTML = layout('#start', `
     <main id="journey"><div class="anatomy-journey">
-      <div class="stage" data-layout="hero"><div class="demo-window">${demoInterface()}<div id="demo-viewer-host"></div>${text('site.loading', 'p', 'id="load-status" class="load-status" role="status"')}<button id="retry" class="retry" type="button" hidden data-i18n="site.retry"></button></div></div>
+      <div class="stage" data-layout="hero"><div class="demo-window">${demoInterface()}<div id="demo-viewer-host"></div></div>${text('site.loading', 'p', 'id="load-status" class="load-status" role="status"')}<button id="retry" class="retry" type="button" hidden data-i18n="site.retry"></button></div>
       ${introductionSection()}
     ${appOverviewSection()}${spreadSection()}${essentialsSection()}${releaseSection()}</div></main>`, `<footer class="site-footer">${text('site.copyright')}${text('site.modelCredit', 'span', 'class="footer-credit"')}<a href="./credits.html">${text('site.credits')}${arrow}</a></footer>`);
 }

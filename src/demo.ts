@@ -2,7 +2,6 @@ import { getCatalog } from '../demo/web/anatomy/core';
 import { ViewerRuntime } from '../demo/web/anatomy/viewer/runtime';
 import type { Catalog } from '../demo/web/anatomy/catalog/types';
 import type { Viewport } from '../demo/web/anatomy/viewer/contracts';
-import regions from '../demo/web/regions.json';
 import { t } from './i18n.ts';
 import type { MessageKey } from './i18n.ts';
 
@@ -22,14 +21,13 @@ export function mountDemo(report: (key: MessageKey | null) => void, showRetry: (
   stage.dataset.chrome = 'hidden';
   const omitted = new Set(['Hyoid bone', 'Thyroid cartilage', 'Cricoid cartilage', 'Arytenoid cartilage', 'Corniculate cartilage', 'Lateral process of nasal septal cartilage', 'Nasal septal cartilage', 'Major alar cartilage']);
   const frame: Viewport = [0.03, 0.02, 0.94, 0.96];
-  const heroFrame: Viewport = [0.02, 0.0, 0.96, 0.98];
   const layoutFor = (scene: number) => scene === 0 ? 'hero' : scene === 1 ? 'right' : 'split';
   const presentationFor = (scene: number) => ({
     visible: allowed,
-    focus: scene === 0 ? [...new Set([...catalog!.members(regions.head), ...catalog!.members(regions.jaw)])].filter(id => allowed.includes(id)) : allowed,
+    focus: allowed,
     yaw: scene === 0 ? 1.1 : 0,
     spread: scene === 2,
-    viewport: scene === 0 ? heroFrame : frame,
+    viewport: frame,
   });
   const present = (scene: number) => {
     if (!runtime || !catalog) return;
@@ -39,9 +37,9 @@ export function mountDemo(report: (key: MessageKey | null) => void, showRetry: (
     runtime.present(presentation.visible, presentation.focus, presentation.yaw, presentation.spread, presentation.viewport);
   };
   const revealChrome = () => {
-    if (!ready || abort.signal.aborted || stage.dataset.chrome === 'hidden' || stage.dataset.layout === 'hero' || stage.dataset.layout === 'none' || stage.dataset.settled !== 'true' || transition?.playState === 'running') return;
+    if (!ready || abort.signal.aborted || stage.dataset.opening !== undefined || stage.dataset.chrome === 'hidden' || stage.dataset.layout === 'hero' || stage.dataset.layout === 'none' || stage.dataset.settled !== 'true' || transition?.playState === 'running') return;
     stage.dataset.chrome = 'visible';
-    runtime?.setBackdrop(true);
+    runtime?.setBackdrop(1);
   };
   const animateWindow = (key: string, fromLayout: string, layout: string, progress: number) => {
     if (key !== transitionKey) {
@@ -55,7 +53,7 @@ export function mountDemo(report: (key: MessageKey | null) => void, showRetry: (
         const after = demoWindow.getBoundingClientRect();
         const transform = getComputedStyle(demoWindow).transform;
         transition = demoWindow.animate([
-          { transformOrigin: 'top left', transform: `translate(${before.left - after.left}px,${before.top - after.top}px) ${transform === 'none' ? '' : transform} scale(${before.width / after.width},${before.height / after.height})` },
+          { transformOrigin: 'top left', transform: `translate(${before.left - after.left}px,${before.top - after.top}px) ${transform === 'none' ? '' : transform} scale(${before.width / after.width})` },
           { transformOrigin: 'top left', transform },
         ], { duration: 900, easing: 'linear', fill: 'both' });
         transition.pause();
@@ -68,14 +66,17 @@ export function mountDemo(report: (key: MessageKey | null) => void, showRetry: (
       transition?.cancel(); transition = undefined; transitionKey = ''; lastPage = '';
     }
     stage.style.removeProperty('opacity');
+    stage.style.removeProperty('--demo-chrome');
     if (active.id === lastPage && ready) return;
+    delete stage.dataset.opening;
     lastPage = active.id;
     const scene = active.dataset.scene;
     const layout = scene === undefined ? 'none' : layoutFor(Number(scene));
-    if (layout === 'hero' || layout === 'none' || stage.dataset.layout === 'hero') {
-      stage.dataset.chrome = 'hidden';
-      runtime?.setBackdrop(false);
-    }
+    pages[0]!.style.opacity = layout === 'hero' ? '1' : '0';
+    pages[0]!.inert = layout !== 'hero';
+    stage.dataset.chrome = layout === 'hero' || layout === 'none' ? 'hidden' : 'pending';
+    runtime?.setBackdrop(0);
+    if (layout === 'hero') stage.dataset.opening = '';
     transition?.cancel(); transition = undefined;
     stage.dataset.layout = layout;
     delete stage.dataset.progress;
@@ -97,22 +98,26 @@ export function mountDemo(report: (key: MessageKey | null) => void, showRetry: (
       stage.style.removeProperty('opacity');
       const fromScene = Number(from.dataset.scene), toScene = Number(next.dataset.scene);
       const progress = Math.max(0, Math.min(1, (viewport.scrollTop - from.offsetTop) / (next.offsetTop - from.offsetTop)));
+      const blend = fromScene === 0 ? progress * progress * (3 - 2 * progress) : progress;
       const key = `${from.id}:${next.id}`;
       const newTransition = key !== transitionKey;
-      animateWindow(key, layoutFor(fromScene), layoutFor(toScene), progress);
+      animateWindow(key, layoutFor(fromScene), layoutFor(toScene), blend);
+      if (fromScene === 0) stage.dataset.opening = '';
+      else delete stage.dataset.opening;
+      const copy = fromScene === 0 ? Math.max(0, 1 - progress / 0.4) : 0;
+      pages[0]!.style.opacity = String(copy * copy * (3 - 2 * copy));
+      pages[0]!.inert = copy === 0;
       stage.dataset.scene = String(progress < 0.5 ? fromScene : toScene);
       stage.dataset.progress = String(progress);
       stage.dataset.settled = 'true';
-      if (progress < 0.03 && fromScene === 0) {
-        stage.dataset.chrome = 'hidden';
-        runtime?.setBackdrop(false);
-      } else {
-        stage.dataset.chrome = 'visible';
-        runtime?.setBackdrop(true);
-      }
+      const reveal = fromScene === 0 ? Math.max(0, Math.min(1, (progress - 0.82) / 0.18)) : 1;
+      const chrome = reveal * reveal * (3 - 2 * reveal);
+      stage.style.setProperty('--demo-chrome', String(chrome));
+      stage.dataset.chrome = chrome > 0 ? 'visible' : 'hidden';
+      runtime?.setBackdrop(chrome);
       if (runtime && catalog) {
-        if (newTransition) runtime.beginScrollTransition(presentationFor(fromScene), presentationFor(toScene), progress);
-        else runtime.setScrollProgress(progress);
+        if (newTransition) runtime.beginScrollTransition(presentationFor(fromScene), presentationFor(toScene), blend);
+        else runtime.setScrollProgress(blend);
       }
       lastPage = progress < 0.5 ? from.id : next.id;
       return;
@@ -120,6 +125,8 @@ export function mountDemo(report: (key: MessageKey | null) => void, showRetry: (
     if (!motion.matches && from.dataset.scene !== undefined && next && next.dataset.scene === undefined) {
       const progress = Math.max(0, Math.min(1, (viewport.scrollTop - from.offsetTop) / (next.offsetTop - from.offsetTop)));
       const key = `${from.id}:${next.id}:exit`;
+      delete stage.dataset.opening;
+      stage.style.removeProperty('--demo-chrome');
       transition?.cancel(); transition = undefined;
       transitionKey = key;
       stage.dataset.layout = progress === 1 ? 'none' : layoutFor(Number(from.dataset.scene));
@@ -129,7 +136,7 @@ export function mountDemo(report: (key: MessageKey | null) => void, showRetry: (
       stage.dataset.chrome = progress < 1 ? 'visible' : 'hidden';
       const fade = Math.max(0, Math.min(1, (progress - 0.4) / 0.2));
       stage.style.opacity = String(1 - fade * fade * (3 - 2 * fade));
-      runtime?.setBackdrop(progress < 1);
+      runtime?.setBackdrop(progress < 1 ? 1 : 0);
       if (ready && lastPage !== from.id) present(Number(from.dataset.scene));
       lastPage = progress < 0.5 ? from.id : next.id;
       return;
@@ -178,5 +185,9 @@ export function mountDemo(report: (key: MessageKey | null) => void, showRetry: (
     runtime?.dispose(); catalog?.free();
     delete stage.dataset.ready; delete stage.dataset.scene; delete stage.dataset.settled;
     delete stage.dataset.chrome; delete stage.dataset.progress;
+    delete stage.dataset.opening;
+    stage.style.removeProperty('--demo-chrome');
+    pages[0]!.style.removeProperty('opacity');
+    pages[0]!.inert = false;
   };
 }

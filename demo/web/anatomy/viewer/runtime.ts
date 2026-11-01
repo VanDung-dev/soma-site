@@ -21,8 +21,7 @@ export class ViewerRuntime {
   private renderFrame = 0;
   private resizePending = false;
   private lastRenderTime = -Infinity;
-  private backdropVisible = false;
-  private backdropStarted = 0;
+  private backdrop = 0;
   private presentation: Presentation | undefined;
   private scrollPresentation: { from: Presentation; to: Presentation; progress: number } | undefined;
 
@@ -87,8 +86,7 @@ export class ViewerRuntime {
           now = performance.now();
         }
         const cameraAnimating = this.viewer!.advance_camera(now);
-        const backdrop = this.backdropVisible ? this.motion.matches ? 1 : Math.min(1, (now - this.backdropStarted) / 280) : 0;
-        this.viewer!.set_backdrop(backdrop);
+        this.viewer!.set_backdrop(this.backdrop);
         const revealing = !this.animating && this.viewer!.advance_reconstruction(now);
         if (this.animating) this.animating = this.viewer!.render_reconstruction(now);
         else this.viewer!.render();
@@ -96,7 +94,7 @@ export class ViewerRuntime {
           this.ready = true;
           this.options.onReady(this.structureIds);
         }
-        if (cameraAnimating || revealing || this.animating || (this.backdropVisible && backdrop < 1)) this.scheduleRender();
+        if (cameraAnimating || revealing || this.animating) this.scheduleRender();
         else if (!this.renderFrame) this.options.onSettled();
       } catch (cause) { this.fail(cause, 'renderError'); }
     });
@@ -112,7 +110,7 @@ export class ViewerRuntime {
     const style = getComputedStyle(this.host);
     const width = parseFloat(style.width), height = parseFloat(style.height);
     if (width > 0 && height > 0) {
-      const ratio = Math.min(window.devicePixelRatio, 2);
+      const ratio = Math.min(window.devicePixelRatio * parseFloat(style.getPropertyValue('--demo-zoom')), 4096 / width, 4096 / height);
       const renderWidth = Math.max(1, Math.round(width * ratio));
       const renderHeight = Math.max(1, Math.round(height * ratio));
       if (this.canvas.width !== renderWidth || this.canvas.height !== renderHeight) this.viewer!.resize(renderWidth, renderHeight);
@@ -160,10 +158,9 @@ export class ViewerRuntime {
     } catch (cause) { this.fail(cause, 'processError'); }
   }
 
-  setBackdrop(visible: boolean) {
-    if (this.backdropVisible === visible) return;
-    this.backdropVisible = visible;
-    this.backdropStarted = performance.now();
+  setBackdrop(opacity: number) {
+    if (this.backdrop === opacity) return;
+    this.backdrop = opacity;
     this.scheduleRender();
   }
 

@@ -32,6 +32,7 @@ try {
       const vector = WebGL2RenderingContext.prototype.uniform3f;
       WebGL2RenderingContext.prototype.uniform3f = function(location, x, y, z) {
         if (names.get(location) === 'eye') {
+          window.demoCameraEye = [x, y, z];
           const stage = document.querySelector('.stage');
           const progress = Number(stage?.dataset.progress);
           if (progress > 0 && progress < 1) window.demoCameraFrames.push({ time: performance.now(), scene: stage.dataset.scene, progress, eye: [x, y, z] });
@@ -94,12 +95,10 @@ try {
       const bounds = await frame.boundingBox();
       if (layout === 'hero') {
         const viewport = await page.locator('.site-scroll').boundingBox();
-        const expected = width > 700
-          ? { x: viewport.x + viewport.width * 0.41, y: viewport.y, width: viewport.width * 0.59, height: viewport.height }
-          : { x: viewport.x + viewport.width * 0.3, y: viewport.y, width: viewport.width * 0.7, height: viewport.height * 0.42 };
-        for (const key of ['x', 'y', 'width', 'height']) assert.ok(Math.abs(bounds[key] - expected[key]) < 2, `Hero ${key} must return to its fixed layout after scrolling`);
+        assert.ok(bounds.width > viewport.width && bounds.height > viewport.height && bounds.y < viewport.y, 'The opening window must be enlarged beyond the viewport');
+        for (const key of ['x', 'y', 'width', 'height']) assert.ok(Math.abs(bounds[key] - heroFrame[key]) < 2, `Hero ${key} must return to its fixed layout after scrolling`);
       }
-      if (layout !== 'hero') assert.ok(Math.abs(bounds.width / bounds.height - 1.5) < 0.01, 'App window must keep its 3:2 aspect ratio');
+      assert.ok(Math.abs(bounds.width / bounds.height - 1.5) < 0.01, 'App window must keep its 3:2 aspect ratio');
       if (['split', 'right'].includes(layout) && initialFrame) for (const key of ['y', 'width', 'height']) assert.ok(Math.abs(bounds[key] - initialFrame[key]) < 2, 'Split app window must keep its size and height');
       const canvas = page.locator('#demo-viewer-host canvas');
       assert.equal(await canvas.count(), 1);
@@ -125,14 +124,32 @@ try {
       assert.ok(await page.locator('#hero-title').evaluate(el => el.getBoundingClientRect().height <= parseFloat(getComputedStyle(el).lineHeight) * 2 + 1), 'The wide-screen hero title must stay on two lines');
     }
     assert.equal(await page.evaluate(() => window.demoBackdropDraws), 0, 'The opening chapter must not draw the app grid');
-    const canvasBefore = await page.locator('#demo-viewer-host').screenshot();
-    const drag = { x: heroFrame.x + heroFrame.width * 0.75, y: heroFrame.y + heroFrame.height * 0.25 };
+    const cameraBefore = await page.evaluate(() => [window.demoCameraEye, window.demoProjectionAspect]);
+    const viewport = await page.locator('.site-scroll').boundingBox();
+    const drag = { x: viewport.x + viewport.width * 0.75, y: viewport.y + viewport.height * (width > 700 ? 0.4 : 0.2) };
     await page.mouse.move(drag.x, drag.y);
     await page.mouse.down();
     await page.mouse.move(drag.x + 30, drag.y + 15, { steps: 3 });
     await page.mouse.up();
     await page.waitForTimeout(100);
-    assert.ok((await page.locator('#demo-viewer-host').screenshot()).equals(canvasBefore), 'Dragging the preview must not rotate the model');
+    assert.deepEqual(await page.evaluate(() => [window.demoCameraEye, window.demoProjectionAspect]), cameraBefore, 'Dragging the preview must not rotate the model');
+    const openingSamples = new Map();
+    const openingResizes = await page.evaluate(() => window.demoCanvasResizes);
+    for (const progress of [0, 0.25, 0.5, 0.75, 0.9, 0.99, 0.9, 0.75, 0.5, 0.25, 0]) {
+      await page.locator('.site-scroll').evaluate((el, progress) => el.scrollTo({ top: document.querySelector('#learn').offsetTop * progress, behavior: 'instant' }), progress);
+      await page.waitForFunction(progress => Math.abs(Number(document.querySelector('.stage').dataset.progress) - progress) < 0.002, progress);
+      await page.waitForTimeout(40);
+      const bounds = await frame.boundingBox();
+      assert.ok(Math.abs(bounds.width / bounds.height - 1.5) < 0.01, 'Every intermediate opening frame must remain 3:2');
+      const previous = openingSamples.get(progress);
+      if (previous) for (const key of ['x', 'y', 'width', 'height']) assert.ok(Math.abs(bounds[key] - previous[key]) < 2, 'Reversing scroll must restore the same intermediate frame');
+      else openingSamples.set(progress, bounds);
+      const chrome = Number(await page.locator('.demo-shell').evaluate(el => getComputedStyle(el).opacity));
+      assert.ok(progress < 0.82 ? chrome === 0 : chrome > 0 && chrome < 1, 'The frame must fade in only near the end of the opening transition');
+      if (progress >= 0.5) assert.equal(await page.locator('#start').evaluate(el => el.inert && getComputedStyle(el).opacity === '0'), true, 'Outgoing intro text must not overlap the model');
+    }
+    assert.equal(await page.evaluate(() => window.demoCanvasResizes), openingResizes, 'Uniform zoom must not resize the drawing buffer during scroll');
+    assert.ok(openingSamples.get(0).width > openingSamples.get(0.5).width && openingSamples.get(0.5).width > openingSamples.get(0.99).width, 'The opening window must shrink continuously');
     if (name === '16-9') {
       await page.evaluate(() => {
         window.demoScrollSamples = [];
@@ -169,7 +186,7 @@ try {
       else await checkFrame(layout);
       assert.equal(await page.locator('#' + id).evaluate(el => Math.abs(el.clientHeight - document.querySelector('.site-scroll').clientHeight) < 2), true);
       const textBounds = await page.locator('#' + id + ' .product-inner').boundingBox();
-      if (['split', 'right', 'hero'].includes(layout)) {
+      if (['split', 'right'].includes(layout)) {
         const app = await frame.boundingBox();
         assert.ok(width > 700 ? textBounds.x >= app.x + app.width - 1 || textBounds.x + textBounds.width <= app.x + 1 : textBounds.y >= app.y + app.height - 1, 'Copy must not overlap the app window');
       }
@@ -201,11 +218,18 @@ try {
   const failed = await browser.newPage({ viewport: { width: 390, height: 844 }, reducedMotion: 'reduce' });
   failed.setDefaultTimeout(10000);
   await failed.route('**/models/z-anatomy/skeletal-system.glb.br', route => route.fulfill({ status: 503, body: 'Unavailable' }));
-  await failed.goto(new URL('#app-overview', baseUrl).href);
+  await failed.goto(baseUrl);
   await failed.waitForSelector('#retry:not([hidden])');
+  const openingRetry = await failed.locator('#retry').boundingBox();
+  assert.ok(openingRetry && openingRetry.y >= 0 && openingRetry.y + openingRetry.height < 844 * 0.42, 'Retry must remain accessible outside the enlarged app window');
   assert.equal(await failed.locator('.product-section').count(), 5);
   await failed.unroute('**/models/z-anatomy/skeletal-system.glb.br');
   await failed.locator('#retry').click();
+  await failed.waitForSelector('.stage[data-ready][data-scene="0"][data-settled="true"]');
+  await failed.setViewportSize({ width: 410, height: 844 });
+  await failed.waitForTimeout(100);
+  assert.equal(await failed.locator('.stage').getAttribute('data-opening'), '', 'Resizing the reduced-motion hero must preserve the crop above the intro text');
+  await failed.goto(new URL('#app-overview', baseUrl).href);
   await failed.waitForSelector('.stage[data-ready][data-scene="2"][data-settled="true"]');
   await failed.locator('#learn').evaluate(el => el.scrollIntoView({ block: 'start' }));
   await failed.waitForSelector('.stage[data-scene="1"][data-settled="true"]');
@@ -213,7 +237,8 @@ try {
   await failed.waitForFunction(() => {
     const canvas = document.querySelector('#demo-viewer-host canvas');
     const host = document.querySelector('#demo-viewer-host').getBoundingClientRect();
-    const ratio = Math.min(devicePixelRatio, 2);
+    const style = getComputedStyle(canvas);
+    const ratio = Math.min(devicePixelRatio * parseFloat(style.getPropertyValue('--demo-zoom')), 4096 / host.width, 4096 / host.height);
     return canvas.width === Math.round(host.width * ratio) && canvas.height === Math.round(host.height * ratio);
   });
   await failed.evaluate(() => document.querySelector('#demo-viewer-host canvas').getContext('webgl2').getExtension('WEBGL_lose_context').loseContext());
@@ -243,7 +268,7 @@ try {
   await motion.waitForFunction(() => {
     const viewport = document.querySelector('.site-scroll').getBoundingClientRect();
     const frame = document.querySelector('.demo-window').getBoundingClientRect();
-    return Math.abs(frame.x - viewport.x - viewport.width * 0.41) < 2 && Math.abs(frame.height - viewport.height) < 2;
+    return frame.width > viewport.width && frame.height > viewport.height && Math.abs(frame.width / frame.height - 1.5) < 0.01;
   });
   for (const [id, scene] of [['learn', 1], ['start', 0], ['learn', 1], ['start', 0]]) {
     await motion.locator(`#${id}`).evaluate(el => el.scrollIntoView({ block: 'start' }));

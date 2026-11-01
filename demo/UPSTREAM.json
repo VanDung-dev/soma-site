@@ -85,7 +85,7 @@
     },
     {
       "path": "demo/web/anatomy/viewer/runtime.ts",
-      "reason": "Passive presentation runtime: load, reconstruct, frame, resize, reduced motion, error and disposal callbacks"
+      "reason": "Passive presentation runtime: load, reconstruct, frame, resize, reduced motion, error and disposal callbacks; fixed high-resolution buffer for uniform opening zoom and scroll-driven backdrop opacity"
     },
     {
       "path": "demo/web/anatomy/viewer/loader.ts",
