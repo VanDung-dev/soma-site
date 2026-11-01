@@ -16,12 +16,26 @@ let browser;
 try {
   browser = await chromium.launch({ executablePath: process.env.BENCHMARK_BROWSER, headless: true, chromiumSandbox: true, args: ['--enable-unsafe-swiftshader'] });
   for (const [name, width, height] of viewports.filter(([name]) => !process.argv[2] || name === process.argv[2])) {
-    const page = await browser.newPage({ viewport: { width, height }, colorScheme: ['tablet', '16-9', '16-10'].includes(name) ? 'dark' : 'light' });
+    const page = await browser.newPage({ viewport: { width, height }, deviceScaleFactor: name === '16-9' ? 2 : 1, colorScheme: ['tablet', '16-9', '16-10'].includes(name) ? 'dark' : 'light' });
     await page.addInitScript(() => {
       window.demoCanvasResizes = 0;
       window.demoBackdropDraws = 0;
       window.demoChromeEvents = [];
       window.demoCameraFrames = [];
+      window.demoFrame = 0;
+      window.demoProgressFrames = 0;
+      window.demoFrameMismatches = [];
+      let frameTime = -1, lastDraw = {};
+      const raf = window.requestAnimationFrame;
+      window.requestAnimationFrame = callback => raf(time => {
+        if (time !== frameTime) { frameTime = time; window.demoFrame++; }
+        callback(time);
+      });
+      const clear = WebGL2RenderingContext.prototype.clear;
+      WebGL2RenderingContext.prototype.clear = function(...args) {
+        lastDraw = { frame: window.demoFrame, progress: document.querySelector('.stage')?.dataset.progress };
+        return clear.apply(this, args);
+      };
       const names = new WeakMap();
       const location = WebGL2RenderingContext.prototype.getUniformLocation;
       WebGL2RenderingContext.prototype.getUniformLocation = function(...args) {
@@ -41,7 +55,16 @@ try {
       };
       const matrix = WebGL2RenderingContext.prototype.uniformMatrix4fv;
       WebGL2RenderingContext.prototype.uniformMatrix4fv = function(location, transpose, values, ...rest) {
-        if (names.get(location) === 'view_projection') window.demoProjectionAspect = Math.hypot(values[1], values[5], values[9]) / Math.hypot(values[0], values[4], values[8]);
+        if (names.get(location) === 'view_projection') {
+          const forward = [values[3], values[7], values[11]];
+          const length = Math.hypot(...forward) ** 2;
+          const rowLength = index => {
+            const row = [values[index], values[index + 4], values[index + 8]];
+            const shift = row.reduce((sum, value, i) => sum + value * forward[i], 0) / length;
+            return Math.hypot(...row.map((value, i) => value - shift * forward[i]));
+          };
+          window.demoProjectionAspect = rowLength(1) / rowLength(0);
+        }
         return matrix.call(this, location, transpose, values, ...rest);
       };
       const draw = WebGL2RenderingContext.prototype.drawArrays;
@@ -52,11 +75,15 @@ try {
       new MutationObserver(records => {
         for (const record of records) {
           const stage = record.target;
-          if (stage.matches('.stage') && stage.dataset.chrome === 'visible') {
+          if (record.attributeName === 'data-progress' && stage.matches('.stage[data-ready]') && Number(stage.dataset.progress) > 0 && Number(stage.dataset.progress) < 1) {
+            window.demoProgressFrames++;
+            if (lastDraw.frame !== window.demoFrame || lastDraw.progress !== stage.dataset.progress) window.demoFrameMismatches.push({ frame: window.demoFrame, progress: stage.dataset.progress, draw: lastDraw });
+          }
+          if (record.attributeName === 'data-chrome' && stage.matches('.stage') && stage.dataset.chrome === 'visible') {
             window.demoChromeEvents.push({ scene: stage.dataset.scene, settled: stage.dataset.settled, moving: document.querySelector('.demo-window').getAnimations().some(animation => animation.playState === 'running') });
           }
         }
-      }).observe(document, { subtree: true, attributes: true, attributeFilter: ['data-chrome'] });
+      }).observe(document, { subtree: true, attributes: true, attributeFilter: ['data-chrome', 'data-progress'] });
       for (const name of ['width', 'height']) {
         const descriptor = Object.getOwnPropertyDescriptor(HTMLCanvasElement.prototype, name);
         Object.defineProperty(HTMLCanvasElement.prototype, name, { ...descriptor, set(value) {
@@ -91,7 +118,21 @@ try {
     const frame = page.locator('.demo-window');
     const heroFrame = await frame.boundingBox();
     let initialFrame;
+    const checkResolution = async () => {
+      const raster = await page.locator('#demo-viewer-host canvas').evaluate(canvas => {
+        const display = canvas.getBoundingClientRect();
+        const viewport = canvas.closest('.stage').getBoundingClientRect();
+        const gl = canvas.getContext('webgl2');
+        const limit = Math.min(4096, gl.getParameter(gl.MAX_RENDERBUFFER_SIZE));
+        const density = Math.min(devicePixelRatio, 2, limit / viewport.width, limit / viewport.height);
+        return { sharp: canvas.width >= Math.round(display.width * density) - 1 && canvas.height >= Math.round(display.height * density) - 1,
+          clipped: display.x >= viewport.x - 1 && display.y >= viewport.y - 1 && display.right <= viewport.right + 1 && display.bottom <= viewport.bottom + 1 };
+      });
+      assert.ok(raster.sharp, 'Visible anatomy must render at screen pixel density even when the app is enlarged');
+      assert.ok(raster.clipped, 'The canvas must render only the visible part of the enlarged app');
+    };
     const checkFrame = async (layout = 'split') => {
+      await checkResolution();
       const bounds = await frame.boundingBox();
       if (layout === 'hero') {
         const viewport = await page.locator('.site-scroll').boundingBox();
@@ -139,6 +180,7 @@ try {
       await page.locator('.site-scroll').evaluate((el, progress) => el.scrollTo({ top: document.querySelector('#learn').offsetTop * progress, behavior: 'instant' }), progress);
       await page.waitForFunction(progress => Math.abs(Number(document.querySelector('.stage').dataset.progress) - progress) < 0.002, progress);
       await page.waitForTimeout(40);
+      await checkResolution();
       const bounds = await frame.boundingBox();
       assert.ok(Math.abs(bounds.width / bounds.height - 1.5) < 0.01, 'Every intermediate opening frame must remain 3:2');
       const previous = openingSamples.get(progress);
@@ -211,6 +253,8 @@ try {
     assert.equal(await page.locator('.site-scroll').evaluate(el => el.scrollWidth > el.clientWidth), false);
     await visit('learn', 1);
     assert.deepEqual(errors, []);
+    assert.ok(await page.evaluate(() => window.demoProgressFrames) > 20, 'Frame synchronization must be checked during moving scroll transitions');
+    assert.deepEqual(await page.evaluate(() => window.demoFrameMismatches), [], 'Window transforms, canvas crop and model draws must update in the same animation frame');
     console.log(`${name}: scroll scenes, fixed 3:2 app window, clipped noninteractive viewer, language and navigation passed`);
     await page.close();
   }
@@ -236,10 +280,9 @@ try {
   await failed.setViewportSize({ width: 620, height: 760 });
   await failed.waitForFunction(() => {
     const canvas = document.querySelector('#demo-viewer-host canvas');
-    const host = document.querySelector('#demo-viewer-host').getBoundingClientRect();
-    const style = getComputedStyle(canvas);
-    const ratio = Math.min(devicePixelRatio * parseFloat(style.getPropertyValue('--demo-zoom')), 4096 / host.width, 4096 / host.height);
-    return canvas.width === Math.round(host.width * ratio) && canvas.height === Math.round(host.height * ratio);
+    const viewport = document.querySelector('.stage').getBoundingClientRect();
+    const ratio = Math.min(devicePixelRatio, 2, 4096 / viewport.width, 4096 / viewport.height);
+    return canvas.width === Math.round(viewport.width * ratio) && canvas.height === Math.round(viewport.height * ratio);
   });
   await failed.evaluate(() => document.querySelector('#demo-viewer-host canvas').getContext('webgl2').getExtension('WEBGL_lose_context').loseContext());
   await failed.waitForSelector('#retry:not([hidden])');

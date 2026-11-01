@@ -85,7 +85,7 @@
     },
     {
       "path": "demo/web/anatomy/viewer/runtime.ts",
-      "reason": "Passive presentation runtime: load, reconstruct, frame, resize, reduced motion, error and disposal callbacks; fixed high-resolution buffer for uniform opening zoom and scroll-driven backdrop opacity"
+      "reason": "Passive presentation runtime: load, reconstruct, frame, resize, reduced motion, error and disposal callbacks; viewport-sized pixel-dense buffer, visible-region projection and scroll transforms synchronized with model draws in one requestAnimationFrame loop at the display refresh rate"
     },
     {
       "path": "demo/web/anatomy/viewer/loader.ts",
@@ -121,11 +121,11 @@
     },
     {
       "path": "demo/crates/wasm/src/renderer/draw.rs",
-      "reason": "Keep presentation, camera framing, source geometry and rendering; remove interaction APIs and GPU picking/outline resources; project using the displayed canvas aspect ratio during CSS scroll transforms"
+      "reason": "Keep presentation, camera framing, source geometry and rendering; remove interaction APIs and GPU picking/outline resources; crop the virtual app projection to the visible canvas region at screen pixel density during CSS scroll transforms"
     },
     {
       "path": "demo/crates/wasm/src/renderer/graphics.rs",
-      "reason": "Keep presentation, camera framing, source geometry and rendering; remove interaction APIs and GPU picking/outline resources"
+      "reason": "Keep presentation, camera framing, source geometry and rendering; remove interaction APIs and GPU picking/outline resources; validate normalized render regions independently of the drawing buffer size"
     },
     {
       "path": "demo/crates/wasm/src/renderer/io.rs",
@@ -149,7 +149,7 @@
     },
     {
       "path": "demo/crates/wasm/src/renderer.rs",
-      "reason": "Keep presentation, camera framing, source geometry and rendering; remove interaction APIs and GPU picking/outline resources"
+      "reason": "Keep presentation, camera framing, source geometry and rendering; remove interaction APIs and GPU picking/outline resources; retain the visible render region separately from camera framing"
     },
     {
       "path": "demo/crates/wasm/Cargo.toml",

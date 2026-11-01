@@ -15,7 +15,7 @@ export function mountDemo(report: (key: MessageKey | null) => void, showRetry: (
   const abort = new AbortController();
   let catalog: Catalog | undefined;
   let runtime: ViewerRuntime | undefined;
-  let ready = false, lastPage = '', scrollFrame = 0, transitionKey = '';
+  let ready = false, lastPage = '', scrollDirty = true, transitionKey = '';
   let transition: Animation | undefined;
   let allowed: string[] = [];
   stage.dataset.chrome = 'hidden';
@@ -86,7 +86,6 @@ export function mountDemo(report: (key: MessageKey | null) => void, showRetry: (
     } else if (ready) present(Number(scene));
   };
   const syncPage = () => {
-    scrollFrame = 0;
     let fromIndex = 0;
     for (let index = 1; index < pages.length; index++) {
       if (pages[index]!.offsetTop <= viewport.scrollTop) fromIndex = index;
@@ -115,7 +114,7 @@ export function mountDemo(report: (key: MessageKey | null) => void, showRetry: (
       stage.style.setProperty('--demo-chrome', String(chrome));
       stage.dataset.chrome = chrome > 0 ? 'visible' : 'hidden';
       runtime?.setBackdrop(chrome);
-      if (runtime && catalog) {
+      if (ready && runtime && catalog) {
         if (newTransition) runtime.beginScrollTransition(presentationFor(fromScene), presentationFor(toScene), blend);
         else runtime.setScrollProgress(blend);
       }
@@ -145,7 +144,11 @@ export function mountDemo(report: (key: MessageKey | null) => void, showRetry: (
     for (const page of pages) if (Math.abs(page.offsetTop - viewport.scrollTop) < Math.abs(active.offsetTop - viewport.scrollTop)) active = page;
     syncDiscretePage(active);
   };
-  const scheduleSync = () => { if (!scrollFrame) scrollFrame = requestAnimationFrame(syncPage); };
+  const scheduleSync = () => {
+    scrollDirty = true;
+    if (runtime) runtime.scheduleRender();
+    else syncPage();
+  };
   const observer = new ResizeObserver(() => { transitionKey = ''; scheduleSync(); });
   observer.observe(viewport);
   viewport.addEventListener('scroll', scheduleSync, { signal: abort.signal });
@@ -157,11 +160,16 @@ export function mountDemo(report: (key: MessageKey | null) => void, showRetry: (
       if (abort.signal.aborted) { catalog.free(); catalog = undefined; return; }
       runtime = new ViewerRuntime(host, {
         viewport: frame,
+        onBeforeRender: () => {
+          if (!scrollDirty) return;
+          scrollDirty = false;
+          syncPage();
+        },
         onReady: ids => {
           ready = true;
           allowed = ids.filter(id => !omitted.has(catalog!.sourceName(id) || ''));
           stage.dataset.ready = '';
-          report(null); lastPage = ''; transitionKey = ''; syncPage();
+          report(null); lastPage = ''; transitionKey = ''; scheduleSync();
         },
         onError: status => {
           ready = false; delete stage.dataset.ready;
@@ -179,7 +187,7 @@ export function mountDemo(report: (key: MessageKey | null) => void, showRetry: (
     }
   })();
   return () => {
-    abort.abort(); cancelAnimationFrame(scrollFrame);
+    abort.abort();
     observer.disconnect();
     transition?.cancel();
     runtime?.dispose(); catalog?.free();

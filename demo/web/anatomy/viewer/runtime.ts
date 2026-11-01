@@ -9,6 +9,8 @@ type Presentation = { visible: string[]; focus: string[]; yaw: number; spread: b
 export class ViewerRuntime {
   private viewer: AnatomyViewer | undefined;
   private canvas = document.createElement('canvas');
+  private viewport: HTMLElement;
+  private renderLimit = 4096;
   private abort = new AbortController();
   private motion = window.matchMedia('(prefers-reduced-motion: reduce)');
   private observer: ResizeObserver;
@@ -20,22 +22,24 @@ export class ViewerRuntime {
   private structureIds: string[] = [];
   private renderFrame = 0;
   private resizePending = false;
-  private lastRenderTime = -Infinity;
   private backdrop = 0;
   private presentation: Presentation | undefined;
   private scrollPresentation: { from: Presentation; to: Presentation; progress: number } | undefined;
 
   constructor(private host: HTMLElement, private options: {
     viewport: Viewport;
+    onBeforeRender: () => void;
     onReady: (ids: string[]) => void;
     onError: (status: ViewerError) => void;
     onSettled: () => void;
   }) {
+    this.viewport = host.closest<HTMLElement>('.stage')!;
     this.canvas.setAttribute('role', 'img');
     this.canvas.tabIndex = -1;
     host.appendChild(this.canvas);
     this.observer = new ResizeObserver(this.resize);
     this.observer.observe(host);
+    this.observer.observe(this.viewport);
     this.motion.addEventListener('change', this.motionChanged);
     this.canvas.addEventListener('webglcontextlost', this.contextLost);
   }
@@ -49,6 +53,8 @@ export class ViewerRuntime {
       const prepared = await loadModel(catalog.roots[0]!, this.abort.signal, (root, json) => catalog.ingestMetadata(root, json));
       if (this.disposed) return;
       this.viewer = wasm.AnatomyViewer.fromPrepared(this.canvas, prepared);
+      const gl = this.canvas.getContext('webgl2')!;
+      this.renderLimit = Math.min(4096, gl.getParameter(gl.MAX_RENDERBUFFER_SIZE));
       this.viewer.begin_reconstruction(performance.now(), true);
       const animate = !this.motion.matches;
       this.viewer.start_reconstruction(performance.now(), animate);
@@ -70,21 +76,19 @@ export class ViewerRuntime {
     this.options.onError(status);
   }
 
-  private scheduleRender = () => {
-    if (this.loading || !this.viewer || this.renderFrame || this.failed || this.disposed) return;
+  scheduleRender = () => {
+    if (this.renderFrame || this.disposed) return;
     this.renderFrame = requestAnimationFrame(() => {
       this.renderFrame = 0;
-      if (this.failed || this.disposed) return;
-      let now = performance.now();
-      const interval = 1000 / 60;
-      const elapsed = now - this.lastRenderTime;
-      if (elapsed + 0.5 < interval) { this.scheduleRender(); return; }
-      this.lastRenderTime = elapsed < interval * 2 ? this.lastRenderTime + interval : now;
+      if (this.disposed) return;
       try {
+        this.options.onBeforeRender();
+        if (this.loading || !this.viewer || this.failed) return;
         if (this.resizePending) {
           this.resizeCanvas();
-          now = performance.now();
         }
+        this.updateRenderRegion();
+        const now = performance.now();
         const cameraAnimating = this.viewer!.advance_camera(now);
         this.viewer!.set_backdrop(this.backdrop);
         const revealing = !this.animating && this.viewer!.advance_reconstruction(now);
@@ -107,13 +111,13 @@ export class ViewerRuntime {
 
   private resizeCanvas() {
     this.resizePending = false;
-    const style = getComputedStyle(this.host);
-    const width = parseFloat(style.width), height = parseFloat(style.height);
+    const { width, height } = this.viewport.getBoundingClientRect();
     if (width > 0 && height > 0) {
-      const ratio = Math.min(window.devicePixelRatio * parseFloat(style.getPropertyValue('--demo-zoom')), 4096 / width, 4096 / height);
+      const ratio = Math.min(window.devicePixelRatio, 2, this.renderLimit / width, this.renderLimit / height);
       const renderWidth = Math.max(1, Math.round(width * ratio));
       const renderHeight = Math.max(1, Math.round(height * ratio));
       if (this.canvas.width !== renderWidth || this.canvas.height !== renderHeight) this.viewer!.resize(renderWidth, renderHeight);
+      this.updateRenderRegion();
       if (this.scrollPresentation) {
         const { from, to, progress } = this.scrollPresentation;
         this.presentation = from;
@@ -124,6 +128,22 @@ export class ViewerRuntime {
       } else if (this.presentation) this.applyPresentation(!this.motion.matches);
       else this.viewer!.reframe(...this.options.viewport);
     }
+  }
+
+  private updateRenderRegion() {
+    const host = this.host.getBoundingClientRect();
+    const viewport = this.viewport.getBoundingClientRect();
+    const left = Math.max(host.left, viewport.left), top = Math.max(host.top, viewport.top);
+    const width = Math.min(host.right, viewport.right) - left;
+    const height = Math.min(host.bottom, viewport.bottom) - top;
+    if (width <= 0 || height <= 0 || host.width <= 0 || host.height <= 0) return;
+    const style = getComputedStyle(this.host);
+    const scaleX = host.width / parseFloat(style.width), scaleY = host.height / parseFloat(style.height);
+    this.canvas.style.left = `${(left - host.left) / scaleX}px`;
+    this.canvas.style.top = `${(top - host.top) / scaleY}px`;
+    this.canvas.style.width = `${width / scaleX}px`;
+    this.canvas.style.height = `${height / scaleY}px`;
+    this.viewer!.set_render_region((left - host.left) / host.width, (top - host.top) / host.height, width / host.width, height / host.height, host.width / host.height);
   }
 
   present(visible: string[], focus: string[], yaw: number, spread: boolean, viewport: Viewport) {
