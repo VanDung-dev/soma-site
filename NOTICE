@@ -2,7 +2,7 @@ Human Atlas Site
 Copyright (c) 2026 Nguyễn Lê Văn Dũng
 
 Original website source code is licensed under Apache-2.0. See LICENSE.
-Design tokens, fonts, skull preview, app icon and skeletal model were copied
+Design tokens, fonts, app icon and skeletal model were copied
 from Human Atlas Rust. The demo includes only the skeletal package.
 
 Model: Z-Anatomy, Gauthier Kervyn and contributors, based on BodyParts3D
