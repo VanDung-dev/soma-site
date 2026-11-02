@@ -241,6 +241,13 @@ try {
     assert.ok(await page.evaluate(() => window.demoBackdropDraws) > 0);
     await visit('download', 3);
     await checkFrame('closing');
+    const completedClosing = await frame.boundingBox();
+    await page.locator('.site-scroll').evaluate(el => el.scrollTo({ top: document.querySelector('#download').offsetTop - el.clientHeight * 0.25, behavior: 'instant' }));
+    await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+    assert.equal(await page.locator('.stage').getAttribute('data-progress'), '1', 'The closing scene must finish before reaching the final section anchor');
+    const earlyClosing = await frame.boundingBox();
+    for (const key of ['x', 'y', 'width', 'height']) assert.ok(Math.abs(earlyClosing[key] - completedClosing[key]) < 1, 'The final model must already be at its reading position');
+    assert.equal(await page.locator('#download .product-inner').evaluate(panel => getComputedStyle(panel).visibility === 'visible' && Math.abs(panel.getBoundingClientRect().left - document.querySelector('.site-scroll').getBoundingClientRect().left - panel.offsetLeft) < 1), true, 'The final text must arrive with the model and remain visible');
     assert.equal(await page.locator('#sources-title').textContent(), 'Nguồn dữ liệu và giới hạn');
     assert.equal(await page.locator('#essentials,.product-facts').count(), 0);
     assert.equal(await page.getByText('Human Atlas đang được hoàn thiện.', { exact: true }).count(), 0);
@@ -312,7 +319,7 @@ try {
           assert.ok(!copy.overlap, 'Sliding text must stay outside the demo window: ' + JSON.stringify({ index, progress, copy }));
         }
         for (const copy of sample) assert.ok(copy.id === 'learn' ? copy.x <= copy.restX + 1 : copy.x >= copy.restX - 1, 'Text must enter and leave through its outer edge');
-        if (progress === 0.975) assert.ok(Math.abs(sample[index].x - sample[index].restX) > 1 && sample[index].visible, 'Incoming text must slide inward before reaching its reading position');
+        if (progress === 0.975) assert.ok(sample[index].visible && (index === 2 ? Math.abs(sample[index].x - sample[index].restX) < 1 : Math.abs(sample[index].x - sample[index].restX) > 1), 'Incoming text must slide inward; the faster closing text must already be settled');
         if (progress === 0.3 && index > 0) assert.ok(Math.abs(sample[index - 1].x - sample[index - 1].restX) > 1 && sample[index - 1].visible, 'Outgoing text must slide back toward the same edge');
         if (index === 1 && progress === 0.3 || index === 0 && progress === 0.975) await page.screenshot({ path: path.join(screenshots, name + '-copy-' + index + '-' + progress + '.png') });
         const key = index + ':' + progress;

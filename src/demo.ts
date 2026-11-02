@@ -22,6 +22,7 @@ export function mountDemo(report: (key: MessageKey | null) => void, showRetry: (
   stage.dataset.chrome = 'hidden';
   const omitted = new Set(['Hyoid bone', 'Thyroid cartilage', 'Cricoid cartilage', 'Arytenoid cartilage', 'Corniculate cartilage', 'Lateral process of nasal septal cartilage', 'Nasal septal cartilage', 'Major alar cartilage']);
   const frame: Viewport = [0.03, 0.02, 0.94, 0.96];
+  const closingSpan = 0.7;
   const measureCopies = () => {
     const width = viewport.clientWidth;
     const compact = window.matchMedia('(max-width: 700px)').matches;
@@ -44,7 +45,11 @@ export function mountDemo(report: (key: MessageKey | null) => void, showRetry: (
         continue;
       }
       const offset = scroll - top;
-      const progress = Math.max(0, Math.min(1, offset < 0 ? 1 + offset / (height * entrance) : 1 - Math.max(0, offset - hold) / (height * 0.35)));
+      const closing = page.dataset.scene === '3';
+      const exit = 0.35 * (page.dataset.scene === '2' ? closingSpan : 1);
+      const progress = Math.max(0, Math.min(1, closing
+        ? 1 + (offset / height + 1 - closingSpan) / (entrance * closingSpan)
+        : offset < 0 ? 1 + offset / (height * entrance) : 1 - Math.max(0, offset - hold) / (height * exit)));
       const visible = progress * progress * (3 - 2 * progress);
       panel.style.transform = `translate3d(${distance * (1 - visible)}px,${offset}px,0)`;
       panel.style.visibility = progress > 0 ? 'visible' : 'hidden';
@@ -128,7 +133,7 @@ export function mountDemo(report: (key: MessageKey | null) => void, showRetry: (
     if (!motion.matches && from.dataset.scene !== undefined && next?.dataset.scene !== undefined) {
       stage.style.removeProperty('opacity');
       const fromScene = Number(from.dataset.scene), toScene = Number(next.dataset.scene);
-      const progress = Math.max(0, Math.min(1, 1 - (next.offsetTop - viewport.scrollTop) / viewport.clientHeight));
+      const progress = Math.max(0, Math.min(1, (1 - (next.offsetTop - viewport.scrollTop) / viewport.clientHeight) / (toScene === 3 ? closingSpan : 1)));
       const closing = Math.max(0, Math.min(1, (progress - 0.35) / 0.65));
       const blend = fromScene === 0 ? progress * progress * (3 - 2 * progress) : toScene === 3 ? closing * closing * (3 - 2 * closing) : progress;
       const key = `${from.id}:${next.id}`;
