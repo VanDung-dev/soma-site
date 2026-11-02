@@ -19,7 +19,7 @@ test('shared preference labels and English landing content use the selected lang
   assert.equal(translateMessage('language.selector.label', 'vi'), 'Ngôn ngữ');
   assert.equal(translateMessage('language.selector.label', 'en'), 'Language');
   assert.equal(translateMessage('appearance.mode.auto', 'en'), 'Auto');
-  assert.equal(translateMessage('site.hero.explore', 'en'), 'Explore the features');
+  assert.equal(translateMessage('site.hero.title1', 'en'), 'Study anatomy.');
   assert.notEqual(translateMessage('site.loadError', 'en'), translateMessage('site.loadError', 'vi'));
   assert.equal(translateMessage('credits.models.heading', 'en'), 'Anatomy models');
 });

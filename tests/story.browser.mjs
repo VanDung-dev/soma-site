@@ -112,6 +112,11 @@ try {
       }
     };
     await page.goto(baseUrl);
+    assert.equal(await page.locator('a[href^="#"]').count(), 0);
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Enter');
+    assert.equal(await page.locator('#journey').evaluate(el => el === document.activeElement), true);
+    assert.equal(new URL(page.url()).hash, '');
     await page.waitForSelector('.stage[data-ready][data-settled="true"]');
     await page.waitForFunction(() => getComputedStyle(document.querySelector('.stage>canvas')).opacity === '1');
     assert.equal(await page.locator('.product-section').count(), 5);
@@ -279,7 +284,7 @@ try {
   await failed.setViewportSize({ width: 410, height: 844 });
   await failed.waitForTimeout(100);
   assert.equal(await failed.locator('.stage').getAttribute('data-opening'), '', 'Resizing the reduced-motion hero must preserve the crop above the intro text');
-  await failed.goto(new URL('#app-overview', baseUrl).href);
+  await failed.locator('#app-overview').evaluate(el => el.scrollIntoView({ block: 'start' }));
   await failed.waitForSelector('.stage[data-ready][data-scene="2"][data-settled="true"]');
   await failed.locator('#learn').evaluate(el => el.scrollIntoView({ block: 'start' }));
   await failed.waitForSelector('.stage[data-scene="1"][data-settled="true"]');
@@ -300,12 +305,17 @@ try {
   assert.ok(Math.abs(await failed.locator('.site-scroll').evaluate(el => el.scrollTop) - retryPosition) < 2);
   await failed.goto(new URL('credits.html', baseUrl).href);
   assert.equal(await failed.locator('.credits-page h1').count(), 1);
+  await failed.keyboard.press('Tab');
+  await failed.keyboard.press('Enter');
+  assert.equal(await failed.locator('#journey').evaluate(el => el === document.activeElement), true);
+  assert.equal(new URL(failed.url()).hash, '');
   await failed.close();
   const wasmFailure = await browser.newPage({ viewport: { width: 390, height: 844 }, reducedMotion: 'reduce' });
   wasmFailure.setDefaultTimeout(10000);
   await wasmFailure.route('**/*content_bg*.wasm', route => route.fulfill({ status: 503, body: 'Unavailable' }));
-  await wasmFailure.goto(new URL('#learn', baseUrl).href);
+  await wasmFailure.goto(baseUrl);
   await wasmFailure.waitForSelector('#retry:not([hidden])');
+  await wasmFailure.locator('#learn').evaluate(el => el.scrollIntoView({ block: 'start' }));
   await wasmFailure.unroute('**/*content_bg*.wasm');
   await wasmFailure.locator('#retry').click();
   await wasmFailure.waitForSelector('.stage[data-ready][data-scene="1"][data-settled="true"]');
@@ -331,7 +341,7 @@ try {
   await motion.waitForFunction(() => !document.querySelector('.demo-window').getAnimations().some(animation => animation.playState === 'running'), null, { timeout: 250 });
   assert.equal(await motion.locator('.stage>canvas').count(), 1);
   await motion.close();
-  console.log('Direct links, reduced motion including live changes, resize, model/WASM/WebGL failure and retry, and credits passed');
+  console.log('Keyboard skip, reduced motion including live changes, resize, model/WASM/WebGL failure and retry, and credits passed');
   }
   console.log(`Screenshots: ${screenshots}`);
 } finally {

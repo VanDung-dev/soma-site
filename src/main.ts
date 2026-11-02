@@ -11,7 +11,6 @@ import { mountDemo } from './demo.ts';
 renderLandingPage(document.querySelector<HTMLElement>('#root')!);
 initLanguage();
 initTheme();
-requestAnimationFrame(() => document.getElementById(location.hash.slice(1))?.scrollIntoView({ behavior: 'instant', block: 'start' }));
 const status = document.querySelector<HTMLElement>('#load-status')!;
 const retry = document.querySelector<HTMLButtonElement>('#retry')!;
 let dispose = () => {};
