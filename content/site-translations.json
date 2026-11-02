@@ -2,300 +2,86 @@
   "schema_version": 1,
   "status": "draft",
   "integration_status": "integrated",
-  "scope": "Website landing and credits copy in Vietnamese and English; shared application text remains in ui-translations.json and anatomy names in anatomy-terminology.json.",
-  "message_format": "ICU MessageFormat 1",
+  "scope": "Website landing, credits and preference labels in Vietnamese and English.",
+  "message_format": "Plain text",
   "messages": {
-    "site.skip": {
-      "vi": "Đến nội dung chính",
-      "en": "Skip to main content"
-    },
-    "site.brand": {
-      "vi": "Human Atlas",
-      "en": "Human Atlas"
-    },
-    "site.loading": {
-      "vi": "Đang chuẩn bị mô hình 3D…",
-      "en": "Preparing the 3D model…"
-    },
-    "site.loadError": {
-      "vi": "Chưa thể hiển thị 3D. Bạn vẫn có thể cuộn để khám phá nội dung.",
-      "en": "The 3D model could not be displayed. You can still scroll to explore the content."
-    },
-    "site.contextLost": {
-      "vi": "Kết nối đồ họa bị gián đoạn. Bạn có thể tải lại mô hình.",
-      "en": "The graphics connection was interrupted. You can reload the model."
-    },
-    "site.retry": {
-      "vi": "Thử tải lại mô hình",
-      "en": "Retry loading the model"
-    },
-    "site.hero.eyebrow": {
-      "vi": "HUMAN ATLAS · ỨNG DỤNG GIẢI PHẪU 3D",
-      "en": "HUMAN ATLAS · THE 3D ANATOMY APP"
-    },
-    "site.hero.title1": {
-      "vi": "Học giải phẫu.",
-      "en": "Study anatomy."
-    },
-    "site.hero.title2": {
-      "vi": "Trong không gian 3D.",
-      "en": "In 3D."
-    },
-    "site.hero.description": {
-      "vi": "Human Atlas giúp bạn tìm cấu trúc, quan sát vị trí và mối liên hệ trên mô hình 3D, rồi mở tài liệu để đọc tiếp. Một công cụ dùng cùng giáo trình và buổi thực hành giải phẫu của bạn.",
-      "en": "Human Atlas helps you find structures, explore their positions and relationships on a 3D model, and open related readings. A tool to use alongside your anatomy textbook and practical classes."
-    },
-    "site.hero.explore": {
-      "vi": "Tìm hiểu tính năng",
-      "en": "Explore the features"
-    },
-    "site.hero.note": {
-      "vi": "Ứng dụng đang phát triển · Giao diện Việt / Anh",
-      "en": "In development · Vietnamese / English interface"
-    },
-    "site.copyright": {
-      "vi": "© 2026 Nguyễn Lê Văn Dũng",
-      "en": "© 2026 Nguyễn Lê Văn Dũng"
-    },
-    "site.modelCredit": {
-      "vi": "Mô hình: Z-Anatomy / BodyParts3D",
-      "en": "Models: Z-Anatomy / BodyParts3D"
-    },
-    "site.credits": {
-      "vi": "Nguồn tài nguyên & giấy phép",
-      "en": "Asset sources & licenses"
-    },
-    "credits.back": {
-      "vi": "Trở về Human Atlas",
-      "en": "Back to Human Atlas"
-    },
-    "credits.heading1": {
-      "vi": "Nguồn tài nguyên",
-      "en": "Asset sources"
-    },
-    "credits.heading2": {
-      "vi": "& giấy phép.",
-      "en": "& licenses."
-    },
-    "credits.code": {
-      "vi": "Human Atlas © 2026 Nguyễn Lê Văn Dũng. Mã nguồn gốc của trang được cấp phép theo Apache License 2.0. Mô hình, ảnh và font giữ giấy phép riêng.",
-      "en": "Human Atlas © 2026 Nguyễn Lê Văn Dũng. Original website source code is licensed under Apache License 2.0. Models, images and fonts retain their own licenses."
-    },
-    "credits.codeLink": {
-      "vi": "Giấy phép mã nguồn Apache-2.0",
-      "en": "Apache-2.0 source code license"
-    },
-    "credits.models.heading": {
-      "vi": "Mô hình giải phẫu",
-      "en": "Anatomy models"
-    },
-    "credits.models.source": {
-      "vi": "Mô hình xương trên trang được lấy từ tài nguyên Human Atlas có nguồn gốc Z-Anatomy. Ghi công Gauthier Kervyn và các cộng tác viên Z-Anatomy; dựa trên BodyParts3D của Database Center for Life Science.",
-      "en": "The skeleton displayed here comes from Human Atlas assets derived from Z-Anatomy. Credit: Gauthier Kervyn and the Z-Anatomy contributors, based on BodyParts3D by the Database Center for Life Science."
-    },
-    "credits.models.terms": {
-      "vi": "Tài nguyên giữ các điều khoản và ghi công nguồn trong liên kết dưới. Các điều khoản riêng của từng thành phần được giữ trong ghi công đầy đủ.",
-      "en": "Assets retain the source terms and credits linked below, including the component-specific terms in the full attribution."
-    },
-    "credits.models.link": {
-      "vi": "Ghi công đầy đủ và điều khoản từng thành phần",
-      "en": "Full credits and component terms"
-    },
-    "credits.models.changes": {
-      "vi": "Bộ xương được giải nén nguyên bản, giữ hình học, vật liệu và biến đổi nguồn. Trang thay đổi góc nhìn và độ đậm của các nhóm xương để minh họa tính năng ứng dụng; không thay đổi hình học nguồn.",
-      "en": "The skeletal package is decompressed unchanged, retaining source geometry, materials and transforms. The page changes views and group visibility to illustrate app features without modifying source geometry."
-    },
-    "credits.images.heading": {
-      "vi": "Ảnh và biểu tượng",
-      "en": "Images and icons"
-    },
-    "credits.images.description": {
-      "vi": "Biểu tượng ứng dụng được sao chép từ Human Atlas, có nguồn gốc từ ảnh sọ của mô hình Z-Anatomy và giữ điều khoản tài nguyên nguồn.",
-      "en": "The app icon was copied from Human Atlas. It is derived from the Z-Anatomy skull preview and retains the terms of its source assets."
-    },
-    "credits.images.preview": {
-      "vi": "Ghi công ảnh sọ",
-      "en": "Skull image credits"
-    },
-    "credits.images.icon": {
-      "vi": "Ghi công biểu tượng ứng dụng",
-      "en": "App icon credits"
-    },
-    "credits.fonts.heading": {
-      "vi": "Kiểu chữ và thư viện",
-      "en": "Fonts and libraries"
-    },
-    "credits.fonts.description": {
-      "vi": "Lato và Merriweather được sao chép từ ứng dụng, lưu tại trang và giữ SIL Open Font License. Các icon giao diện dùng đúng tài nguyên Material Line Icons (line-md) của ứng dụng, theo MIT License.",
-      "en": "Lato and Merriweather are copied from the application, served locally and retain the SIL Open Font License. Interface icons use the application's Material Line Icons (line-md) assets under the MIT License."
-    },
-    "credits.lato": {
-      "vi": "Lato — giấy phép font",
-      "en": "Lato — font license"
-    },
-    "credits.merriweather": {
-      "vi": "Merriweather — giấy phép font",
-      "en": "Merriweather — font license"
-    },
-    "credits.icons": {
-      "vi": "Material Line Icons — MIT License",
-      "en": "Material Line Icons — MIT License"
-    },
-    "credits.scope.heading": {
-      "vi": "Phạm vi sử dụng",
-      "en": "Scope of use"
-    },
-    "credits.scope.description": {
-      "vi": "Tài nguyên thể hiện giải phẫu tham chiếu nam trưởng thành. Nội dung dùng cho giáo dục; chưa được thẩm định y khoa độc lập và không thay thế tư vấn y khoa. Danh pháp tiếng Việt là bản nháp đang chờ thẩm định.",
-      "en": "The assets depict adult male reference anatomy. This educational content has not received independent medical review and does not replace medical advice. Vietnamese terminology is a draft awaiting review."
-    },
-    "study.heroTitle": {
-      "vi": "Học giải phẫu. Trong không gian 3D.",
-      "en": "Study anatomy. In 3D."
-    },
-    "site.download.unavailable": {
-      "vi": "Chưa phát hành",
-      "en": "Not yet released"
-    },
-    "product.learn.action": {
-      "vi": "Xem giao diện Human Atlas",
-      "en": "See the Human Atlas interface"
-    },
-    "product.essentials.eyebrow": {
-      "vi": "TRƯỚC KHI BẮT ĐẦU",
-      "en": "BEFORE YOU BEGIN"
-    },
-    "product.essentials.title": {
-      "vi": "Biết rõ công cụ bạn sẽ dùng.",
-      "en": "Know the tool you’re choosing."
-    },
-    "product.essentials.description": {
-      "vi": "Bạn vừa xem bản demo giới hạn ở hệ xương. App đầy đủ đang phát triển; dưới đây là phạm vi và thông tin sử dụng.",
-      "en": "You have seen a demo limited to the skeletal system. The full app is in development; here is its coverage and practical information."
-    },
-    "product.essentials.scope.title": {
-      "vi": "Nội dung giải phẫu",
-      "en": "Anatomy coverage"
-    },
-    "product.essentials.scope.body": {
-      "vi": "App có các nhóm mô hình xương, cơ, khớp, thần kinh, tim mạch và hệ tạng. Tài nguyên tham chiếu nam trưởng thành; trang giới thiệu hiện hiển thị mô hình hệ xương.",
-      "en": "The app includes skeletal, muscular, joint, nervous, cardiovascular and visceral model groups. The assets depict adult male reference anatomy; this introduction currently displays the skeleton."
-    },
-    "product.essentials.language.title": {
-      "vi": "Ngôn ngữ và tên gọi",
-      "en": "Languages and terminology"
-    },
-    "product.essentials.language.body": {
-      "vi": "Giao diện Việt/Anh, kèm tên Latin khi nguồn có dữ liệu. Danh pháp tiếng Việt là bản nháp đang chờ thẩm định.",
-      "en": "Vietnamese and English interface, with Latin names where supplied by the source. Vietnamese terminology is a draft awaiting review."
-    },
-    "product.essentials.platform.title": {
-      "vi": "Nền tảng",
-      "en": "Platforms"
-    },
-    "product.essentials.platform.body": {
-      "vi": "Hướng tới trình duyệt và máy tính. Bản cài Windows/macOS và đường dẫn web công khai chưa có tại đây; trải nghiệm trên thiết bị di động chưa được xác nhận đầy đủ.",
-      "en": "Designed for the browser and desktop. Windows/macOS installers and a public web app link are not available here yet; the mobile experience has not been fully verified."
-    },
-    "product.essentials.network.title": {
-      "vi": "Kết nối Internet",
-      "en": "Internet access"
-    },
-    "product.essentials.network.body": {
-      "vi": "Các mục đọc OpenStax và Wikipedia cần kết nối Internet. Khả năng dùng ngoại tuyến của bản phát hành chưa được xác nhận.",
-      "en": "OpenStax and Wikipedia readings require an Internet connection. Offline availability for a release has not been confirmed."
-    },
-    "product.essentials.requirements.title": {
-      "vi": "Cấu hình máy",
-      "en": "System requirements"
-    },
-    "product.essentials.requirements.body": {
-      "vi": "Chưa công bố cấu hình tối thiểu đã được kiểm chứng cho bản phát hành.",
-      "en": "Verified minimum system requirements for a release have not been published yet."
-    },
-    "product.essentials.cost.title": {
-      "vi": "Chi phí",
-      "en": "Cost"
-    },
-    "product.essentials.cost.body": {
-      "vi": "Chưa công bố thông tin chi phí cho bản phát hành.",
-      "en": "Cost information for a release has not been announced yet."
-    },
-    "product.trust.title": {
-      "vi": "Nguồn dữ liệu và giới hạn",
-      "en": "Sources and limitations"
-    },
-    "product.trust.body": {
-      "vi": "Mô hình có nguồn gốc Z-Anatomy/BodyParts3D; bảng thông tin dẫn tới các mục đọc OpenStax và Wikipedia. Nội dung và mô hình chưa được thẩm định y khoa độc lập. Hãy sử dụng cùng giáo trình và hướng dẫn của giảng viên.",
-      "en": "Models are derived from Z-Anatomy/BodyParts3D; the information panel links to OpenStax and Wikipedia readings. The content and models have not received independent medical review. Use them alongside your textbook and instructor’s guidance."
-    },
-    "product.trust.action": {
-      "vi": "Xem nguồn và phạm vi sử dụng",
-      "en": "View sources and scope of use"
-    },
-    "product.release.eyebrow": {
-      "vi": "TRẠNG THÁI PHÁT HÀNH",
-      "en": "RELEASE STATUS"
-    },
-    "product.release.title": {
-      "vi": "Human Atlas đang được hoàn thiện.",
-      "en": "Human Atlas is taking shape."
-    },
-    "product.release.description": {
-      "vi": "Bản cài đặt và đường dẫn dùng app công khai sẽ được bổ sung khi sẵn sàng. Hiện bạn có thể tìm hiểu tính năng, phạm vi nội dung và thông tin sử dụng trên trang này.",
-      "en": "Installers and a public app link will be added when ready. You can currently explore the features, anatomy coverage and practical information on this page."
-    },
-    "product.release.platforms": {
-      "vi": "Bản cài đặt đang chờ phát hành",
-      "en": "Installers awaiting release"
-    },
-    "product.release.action": {
-      "vi": "Về giới thiệu Human Atlas",
-      "en": "Back to Human Atlas"
-    },
-    "product.essentials.action": {
-      "vi": "Xem trạng thái phát hành",
-      "en": "View release status"
-    },
-    "demo.title": {
-      "vi": "Một cửa sổ. Nhiều cách quan sát.",
-      "en": "One window. Many ways to explore."
-    },
-    "demo.scope": {
-      "vi": "Hệ xương · Human Atlas",
-      "en": "Skeletal system · Human Atlas"
-    },
-    "demo.continue": {
-      "vi": "Tiếp tục",
-      "en": "Continue"
-    },
-    "demo.hint": {
-      "vi": "Bản minh họa thay đổi theo từng phần khi cuộn trang. Các thao tác trực tiếp sẽ có trong ứng dụng.",
-      "en": "This preview changes with each section as you scroll. Direct controls are available in the application."
-    },
-    "demo.overview": {
-      "vi": "Tìm cấu trúc, điều chỉnh góc nhìn và xem tên gọi trong cùng một không gian. Human Atlas giữ mô hình ở trung tâm để bạn theo dõi vùng đang học.",
-      "en": "Find structures, adjust the view and read their names in one workspace. Human Atlas keeps the model at the center so you can follow the region you are studying."
-    },
-    "site.title": {
-      "vi": "Human Atlas — Ứng dụng học giải phẫu 3D",
-      "en": "Human Atlas — The 3D anatomy study app"
-    },
-    "site.description": {
-      "vi": "Tìm cấu trúc, quan sát mô hình 3D và đọc tài liệu cùng Human Atlas. Tìm hiểu tính năng, không gian ứng dụng và thông tin sử dụng.",
-      "en": "Find structures, explore 3D models and follow reference readings with Human Atlas. Explore the app’s features, workspace and practical details."
-    },
-    "credits.title": {
-      "vi": "Nguồn tài nguyên — Human Atlas",
-      "en": "Asset credits — Human Atlas"
-    },
-    "demo.spread.title": {
-      "vi": "Từng xương. Một cái nhìn toàn cảnh.",
-      "en": "Every bone. One overview."
-    },
-    "demo.spread.body": {
-      "vi": "Tách các cấu trúc thành từng hàng để so sánh hình dạng và kích thước. Trong app, bạn có thể đưa chúng trở lại vị trí lắp ráp.",
-      "en": "Arrange structures in rows to compare their shapes and sizes. In the app, return them to their assembled positions."
-    }
+    "site.skip": {"vi": "Đến nội dung chính", "en": "Skip to main content"},
+    "site.brand": {"vi": "Human Atlas", "en": "Human Atlas"},
+    "site.loading": {"vi": "Đang chuẩn bị mô hình 3D…", "en": "Preparing the 3D model…"},
+    "site.loadError": {"vi": "Chưa thể hiển thị 3D. Bạn vẫn có thể cuộn để khám phá nội dung.", "en": "The 3D model could not be displayed. You can still scroll to explore the content."},
+    "site.contextLost": {"vi": "Kết nối đồ họa bị gián đoạn. Bạn có thể tải lại mô hình.", "en": "The graphics connection was interrupted. You can reload the model."},
+    "site.retry": {"vi": "Thử tải lại mô hình", "en": "Retry loading the model"},
+    "site.hero.eyebrow": {"vi": "HUMAN ATLAS · ỨNG DỤNG GIẢI PHẪU 3D", "en": "HUMAN ATLAS · THE 3D ANATOMY APP"},
+    "site.hero.title1": {"vi": "Học giải phẫu.", "en": "Study anatomy."},
+    "site.hero.title2": {"vi": "Trong không gian 3D.", "en": "In 3D."},
+    "site.hero.description": {"vi": "Human Atlas giúp bạn tìm cấu trúc, quan sát vị trí và mối liên hệ trên mô hình 3D, rồi mở tài liệu để đọc tiếp. Một công cụ dùng cùng giáo trình và buổi thực hành giải phẫu của bạn.", "en": "Human Atlas helps you find structures, explore their positions and relationships on a 3D model, and open related readings. A tool to use alongside your anatomy textbook and practical classes."},
+    "site.hero.explore": {"vi": "Tìm hiểu tính năng", "en": "Explore the features"},
+    "site.hero.note": {"vi": "Ứng dụng đang phát triển · Giao diện Việt / Anh", "en": "In development · Vietnamese / English interface"},
+    "site.copyright": {"vi": "© 2026 Nguyễn Lê Văn Dũng", "en": "© 2026 Nguyễn Lê Văn Dũng"},
+    "site.modelCredit": {"vi": "Mô hình: Z-Anatomy / BodyParts3D", "en": "Models: Z-Anatomy / BodyParts3D"},
+    "site.credits": {"vi": "Nguồn tài nguyên & giấy phép", "en": "Asset sources & licenses"},
+    "credits.back": {"vi": "Trở về Human Atlas", "en": "Back to Human Atlas"},
+    "credits.heading1": {"vi": "Nguồn tài nguyên", "en": "Asset sources"},
+    "credits.heading2": {"vi": "& giấy phép.", "en": "& licenses."},
+    "credits.code": {"vi": "Human Atlas © 2026 Nguyễn Lê Văn Dũng. Mã nguồn gốc của trang được cấp phép theo Apache License 2.0. Mô hình, ảnh và font giữ giấy phép riêng.", "en": "Human Atlas © 2026 Nguyễn Lê Văn Dũng. Original website source code is licensed under Apache License 2.0. Models, images and fonts retain their own licenses."},
+    "credits.codeLink": {"vi": "Giấy phép mã nguồn Apache-2.0", "en": "Apache-2.0 source code license"},
+    "credits.models.heading": {"vi": "Mô hình giải phẫu", "en": "Anatomy models"},
+    "credits.models.source": {"vi": "Mô hình xương trên trang được lấy từ tài nguyên Human Atlas có nguồn gốc Z-Anatomy. Ghi công Gauthier Kervyn và các cộng tác viên Z-Anatomy; dựa trên BodyParts3D của Database Center for Life Science.", "en": "The skeleton displayed here comes from Human Atlas assets derived from Z-Anatomy. Credit: Gauthier Kervyn and the Z-Anatomy contributors, based on BodyParts3D by the Database Center for Life Science."},
+    "credits.models.terms": {"vi": "Tài nguyên giữ các điều khoản và ghi công nguồn trong liên kết dưới. Các điều khoản riêng của từng thành phần được giữ trong ghi công đầy đủ.", "en": "Assets retain the source terms and credits linked below, including the component-specific terms in the full attribution."},
+    "credits.models.link": {"vi": "Ghi công đầy đủ và điều khoản từng thành phần", "en": "Full credits and component terms"},
+    "credits.models.changes": {"vi": "Bộ xương được giải nén nguyên bản, giữ hình học, vật liệu và biến đổi nguồn. Trang thay đổi góc nhìn và độ đậm của các nhóm xương để minh họa tính năng ứng dụng; không thay đổi hình học nguồn.", "en": "The skeletal package is decompressed unchanged, retaining source geometry, materials and transforms. The page changes views and group visibility to illustrate app features without modifying source geometry."},
+    "credits.images.heading": {"vi": "Ảnh và biểu tượng", "en": "Images and icons"},
+    "credits.images.description": {"vi": "Biểu tượng ứng dụng được sao chép từ Human Atlas, có nguồn gốc từ ảnh sọ của mô hình Z-Anatomy và giữ điều khoản tài nguyên nguồn.", "en": "The app icon was copied from Human Atlas. It is derived from the Z-Anatomy skull preview and retains the terms of its source assets."},
+    "credits.images.preview": {"vi": "Ghi công ảnh sọ", "en": "Skull image credits"},
+    "credits.images.icon": {"vi": "Ghi công biểu tượng ứng dụng", "en": "App icon credits"},
+    "credits.fonts.heading": {"vi": "Kiểu chữ và thư viện", "en": "Fonts and libraries"},
+    "credits.fonts.description": {"vi": "Lato và Merriweather được sao chép từ ứng dụng, lưu tại trang và giữ SIL Open Font License. Các icon giao diện dùng đúng tài nguyên Material Line Icons (line-md) của ứng dụng, theo MIT License.", "en": "Lato and Merriweather are copied from the application, served locally and retain the SIL Open Font License. Interface icons use the application's Material Line Icons (line-md) assets under the MIT License."},
+    "credits.lato": {"vi": "Lato — giấy phép font", "en": "Lato — font license"},
+    "credits.merriweather": {"vi": "Merriweather — giấy phép font", "en": "Merriweather — font license"},
+    "credits.icons": {"vi": "Material Line Icons — MIT License", "en": "Material Line Icons — MIT License"},
+    "credits.scope.heading": {"vi": "Phạm vi sử dụng", "en": "Scope of use"},
+    "credits.scope.description": {"vi": "Tài nguyên thể hiện giải phẫu tham chiếu nam trưởng thành. Nội dung dùng cho giáo dục; chưa được thẩm định y khoa độc lập và không thay thế tư vấn y khoa. Danh pháp tiếng Việt là bản nháp đang chờ thẩm định.", "en": "The assets depict adult male reference anatomy. This educational content has not received independent medical review and does not replace medical advice. Vietnamese terminology is a draft awaiting review."},
+    "study.heroTitle": {"vi": "Học giải phẫu. Trong không gian 3D.", "en": "Study anatomy. In 3D."},
+    "site.download.unavailable": {"vi": "Chưa phát hành", "en": "Not yet released"},
+    "product.learn.action": {"vi": "Xem giao diện Human Atlas", "en": "See the Human Atlas interface"},
+    "product.essentials.eyebrow": {"vi": "TRƯỚC KHI BẮT ĐẦU", "en": "BEFORE YOU BEGIN"},
+    "product.essentials.title": {"vi": "Biết rõ công cụ bạn sẽ dùng.", "en": "Know the tool you’re choosing."},
+    "product.essentials.description": {"vi": "Bạn vừa xem bản demo giới hạn ở hệ xương. App đầy đủ đang phát triển; dưới đây là phạm vi và thông tin sử dụng.", "en": "You have seen a demo limited to the skeletal system. The full app is in development; here is its coverage and practical information."},
+    "product.essentials.scope.title": {"vi": "Nội dung giải phẫu", "en": "Anatomy coverage"},
+    "product.essentials.scope.body": {"vi": "App có các nhóm mô hình xương, cơ, khớp, thần kinh, tim mạch và hệ tạng. Tài nguyên tham chiếu nam trưởng thành; trang giới thiệu hiện hiển thị mô hình hệ xương.", "en": "The app includes skeletal, muscular, joint, nervous, cardiovascular and visceral model groups. The assets depict adult male reference anatomy; this introduction currently displays the skeleton."},
+    "product.essentials.language.title": {"vi": "Ngôn ngữ và tên gọi", "en": "Languages and terminology"},
+    "product.essentials.language.body": {"vi": "Giao diện Việt/Anh, kèm tên Latin khi nguồn có dữ liệu. Danh pháp tiếng Việt là bản nháp đang chờ thẩm định.", "en": "Vietnamese and English interface, with Latin names where supplied by the source. Vietnamese terminology is a draft awaiting review."},
+    "product.essentials.platform.title": {"vi": "Nền tảng", "en": "Platforms"},
+    "product.essentials.platform.body": {"vi": "Hướng tới trình duyệt và máy tính. Bản cài Windows/macOS và đường dẫn web công khai chưa có tại đây; trải nghiệm trên thiết bị di động chưa được xác nhận đầy đủ.", "en": "Designed for the browser and desktop. Windows/macOS installers and a public web app link are not available here yet; the mobile experience has not been fully verified."},
+    "product.essentials.network.title": {"vi": "Kết nối Internet", "en": "Internet access"},
+    "product.essentials.network.body": {"vi": "Các mục đọc OpenStax và Wikipedia cần kết nối Internet. Khả năng dùng ngoại tuyến của bản phát hành chưa được xác nhận.", "en": "OpenStax and Wikipedia readings require an Internet connection. Offline availability for a release has not been confirmed."},
+    "product.essentials.requirements.title": {"vi": "Cấu hình máy", "en": "System requirements"},
+    "product.essentials.requirements.body": {"vi": "Chưa công bố cấu hình tối thiểu đã được kiểm chứng cho bản phát hành.", "en": "Verified minimum system requirements for a release have not been published yet."},
+    "product.essentials.cost.title": {"vi": "Chi phí", "en": "Cost"},
+    "product.essentials.cost.body": {"vi": "Chưa công bố thông tin chi phí cho bản phát hành.", "en": "Cost information for a release has not been announced yet."},
+    "product.trust.title": {"vi": "Nguồn dữ liệu và giới hạn", "en": "Sources and limitations"},
+    "product.trust.body": {"vi": "Mô hình có nguồn gốc Z-Anatomy/BodyParts3D; bảng thông tin dẫn tới các mục đọc OpenStax và Wikipedia. Nội dung và mô hình chưa được thẩm định y khoa độc lập. Hãy sử dụng cùng giáo trình và hướng dẫn của giảng viên.", "en": "Models are derived from Z-Anatomy/BodyParts3D; the information panel links to OpenStax and Wikipedia readings. The content and models have not received independent medical review. Use them alongside your textbook and instructor’s guidance."},
+    "product.trust.action": {"vi": "Xem nguồn và phạm vi sử dụng", "en": "View sources and scope of use"},
+    "product.release.eyebrow": {"vi": "TRẠNG THÁI PHÁT HÀNH", "en": "RELEASE STATUS"},
+    "product.release.title": {"vi": "Human Atlas đang được hoàn thiện.", "en": "Human Atlas is taking shape."},
+    "product.release.description": {"vi": "Bản cài đặt và đường dẫn dùng app công khai sẽ được bổ sung khi sẵn sàng. Hiện bạn có thể tìm hiểu tính năng, phạm vi nội dung và thông tin sử dụng trên trang này.", "en": "Installers and a public app link will be added when ready. You can currently explore the features, anatomy coverage and practical information on this page."},
+    "product.release.platforms": {"vi": "Bản cài đặt đang chờ phát hành", "en": "Installers awaiting release"},
+    "product.release.action": {"vi": "Về giới thiệu Human Atlas", "en": "Back to Human Atlas"},
+    "product.essentials.action": {"vi": "Xem trạng thái phát hành", "en": "View release status"},
+    "demo.title": {"vi": "Một cửa sổ. Nhiều cách quan sát.", "en": "One window. Many ways to explore."},
+    "demo.scope": {"vi": "Hệ xương · Human Atlas", "en": "Skeletal system · Human Atlas"},
+    "demo.continue": {"vi": "Tiếp tục", "en": "Continue"},
+    "demo.hint": {"vi": "Bản minh họa thay đổi theo từng phần khi cuộn trang. Các thao tác trực tiếp sẽ có trong ứng dụng.", "en": "This preview changes with each section as you scroll. Direct controls are available in the application."},
+    "demo.overview": {"vi": "Tìm cấu trúc, điều chỉnh góc nhìn và xem tên gọi trong cùng một không gian. Human Atlas giữ mô hình ở trung tâm để bạn theo dõi vùng đang học.", "en": "Find structures, adjust the view and read their names in one workspace. Human Atlas keeps the model at the center so you can follow the region you are studying."},
+    "site.title": {"vi": "Human Atlas — Ứng dụng học giải phẫu 3D", "en": "Human Atlas — The 3D anatomy study app"},
+    "site.description": {"vi": "Tìm cấu trúc, quan sát mô hình 3D và đọc tài liệu cùng Human Atlas. Tìm hiểu tính năng, không gian ứng dụng và thông tin sử dụng.", "en": "Find structures, explore 3D models and follow reference readings with Human Atlas. Explore the app’s features, workspace and practical details."},
+    "credits.title": {"vi": "Nguồn tài nguyên — Human Atlas", "en": "Asset credits — Human Atlas"},
+    "demo.spread.title": {"vi": "Từng xương. Một cái nhìn toàn cảnh.", "en": "Every bone. One overview."},
+    "demo.spread.body": {"vi": "Tách các cấu trúc thành từng hàng để so sánh hình dạng và kích thước. Trong app, bạn có thể đưa chúng trở lại vị trí lắp ráp.", "en": "Arrange structures in rows to compare their shapes and sizes. In the app, return them to their assembled positions."},
+    "home.brand.label": {"vi": "Human Atlas — Trang chủ", "en": "Human Atlas — Home"},
+    "language.selector.label": {"vi": "Ngôn ngữ", "en": "Language"},
+    "appearance.mode.auto": {"vi": "Tự động", "en": "Auto"},
+    "appearance.mode.light": {"vi": "Sáng", "en": "Light"},
+    "appearance.mode.dark": {"vi": "Tối", "en": "Dark"}
   }
 }
