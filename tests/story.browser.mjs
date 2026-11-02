@@ -120,6 +120,15 @@ try {
     await page.waitForSelector('.stage[data-ready][data-settled="true"]');
     await page.waitForFunction(() => getComputedStyle(document.querySelector('.stage>canvas')).opacity === '1');
     assert.equal(await page.locator('.product-section').count(), 4);
+    assert.equal(await page.locator('.intro-note,.release-note,a[href$="credits.html"]').count(), 0);
+    const corners = await page.locator('.has-footer .site-scroll').evaluate(viewport => {
+      const frame = viewport.closest('.module-content');
+      const box = frame.getBoundingClientRect();
+      const parent = getComputedStyle(frame), child = getComputedStyle(viewport);
+      return { matched: child.borderBottomLeftRadius === parent.borderBottomLeftRadius && child.borderBottomRightRadius === parent.borderBottomRightRadius, radius: parseFloat(child.borderBottomLeftRadius), background: child.backgroundImage, outerBackground: getComputedStyle(viewport.parentElement).backgroundImage, footerShadow: getComputedStyle(document.querySelector('.site-footer')).boxShadow, insets: [box.left, innerWidth - box.right, innerHeight - box.bottom] };
+    });
+    assert.ok(corners.matched && corners.radius === 24 && corners.background !== 'none' && corners.outerBackground === 'none' && corners.footerShadow === 'none', 'Round the content viewport above the footer and keep its outside corners clear');
+    assert.ok(corners.insets.every(inset => Math.abs(inset - 6) < 1), 'The workspace frame must keep its 6px outer spacing');
     assert.equal(await page.locator('#start .download-option:disabled').count(), 2);
     assert.equal(await page.locator('#start .download-option [aria-hidden="true"] svg').count(), 2);
     const frame = page.locator('.demo-window');
@@ -366,8 +375,16 @@ try {
   await failed.mouse.click(retryBounds.x + retryBounds.width / 2, retryBounds.y + retryBounds.height / 2);
   await failed.waitForSelector('.stage[data-ready][data-scene="1"][data-settled="true"]');
   assert.ok(Math.abs(await failed.locator('.site-scroll').evaluate(el => el.scrollTop) - retryPosition) < 2);
-  await failed.goto(new URL('credits.html', baseUrl).href);
+  await failed.locator('.site-footer a').click();
+  assert.equal(new URL(failed.url()).pathname, '/credits');
+  await failed.reload();
   assert.equal(await failed.locator('.credits-page h1').count(), 1);
+  assert.equal(await failed.locator('.site-footer').count(), 1);
+  const creditsFooter = await failed.locator('.site-footer').boundingBox();
+  await failed.locator('.site-scroll').evaluate(el => el.scrollTo({ top: el.scrollHeight, behavior: 'instant' }));
+  assert.deepEqual(await failed.locator('.site-footer').boundingBox(), creditsFooter, 'The credits footer must stay visible while its content scrolls');
+  assert.ok(creditsFooter.y + creditsFooter.height <= 760 - 5);
+
   await failed.keyboard.press('Tab');
   await failed.keyboard.press('Enter');
   assert.equal(await failed.locator('#journey').evaluate(el => el === document.activeElement), true);

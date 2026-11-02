@@ -4,13 +4,13 @@ import { icon } from './icons.ts';
 const text = (key: MessageKey, tag = 'span', attributes = '') => `<${tag} data-i18n="${key}" ${attributes}></${tag}>`;
 const arrow = icon('right');
 
-function layout(root: HTMLElement, content: string, footer = ''): void {
+function layout(root: HTMLElement, content: string): void {
   root.innerHTML = `<div class="module-page"><button class="skip-link" type="button" data-i18n="site.skip"></button>
     <header class="module-header">
       <a class="module-brand" href="./" data-i18n-aria-label="home.brand.label">${text('site.brand')}</a>
       <div class="module-preferences"><button id="language" class="page-toggle" type="button" data-i18n-aria-label="language.selector.label"></button><button id="theme" class="page-toggle theme-toggle" type="button"></button></div>
-    </header><div class="module-content"><div class="model-space${footer ? ' has-footer' : ''}">
-      <div class="site-scroll">${content}</div>${footer}
+    </header><div class="module-content"><div class="model-space has-footer">
+      <div class="site-scroll">${content}</div><footer class="site-footer">${text('site.copyright')}${text('site.modelCredit', 'span', 'class="footer-credit"')}<a href="./credits">${text('site.credits')}${arrow}</a></footer>
     </div></div></div>`;
   root.querySelector<HTMLButtonElement>('.skip-link')!.addEventListener('click', () => root.querySelector<HTMLElement>('main')!.focus());
 }
@@ -20,7 +20,7 @@ function downloadOptions(): string {
 }
 
 function introductionSection(): string {
-  return `<section id="start" class="product-section intro-section" data-scene="0" aria-labelledby="hero-title"><div class="product-inner" tabindex="0" role="region" aria-labelledby="hero-title"><header class="product-header">${text('site.hero.eyebrow', 'p', 'class="eyebrow"')}<h1 id="hero-title" data-i18n-aria-label="study.heroTitle">${text('site.hero.title1')}<br />${text('site.hero.title2', 'em')}</h1>${text('site.hero.description', 'p', 'class="description"')}</header>${downloadOptions()}${text('site.hero.note', 'p', 'class="intro-note"')}</div></section>`;
+  return `<section id="start" class="product-section intro-section" data-scene="0" aria-labelledby="hero-title"><div class="product-inner" tabindex="0" role="region" aria-labelledby="hero-title"><header class="product-header">${text('site.hero.eyebrow', 'p', 'class="eyebrow"')}<h1 id="hero-title" data-i18n-aria-label="study.heroTitle">${text('site.hero.title1')}<br />${text('site.hero.title2', 'em')}</h1>${text('site.hero.description', 'p', 'class="description"')}</header>${downloadOptions()}</div></section>`;
 }
 
 function appOverviewSection(): string {
@@ -36,7 +36,7 @@ function demoInterface(): string {
 }
 
 function releaseSection(): string {
-  return `<section id="download" class="product-section closing-section" data-scene="3" aria-labelledby="sources-title"><div class="product-inner" tabindex="0" role="region" aria-labelledby="sources-title"><header class="product-header">${text('product.trust.title', 'h2', 'id="sources-title"')}${text('product.trust.body', 'p', 'class="description"')}</header><a class="source-link" href="./credits.html">${text('product.trust.action')}${arrow}</a>${text('product.release.description', 'p', 'class="release-note"')}${downloadOptions()}</div></section>`;
+  return `<section id="download" class="product-section closing-section" data-scene="3" aria-labelledby="sources-title"><div class="product-inner" tabindex="0" role="region" aria-labelledby="sources-title"><header class="product-header">${text('product.trust.title', 'h2', 'id="sources-title"')}${text('product.trust.body', 'p', 'class="description"')}</header><a class="source-link" href="./credits">${text('product.trust.action')}${arrow}</a>${downloadOptions()}</div></section>`;
 }
 
 export function renderLandingPage(root: HTMLElement): void {
@@ -44,7 +44,7 @@ export function renderLandingPage(root: HTMLElement): void {
     <main id="journey" tabindex="-1"><div class="anatomy-journey">
       <div class="stage" data-layout="hero"><div class="demo-window">${demoInterface()}<div id="demo-viewer-host"></div></div>${text('site.loading', 'p', 'id="load-status" class="load-status" role="status"')}<button id="retry" class="retry" type="button" hidden data-i18n="site.retry"></button></div>
       ${introductionSection()}
-    ${appOverviewSection()}${spreadSection()}${releaseSection()}</div></main>`, `<footer class="site-footer">${text('site.copyright')}${text('site.modelCredit', 'span', 'class="footer-credit"')}<a href="./credits.html">${text('site.credits')}${arrow}</a></footer>`);
+    ${appOverviewSection()}${spreadSection()}${releaseSection()}</div></main>`);
 }
 
 export function renderCreditsPage(root: HTMLElement): void {
