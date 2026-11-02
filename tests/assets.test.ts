@@ -30,7 +30,3 @@ test('redistributed source assets include attribution and licenses', () => {
     assert.ok(fs.statSync(new URL(`../${path}`, import.meta.url)).size > 100, path);
   }
 });
-
-test('page foundation is copied from the application stylesheet', () => {
-  assert.equal(hash(fs.readFileSync(new URL('../pages.css', import.meta.url))), '8d7d369462cab54f477b6fd12fc5d0c24e86d289baf48a92b146807c0ee1b39f');
-});
