@@ -12,6 +12,7 @@ export function mountDemo(report: (key: MessageKey | null) => void, showRetry: (
   const demoWindow = document.querySelector<HTMLElement>('.demo-window')!;
   const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const pages = [...document.querySelectorAll<HTMLElement>('.product-section')];
+  const copies = pages.slice(1).map((page, index) => ({ page, panel: page.querySelector<HTMLElement>('.product-inner')!, left: index === 0, top: 0, height: 1, hold: 0, distance: 0, entrance: 0.2 }));
   const abort = new AbortController();
   let catalog: Catalog | undefined;
   let runtime: ViewerRuntime | undefined;
@@ -21,6 +22,35 @@ export function mountDemo(report: (key: MessageKey | null) => void, showRetry: (
   stage.dataset.chrome = 'hidden';
   const omitted = new Set(['Hyoid bone', 'Thyroid cartilage', 'Cricoid cartilage', 'Arytenoid cartilage', 'Corniculate cartilage', 'Lateral process of nasal septal cartilage', 'Nasal septal cartilage', 'Major alar cartilage']);
   const frame: Viewport = [0.03, 0.02, 0.94, 0.96];
+  const measureCopies = () => {
+    const width = viewport.clientWidth;
+    const compact = window.matchMedia('(max-width: 700px)').matches;
+    for (const [index, copy] of copies.entries()) {
+      copy.top = copy.page.offsetTop;
+      copy.height = copy.page.offsetHeight;
+      copy.hold = Math.max(0, (pages[index + 2]?.offsetTop ?? copy.top + copy.height) - copy.top - copy.height);
+      copy.distance = copy.left ? -copy.panel.offsetLeft - copy.panel.offsetWidth : width - copy.panel.offsetLeft;
+      copy.entrance = copy.left && compact ? 0.06 : 0.2;
+    }
+  };
+  const syncCopies = () => {
+    const scroll = viewport.scrollTop;
+    viewport.toggleAttribute('data-copy-motion', !motion.matches);
+    for (const { page, panel, top, height, hold, distance, entrance } of copies) {
+      if (motion.matches) {
+        panel.style.removeProperty('transform');
+        panel.style.removeProperty('visibility');
+        page.inert = false;
+        continue;
+      }
+      const offset = scroll - top;
+      const progress = Math.max(0, Math.min(1, offset < 0 ? 1 + offset / (height * entrance) : 1 - Math.max(0, offset - hold) / (height * 0.35)));
+      const visible = progress * progress * (3 - 2 * progress);
+      panel.style.transform = `translate3d(${distance * (1 - visible)}px,${offset}px,0)`;
+      panel.style.visibility = progress > 0 ? 'visible' : 'hidden';
+      page.inert = progress === 0;
+    }
+  };
   const layoutFor = (scene: number) => scene === 0 ? 'hero' : scene === 1 ? 'right' : 'split';
   const presentationFor = (scene: number) => ({
     visible: allowed,
@@ -86,6 +116,7 @@ export function mountDemo(report: (key: MessageKey | null) => void, showRetry: (
     } else if (ready) present(Number(scene));
   };
   const syncPage = () => {
+    syncCopies();
     let fromIndex = 0;
     for (let index = 1; index < pages.length; index++) {
       if (pages[index]!.offsetTop <= viewport.scrollTop) fromIndex = index;
@@ -96,7 +127,7 @@ export function mountDemo(report: (key: MessageKey | null) => void, showRetry: (
     if (!motion.matches && from.dataset.scene !== undefined && next?.dataset.scene !== undefined) {
       stage.style.removeProperty('opacity');
       const fromScene = Number(from.dataset.scene), toScene = Number(next.dataset.scene);
-      const progress = Math.max(0, Math.min(1, (viewport.scrollTop - from.offsetTop) / (next.offsetTop - from.offsetTop)));
+      const progress = Math.max(0, Math.min(1, 1 - (next.offsetTop - viewport.scrollTop) / viewport.clientHeight));
       const blend = fromScene === 0 ? progress * progress * (3 - 2 * progress) : progress;
       const key = `${from.id}:${next.id}`;
       const newTransition = key !== transitionKey;
@@ -122,7 +153,7 @@ export function mountDemo(report: (key: MessageKey | null) => void, showRetry: (
       return;
     }
     if (!motion.matches && from.dataset.scene !== undefined && next && next.dataset.scene === undefined) {
-      const progress = Math.max(0, Math.min(1, (viewport.scrollTop - from.offsetTop) / (next.offsetTop - from.offsetTop)));
+      const progress = Math.max(0, Math.min(1, 1 - (next.offsetTop - viewport.scrollTop) / viewport.clientHeight));
       const key = `${from.id}:${next.id}:exit`;
       delete stage.dataset.opening;
       stage.style.removeProperty('--demo-chrome');
@@ -149,10 +180,11 @@ export function mountDemo(report: (key: MessageKey | null) => void, showRetry: (
     if (runtime) runtime.scheduleRender();
     else syncPage();
   };
-  const observer = new ResizeObserver(() => { transitionKey = ''; scheduleSync(); });
+  const observer = new ResizeObserver(() => { transitionKey = ''; measureCopies(); scheduleSync(); });
   observer.observe(viewport);
   viewport.addEventListener('scroll', scheduleSync, { signal: abort.signal });
-  motion.addEventListener('change', scheduleSync, { signal: abort.signal });
+  motion.addEventListener('change', () => { measureCopies(); scheduleSync(); }, { signal: abort.signal });
+  measureCopies();
   syncPage();
   void (async () => {
     try {
@@ -196,5 +228,11 @@ export function mountDemo(report: (key: MessageKey | null) => void, showRetry: (
     stage.style.removeProperty('--demo-chrome');
     pages[0]!.style.removeProperty('opacity');
     pages[0]!.inert = false;
+    viewport.removeAttribute('data-copy-motion');
+    for (const { page, panel } of copies) {
+      panel.style.removeProperty('transform');
+      panel.style.removeProperty('visibility');
+      page.inert = false;
+    }
   };
 }

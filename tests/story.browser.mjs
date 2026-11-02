@@ -227,7 +227,7 @@ try {
     const reveals = await page.evaluate(() => window.demoChromeEvents.filter(event => event.scene === '1'));
     assert.ok(reveals.length > 0 && reveals.every(event => event.settled === 'true' && !event.moving), 'The app frame must appear after both the model and its window settle');
     assert.ok(await page.evaluate(() => window.demoBackdropDraws) > 0);
-    await page.locator('.site-scroll').evaluate(el => el.scrollTo({ top: document.querySelector('#app-overview').offsetTop + el.clientHeight * 0.75, behavior: 'instant' }));
+    await page.locator('.site-scroll').evaluate(el => el.scrollTo({ top: document.querySelector('#essentials').offsetTop - el.clientHeight * 0.25, behavior: 'instant' }));
     await page.waitForFunction(() => getComputedStyle(document.querySelector('.stage')).opacity === '0');
     await visit('learn', 1);
     assert.equal(await page.locator('.stage').evaluate(el => getComputedStyle(el).opacity), '1', 'Returning from the text chapters must restore the demo opacity');
@@ -250,6 +250,60 @@ try {
         await panel.press('End');
         await page.waitForFunction(id => document.querySelector('#' + id + ' .product-inner').scrollTop > 0, id);
         assert.ok(Math.abs(await page.locator('.site-scroll').evaluate(el => el.scrollTop) - position) < 2);
+      }
+    }
+    for (const id of ['learn', 'app-overview']) {
+      let resting;
+      for (const progress of [0, 0.5, 0.9, 0.5, 0]) {
+        const sample = await page.evaluate(async ({ id, progress }) => {
+          const viewport = document.querySelector('.site-scroll');
+          const section = document.getElementById(id);
+          const hold = section.nextElementSibling.offsetTop - section.offsetTop - viewport.clientHeight;
+          viewport.scrollTo({ top: section.offsetTop + hold * progress, behavior: 'instant' });
+          await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+          const bounds = element => {
+            const rect = element.getBoundingClientRect();
+            return [rect.x, rect.y, rect.width, rect.height];
+          };
+          return { hold, viewport: viewport.clientHeight, copy: bounds(section.querySelector('.product-inner')), app: bounds(document.querySelector('.demo-window')), progress: Number(document.querySelector('.stage').dataset.progress) };
+        }, { id, progress });
+        assert.ok(sample.hold >= sample.viewport * 0.24, 'Chapters two and three must reserve extra reading scroll distance');
+        assert.equal(sample.progress, 0, 'The demo must wait during the reading hold');
+        if (resting) for (const target of ['copy', 'app']) for (let i = 0; i < 4; i++) assert.ok(Math.abs(sample[target][i] - resting[target][i]) < 1, 'Text and demo must stay still while scrolling through the reading hold');
+        else resting = sample;
+      }
+    }
+    const copySamples = new Map();
+    for (const index of [0, 1, 2, 3, 3, 2, 1, 0]) {
+      for (const progress of [0, 0.025, 0.05, 0.1, 0.15, 0.2, 0.3, 0.4, 0.5, 0.75, 0.8, 0.85, 0.9, 0.925, 0.94, 0.95, 0.975, 1]) {
+        const sample = await page.evaluate(async ({ index, progress }) => {
+          const viewport = document.querySelector('.site-scroll');
+          const sections = [...document.querySelectorAll('.product-section')];
+          viewport.scrollTo({ top: sections[index].offsetTop + (sections[index + 1].offsetTop - sections[index].offsetTop) * progress, behavior: 'instant' });
+          await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+          const app = document.querySelector('.demo-window').getBoundingClientRect();
+          const stage = document.querySelector('.stage');
+          const appVisible = getComputedStyle(stage).visibility !== 'hidden' && Number(getComputedStyle(stage).opacity) > 0.01 && Number(getComputedStyle(document.querySelector('.demo-shell')).opacity) > 0.05;
+          const copies = sections.slice(1).map(section => {
+            const panel = section.querySelector('.product-inner');
+            const rect = panel.getBoundingClientRect();
+            const visible = getComputedStyle(panel).visibility !== 'hidden' && rect.right > 0 && rect.left < viewport.getBoundingClientRect().right && rect.bottom > viewport.getBoundingClientRect().top && rect.top < viewport.getBoundingClientRect().bottom;
+            return { id: section.id, x: rect.x, y: rect.y, restX: viewport.getBoundingClientRect().left + panel.offsetLeft, visible, pinned: Math.abs(rect.top - viewport.getBoundingClientRect().top - parseFloat(getComputedStyle(section).paddingTop)) < 1, overlap: appVisible && rect.left < app.right - 1 && rect.right > app.left + 1 && rect.top < app.bottom - 1 && rect.bottom > app.top + 1 };
+          });
+          return copies;
+        }, { index, progress });
+        for (const copy of sample.filter(copy => copy.visible)) {
+          assert.ok(copy.pinned, 'Text must stay at its reading height while sliding horizontally: ' + JSON.stringify({ index, progress, copy }));
+          assert.ok(!copy.overlap, 'Sliding text must stay outside the demo window: ' + JSON.stringify({ index, progress, copy }));
+        }
+        for (const copy of sample) assert.ok(copy.id === 'learn' ? copy.x <= copy.restX + 1 : copy.x >= copy.restX - 1, 'Text must enter and leave through its outer edge');
+        if (progress === 0.95) assert.ok(Math.abs(sample[index].x - sample[index].restX) > 1 && sample[index].visible, 'Incoming text must slide inward before reaching its reading position');
+        if (progress === 0.3 && index > 0) assert.ok(Math.abs(sample[index - 1].x - sample[index - 1].restX) > 1 && sample[index - 1].visible, 'Outgoing text must slide back toward the same edge');
+        if (index === 1 && progress === 0.3 || index === 0 && progress === 0.975) await page.screenshot({ path: path.join(screenshots, name + '-copy-' + index + '-' + progress + '.png') });
+        const key = index + ':' + progress;
+        const previous = copySamples.get(key);
+        if (previous) for (let i = 0; i < sample.length; i++) for (const axis of ['x', 'y']) assert.ok(Math.abs(sample[i][axis] - previous[i][axis]) < 1, 'Reverse scroll must restore the same text positions');
+        else copySamples.set(key, sample);
       }
     }
     await page.locator('#language').click();
@@ -339,6 +393,8 @@ try {
   await motion.emulateMedia({ reducedMotion: 'reduce' });
   await motion.waitForSelector('.stage[data-scene="2"][data-settled="true"]');
   await motion.waitForFunction(() => !document.querySelector('.demo-window').getAnimations().some(animation => animation.playState === 'running'), null, { timeout: 250 });
+  await motion.waitForFunction(() => !document.querySelector('.site-scroll').hasAttribute('data-copy-motion'));
+  assert.equal(await motion.locator('.product-section:not(.intro-section)').evaluateAll(sections => sections.every(section => !section.inert && section.querySelector('.product-inner').style.transform === '' && section.querySelector('.product-inner').style.visibility === '')), true, 'Reduced motion must restore normal text scrolling');
   assert.equal(await motion.locator('.stage>canvas').count(), 1);
   await motion.close();
   console.log('Keyboard skip, reduced motion including live changes, resize, model/WASM/WebGL failure and retry, and credits passed');
