@@ -61,24 +61,6 @@ impl CatalogData {
             .filter(|target| target.model.is_some())
             .collect()
     }
-    pub fn members(&self, id: &str) -> Vec<String> {
-        self.catalog
-            .targets
-            .iter()
-            .find(|target| target.id == id)
-            .map(|target| {
-                target
-                    .model
-                    .as_ref()
-                    .map(|model| &model.structure_ids)
-                    .unwrap_or(&target.structure_ids)
-                    .clone()
-            })
-            .unwrap_or_default()
-    }
-    pub fn clear_metadata(&mut self) {
-        self.structures.clear();
-    }
     pub fn ingest(&mut self, root: &str, json: &str) -> Result<Vec<String>, String> {
         let model = self
             .catalog
@@ -116,7 +98,12 @@ mod tests {
     fn presentation_catalog_preserves_membership_and_validated_source_names() {
         let mut data = CatalogData::from_json(CATALOG).unwrap();
         let root = data.roots()[0].id.clone();
-        let expected = data.members(&root);
+        let expected = data.roots()[0]
+            .model
+            .as_ref()
+            .unwrap()
+            .structure_ids
+            .clone();
         assert_eq!(expected.len(), 277);
         let ids = data.ingest(&root, METADATA).unwrap();
         assert_eq!(
@@ -126,9 +113,6 @@ mod tests {
         assert_eq!(data.identities().len(), 277);
         assert!(data.source_name(&ids[0]).is_some());
         assert!(data.source_name("unknown").is_none());
-        assert!(data.members("unknown").is_empty());
-        data.clear_metadata();
-        assert!(data.identities().is_empty());
     }
 
     #[test]

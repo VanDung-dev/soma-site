@@ -51,7 +51,6 @@ export class ViewerRuntime {
     try {
       const wasm = await getWasm();
       if (this.disposed) return;
-      catalog.clearMetadata();
       if (catalog.roots.length !== 1) throw new Error('The demo requires one model package');
       const prepared = await loadModel(catalog.roots[0]!, this.abort.signal, (root, json) => catalog.ingestMetadata(root, json));
       if (this.disposed) return;

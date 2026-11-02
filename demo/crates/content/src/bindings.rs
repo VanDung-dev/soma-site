@@ -25,12 +25,6 @@ impl CatalogData {
     pub fn roots(&self) -> Result<JsValue, JsValue> {
         value(&self.data.roots())
     }
-    pub fn members(&self, id: &str) -> Result<JsValue, JsValue> {
-        value(&self.data.members(id))
-    }
-    pub fn clear_metadata(&mut self) {
-        self.data.clear_metadata();
-    }
     pub fn ingest_metadata(&mut self, root: &str, json: &str) -> Result<JsValue, JsValue> {
         value(
             &self

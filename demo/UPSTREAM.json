@@ -97,11 +97,11 @@
     },
     {
       "path": "demo/crates/content/src/bindings.rs",
-      "reason": "Keep only validated catalog membership and model source metadata needed by the presentation"
+      "reason": "Expose validated model metadata, identities and source names; omit unused membership and metadata-reset APIs"
     },
     {
       "path": "demo/crates/content/src/data.rs",
-      "reason": "Keep only validated catalog membership and model source metadata needed by the presentation"
+      "reason": "Preserve catalog and metadata validation for the presentation; omit unused membership and metadata-reset APIs"
     },
     {
       "path": "demo/crates/content/Cargo.toml",
