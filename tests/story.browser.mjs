@@ -104,8 +104,8 @@ try {
       await page.locator(`#${id}`).evaluate(el => el.scrollIntoView({ block: 'start' }));
       await page.waitForFunction(id => Math.abs(document.querySelector('.site-scroll').scrollTop - document.getElementById(id).offsetTop) < 2, id);
       await page.waitForSelector(`.stage[data-scene="${scene}"][data-settled="true"]`, { state: 'attached' });
-      if (scene !== 'none') await page.waitForFunction(visible => getComputedStyle(document.querySelector('.demo-shell')).opacity === (visible ? '1' : '0'), scene !== 0);
-      if (['0:1', '1:0', '1:2', '2:1'].includes(`${previous}:${scene}`)) {
+      await page.waitForFunction(visible => getComputedStyle(document.querySelector('.demo-shell')).opacity === (visible ? '1' : '0'), scene === 1 || scene === 2);
+      if (['0:1', '1:0', '1:2', '2:1', '2:3', '3:2'].includes(`${previous}:${scene}`)) {
         assert.ok(await page.evaluate(() => window.demoCanvasResizes) - resizes <= 2, 'A chapter transition must resize the WebGL buffer at most once');
         const frames = await page.evaluate(scene => window.demoCameraFrames.filter(frame => frame.scene === String(scene)), scene);
         assert.ok(frames.length > 1 && frames.some(frame => frame.progress > 0.05 && frame.progress < 0.95), 'The camera must follow intermediate scroll progress');
@@ -119,7 +119,7 @@ try {
     assert.equal(new URL(page.url()).hash, '');
     await page.waitForSelector('.stage[data-ready][data-settled="true"]');
     await page.waitForFunction(() => getComputedStyle(document.querySelector('.stage>canvas')).opacity === '1');
-    assert.equal(await page.locator('.product-section').count(), 5);
+    assert.equal(await page.locator('.product-section').count(), 4);
     const frame = page.locator('.demo-window');
     const heroFrame = await frame.boundingBox();
     let initialFrame;
@@ -145,10 +145,11 @@ try {
     const checkFrame = async (layout = 'split') => {
       await checkResolution();
       const bounds = await frame.boundingBox();
-      if (layout === 'hero') {
+      if (layout === 'hero' || layout === 'closing') {
         const viewport = await page.locator('.site-scroll').boundingBox();
         assert.ok(bounds.width > viewport.width && bounds.height > viewport.height && bounds.y < viewport.y, 'The opening window must be enlarged beyond the viewport');
-        for (const key of ['x', 'y', 'width', 'height']) assert.ok(Math.abs(bounds[key] - heroFrame[key]) < 2, `Hero ${key} must return to its fixed layout after scrolling`);
+        for (const key of layout === 'hero' ? ['x', 'y', 'width', 'height'] : ['y', 'width', 'height']) assert.ok(Math.abs(bounds[key] - heroFrame[key]) < 2, `Enlarged ${key} must match its fixed layout`);
+        if (layout === 'closing') assert.ok(Math.abs(bounds.x + bounds.width / 2 + heroFrame.x + heroFrame.width / 2 - 2 * viewport.x - viewport.width) < 2, 'The closing model must sit opposite the opening model');
       }
       assert.ok(Math.abs(bounds.width / bounds.height - 1.5) < 0.01, 'App window must keep its 3:2 aspect ratio');
       if (['split', 'right'].includes(layout) && initialFrame) for (const key of ['y', 'width', 'height']) assert.ok(Math.abs(bounds[key] - initialFrame[key]) < 2, 'Split app window must keep its size and height');
@@ -163,12 +164,12 @@ try {
       assert.equal(await frame.evaluate(el => getComputedStyle(el).overflow), 'hidden');
       assert.equal(await frame.locator('button:not([hidden]),input,a').count(), 0);
       assert.equal(await frame.locator('nav,.demo-active,.demo-language,.demo-axis,.demo-model-status,.demo-search-preview,.demo-info').count(), 0);
-      assert.equal(await frame.locator('.demo-shell').evaluate(el => getComputedStyle(el).opacity), layout === 'hero' ? '0' : '1');
-      assert.equal(await frame.evaluate(el => getComputedStyle(el, '::before').opacity), layout === 'hero' ? '0' : '1');
+      assert.equal(await frame.locator('.demo-shell').evaluate(el => getComputedStyle(el).opacity), ['hero', 'closing'].includes(layout) ? '0' : '1');
+      assert.equal(await frame.evaluate(el => getComputedStyle(el, '::before').opacity), ['hero', 'closing'].includes(layout) ? '0' : '1');
       if (width > 700 && ['split', 'right'].includes(layout)) {
         const viewport = await page.locator('.site-scroll').boundingBox();
         const expectedLeft = layout === 'right' ? viewport.x + viewport.width * 0.975 - bounds.width : viewport.x + viewport.width * 0.025;
-        assert.ok(Math.abs(bounds.x - expectedLeft) < 2, 'Chapter two must place the app on the right; all later demo chapters share the same left position');
+        assert.ok(Math.abs(bounds.x - expectedLeft) < 2, 'Demo chapter position: ' + JSON.stringify({ layout, x: bounds.x, expectedLeft, width: bounds.width }));
       }
     };
     await checkFrame('hero');
@@ -227,16 +228,19 @@ try {
     const reveals = await page.evaluate(() => window.demoChromeEvents.filter(event => event.scene === '1'));
     assert.ok(reveals.length > 0 && reveals.every(event => event.settled === 'true' && !event.moving), 'The app frame must appear after both the model and its window settle');
     assert.ok(await page.evaluate(() => window.demoBackdropDraws) > 0);
-    await page.locator('.site-scroll').evaluate(el => el.scrollTo({ top: document.querySelector('#essentials').offsetTop - el.clientHeight * 0.25, behavior: 'instant' }));
-    await page.waitForFunction(() => getComputedStyle(document.querySelector('.stage')).opacity === '0');
+    await visit('download', 3);
+    await checkFrame('closing');
+    assert.equal(await page.locator('#sources-title').textContent(), 'Nguồn dữ liệu và giới hạn');
+    assert.equal(await page.locator('#essentials,.product-facts').count(), 0);
+    assert.equal(await page.getByText('Human Atlas đang được hoàn thiện.', { exact: true }).count(), 0);
+    const closingEye = await page.evaluate(() => window.demoCameraEye);
+    assert.ok(closingEye[0] * cameraBefore[0][0] < 0, 'The closing camera must face the model from the opposite side');
     await visit('learn', 1);
-    assert.equal(await page.locator('.stage').evaluate(el => getComputedStyle(el).opacity), '1', 'Returning from the text chapters must restore the demo opacity');
-    for (const [id, scene] of [['start', 0], ['learn', 1], ['app-overview', 2], ['essentials', 'none'], ['download', 'none'], ['app-overview', 2], ['learn', 1], ['start', 0]]) {
+    for (const [id, scene] of [['start', 0], ['learn', 1], ['app-overview', 2], ['download', 3], ['app-overview', 2], ['learn', 1], ['start', 0]]) {
       await visit(id, scene);
-      const layout = scene === 'none' ? 'none' : scene === 0 ? 'hero' : scene === 1 ? 'right' : 'split';
-      assert.equal(await page.locator('.stage').getAttribute('data-layout'), scene === 0 ? 'right' : scene === 1 ? 'split' : layout);
-      if (layout === 'none') assert.equal(await page.locator('.stage').evaluate(el => getComputedStyle(el).visibility), 'hidden');
-      else await checkFrame(layout);
+      const layout = scene === 0 ? 'hero' : scene === 1 ? 'right' : scene === 2 ? 'split' : 'closing';
+      assert.equal(await page.locator('.stage').getAttribute('data-layout'), scene === 0 ? 'right' : scene === 1 ? 'split' : scene === 2 ? 'closing' : layout);
+      await checkFrame(layout);
       assert.equal(await page.locator('#' + id).evaluate(el => Math.abs(el.clientHeight - document.querySelector('.site-scroll').clientHeight) < 2), true);
       const textBounds = await page.locator('#' + id + ' .product-inner').boundingBox();
       if (['split', 'right'].includes(layout)) {
@@ -274,7 +278,7 @@ try {
       }
     }
     const copySamples = new Map();
-    for (const index of [0, 1, 2, 3, 3, 2, 1, 0]) {
+    for (const index of [0, 1, 2, 2, 1, 0]) {
       for (const progress of [0, 0.025, 0.05, 0.1, 0.15, 0.2, 0.3, 0.4, 0.5, 0.75, 0.8, 0.85, 0.9, 0.925, 0.94, 0.95, 0.975, 1]) {
         const sample = await page.evaluate(async ({ index, progress }) => {
           const viewport = document.querySelector('.site-scroll');
@@ -297,7 +301,7 @@ try {
           assert.ok(!copy.overlap, 'Sliding text must stay outside the demo window: ' + JSON.stringify({ index, progress, copy }));
         }
         for (const copy of sample) assert.ok(copy.id === 'learn' ? copy.x <= copy.restX + 1 : copy.x >= copy.restX - 1, 'Text must enter and leave through its outer edge');
-        if (progress === 0.95) assert.ok(Math.abs(sample[index].x - sample[index].restX) > 1 && sample[index].visible, 'Incoming text must slide inward before reaching its reading position');
+        if (progress === 0.975) assert.ok(Math.abs(sample[index].x - sample[index].restX) > 1 && sample[index].visible, 'Incoming text must slide inward before reaching its reading position');
         if (progress === 0.3 && index > 0) assert.ok(Math.abs(sample[index - 1].x - sample[index - 1].restX) > 1 && sample[index - 1].visible, 'Outgoing text must slide back toward the same edge');
         if (index === 1 && progress === 0.3 || index === 0 && progress === 0.975) await page.screenshot({ path: path.join(screenshots, name + '-copy-' + index + '-' + progress + '.png') });
         const key = index + ':' + progress;
@@ -307,6 +311,8 @@ try {
       }
     }
     await page.locator('#language').click();
+    await visit('download', 3);
+    assert.equal(await page.locator('#sources-title').textContent(), 'Sources and limitations');
     assert.equal(await page.locator('html').getAttribute('lang'), 'en');
     await visit('learn', 1);
     await page.screenshot({ path: path.join(screenshots, name + '-english.png') });
@@ -331,7 +337,7 @@ try {
   await failed.waitForSelector('#retry:not([hidden])');
   const openingRetry = await failed.locator('#retry').boundingBox();
   assert.ok(openingRetry && openingRetry.y >= 0 && openingRetry.y + openingRetry.height < 844 * 0.42, 'Retry must remain accessible outside the enlarged app window');
-  assert.equal(await failed.locator('.product-section').count(), 5);
+  assert.equal(await failed.locator('.product-section').count(), 4);
   await failed.unroute('**/models/z-anatomy/skeletal-system.glb.br');
   await failed.locator('#retry').click();
   await failed.waitForSelector('.stage[data-ready][data-scene="0"][data-settled="true"]');

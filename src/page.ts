@@ -31,13 +31,8 @@ function demoInterface(): string {
   return `<div class="demo-shell" aria-hidden="true"><header class="demo-titlebar"><span class="demo-lights"><i></i><i></i><i></i></span><strong>Human Atlas</strong></header><div class="demo-workspace"></div></div>`;
 }
 
-function essentialsSection(): string {
-  const facts = ['scope', 'language', 'platform', 'network', 'requirements', 'cost'] as const;
-  return `<section id="essentials" class="product-section text-section" aria-labelledby="essentials-title"><div class="product-inner" tabindex="0" role="region" aria-labelledby="essentials-title"><header class="product-header">${text('product.essentials.eyebrow', 'p', 'class="eyebrow"')}${text('product.essentials.title', 'h2', 'id="essentials-title"')}${text('product.essentials.description', 'p', 'class="description"')}</header><dl class="product-facts">${facts.map(fact => `<div>${text(`product.essentials.${fact}.title`, 'dt')}${text(`product.essentials.${fact}.body`, 'dd')}</div>`).join('')}</dl><aside class="product-note" aria-labelledby="reference-note-title">${text('product.trust.title', 'h3', 'id="reference-note-title"')}${text('product.trust.body', 'p')}<a href="./credits.html">${text('product.trust.action')}${arrow}</a></aside></div></section>`;
-}
-
 function releaseSection(): string {
-  return `<section id="download" class="product-section release-section text-section" aria-labelledby="download-title"><div class="product-inner" tabindex="0" role="region" aria-labelledby="download-title"><header class="product-header">${text('product.release.eyebrow', 'p', 'class="eyebrow"')}${text('product.release.title', 'h2', 'id="download-title"')}${text('product.release.description', 'p', 'class="description"')}</header><div class="download-options" role="group" data-i18n-aria-label="product.release.platforms"><button type="button" class="download-option" disabled><span>Windows</span>${text('site.download.unavailable', 'small')}</button><button type="button" class="download-option" disabled><span>macOS</span>${text('site.download.unavailable', 'small')}</button></div></div></section>`;
+  return `<section id="download" class="product-section closing-section" data-scene="3" aria-labelledby="sources-title"><div class="product-inner" tabindex="0" role="region" aria-labelledby="sources-title"><header class="product-header">${text('product.trust.title', 'h2', 'id="sources-title"')}${text('product.trust.body', 'p', 'class="description"')}</header><a class="source-link" href="./credits.html">${text('product.trust.action')}${arrow}</a>${text('product.release.description', 'p', 'class="release-note"')}<div class="download-options" role="group" data-i18n-aria-label="product.release.platforms"><button type="button" class="download-option" disabled><span>Windows</span>${text('site.download.unavailable', 'small')}</button><button type="button" class="download-option" disabled><span>macOS</span>${text('site.download.unavailable', 'small')}</button></div></div></section>`;
 }
 
 export function renderLandingPage(root: HTMLElement): void {
@@ -45,7 +40,7 @@ export function renderLandingPage(root: HTMLElement): void {
     <main id="journey" tabindex="-1"><div class="anatomy-journey">
       <div class="stage" data-layout="hero"><div class="demo-window">${demoInterface()}<div id="demo-viewer-host"></div></div>${text('site.loading', 'p', 'id="load-status" class="load-status" role="status"')}<button id="retry" class="retry" type="button" hidden data-i18n="site.retry"></button></div>
       ${introductionSection()}
-    ${appOverviewSection()}${spreadSection()}${essentialsSection()}${releaseSection()}</div></main>`, `<footer class="site-footer">${text('site.copyright')}${text('site.modelCredit', 'span', 'class="footer-credit"')}<a href="./credits.html">${text('site.credits')}${arrow}</a></footer>`);
+    ${appOverviewSection()}${spreadSection()}${releaseSection()}</div></main>`, `<footer class="site-footer">${text('site.copyright')}${text('site.modelCredit', 'span', 'class="footer-credit"')}<a href="./credits.html">${text('site.credits')}${arrow}</a></footer>`);
 }
 
 export function renderCreditsPage(root: HTMLElement): void {

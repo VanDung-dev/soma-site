@@ -30,7 +30,7 @@ export function mountDemo(report: (key: MessageKey | null) => void, showRetry: (
       copy.height = copy.page.offsetHeight;
       copy.hold = Math.max(0, (pages[index + 2]?.offsetTop ?? copy.top + copy.height) - copy.top - copy.height);
       copy.distance = copy.left ? -copy.panel.offsetLeft - copy.panel.offsetWidth : width - copy.panel.offsetLeft;
-      copy.entrance = copy.left && compact ? 0.06 : 0.2;
+      copy.entrance = compact && (copy.left || copy.page.dataset.scene === '3') ? 0.06 : 0.2;
     }
   };
   const syncCopies = () => {
@@ -51,11 +51,11 @@ export function mountDemo(report: (key: MessageKey | null) => void, showRetry: (
       page.inert = progress === 0;
     }
   };
-  const layoutFor = (scene: number) => scene === 0 ? 'hero' : scene === 1 ? 'right' : 'split';
+  const layoutFor = (scene: number) => scene === 0 ? 'hero' : scene === 1 ? 'right' : scene === 3 ? 'closing' : 'split';
   const presentationFor = (scene: number) => ({
     visible: allowed,
     focus: allowed,
-    yaw: scene === 0 ? 1.1 : 0,
+    yaw: scene === 0 ? 1.1 : scene === 3 ? -1.1 : 0,
     spread: scene === 2,
     viewport: frame,
   });
@@ -67,7 +67,7 @@ export function mountDemo(report: (key: MessageKey | null) => void, showRetry: (
     runtime.present(presentation.visible, presentation.focus, presentation.yaw, presentation.spread, presentation.viewport);
   };
   const revealChrome = () => {
-    if (!ready || abort.signal.aborted || stage.dataset.opening !== undefined || stage.dataset.chrome === 'hidden' || stage.dataset.layout === 'hero' || stage.dataset.layout === 'none' || stage.dataset.settled !== 'true' || transition?.playState === 'running') return;
+    if (!ready || abort.signal.aborted || stage.dataset.opening !== undefined || stage.dataset.chrome === 'hidden' || stage.dataset.settled !== 'true' || transition?.playState === 'running') return;
     stage.dataset.chrome = 'visible';
     runtime?.setBackdrop(1);
   };
@@ -81,11 +81,14 @@ export function mountDemo(report: (key: MessageKey | null) => void, showRetry: (
       stage.dataset.layout = layout;
       if (before) {
         const after = demoWindow.getBoundingClientRect();
-        const transform = getComputedStyle(demoWindow).transform;
-        transition = demoWindow.animate([
-          { transformOrigin: 'top left', transform: `translate(${before.left - after.left}px,${before.top - after.top}px) ${transform === 'none' ? '' : transform} scale(${before.width / after.width})` },
-          { transformOrigin: 'top left', transform },
-        ], { duration: 900, easing: 'linear', fill: 'both' });
+        const transform = demoWindow.style.transform;
+        demoWindow.style.transform = 'none';
+        const anchor = demoWindow.getBoundingClientRect();
+        demoWindow.style.transform = transform;
+        transition = demoWindow.animate([before, after].map(rect => ({
+          transformOrigin: 'top left',
+          transform: `translate(${rect.left - anchor.left}px,${rect.top - anchor.top}px) scale(${rect.width / anchor.width})`,
+        })), { duration: 900, easing: 'linear', fill: 'both' });
         transition.pause();
       }
     }
@@ -100,20 +103,18 @@ export function mountDemo(report: (key: MessageKey | null) => void, showRetry: (
     if (active.id === lastPage && ready) return;
     delete stage.dataset.opening;
     lastPage = active.id;
-    const scene = active.dataset.scene;
-    const layout = scene === undefined ? 'none' : layoutFor(Number(scene));
+    const scene = Number(active.dataset.scene);
+    const layout = layoutFor(scene);
+    const enlarged = layout === 'hero' || layout === 'closing';
     pages[0]!.style.opacity = layout === 'hero' ? '1' : '0';
     pages[0]!.inert = layout !== 'hero';
-    stage.dataset.chrome = layout === 'hero' || layout === 'none' ? 'hidden' : 'pending';
+    stage.dataset.chrome = enlarged ? 'hidden' : 'pending';
     runtime?.setBackdrop(0);
-    if (layout === 'hero') stage.dataset.opening = '';
+    if (enlarged) stage.dataset.opening = '';
     transition?.cancel(); transition = undefined;
     stage.dataset.layout = layout;
     delete stage.dataset.progress;
-    if (scene === undefined) {
-      stage.dataset.scene = 'none';
-      stage.dataset.settled = 'true';
-    } else if (ready) present(Number(scene));
+    if (ready) present(scene);
   };
   const syncPage = () => {
     syncCopies();
@@ -128,11 +129,12 @@ export function mountDemo(report: (key: MessageKey | null) => void, showRetry: (
       stage.style.removeProperty('opacity');
       const fromScene = Number(from.dataset.scene), toScene = Number(next.dataset.scene);
       const progress = Math.max(0, Math.min(1, 1 - (next.offsetTop - viewport.scrollTop) / viewport.clientHeight));
-      const blend = fromScene === 0 ? progress * progress * (3 - 2 * progress) : progress;
+      const closing = Math.max(0, Math.min(1, (progress - 0.35) / 0.65));
+      const blend = fromScene === 0 ? progress * progress * (3 - 2 * progress) : toScene === 3 ? closing * closing * (3 - 2 * closing) : progress;
       const key = `${from.id}:${next.id}`;
       const newTransition = key !== transitionKey;
       animateWindow(key, layoutFor(fromScene), layoutFor(toScene), blend);
-      if (fromScene === 0) stage.dataset.opening = '';
+      if (fromScene === 0 || toScene === 3) stage.dataset.opening = '';
       else delete stage.dataset.opening;
       const copy = fromScene === 0 ? Math.max(0, 1 - progress / 0.4) : 0;
       pages[0]!.style.opacity = String(copy * copy * (3 - 2 * copy));
@@ -140,7 +142,7 @@ export function mountDemo(report: (key: MessageKey | null) => void, showRetry: (
       stage.dataset.scene = String(progress < 0.5 ? fromScene : toScene);
       stage.dataset.progress = String(progress);
       stage.dataset.settled = 'true';
-      const reveal = fromScene === 0 ? Math.max(0, Math.min(1, (progress - 0.82) / 0.18)) : 1;
+      const reveal = fromScene === 0 ? Math.max(0, Math.min(1, (progress - 0.82) / 0.18)) : toScene === 3 ? Math.max(0, 1 - progress / 0.18) : 1;
       const chrome = reveal * reveal * (3 - 2 * reveal);
       stage.style.setProperty('--demo-chrome', String(chrome));
       stage.dataset.chrome = chrome > 0 ? 'visible' : 'hidden';
@@ -149,25 +151,6 @@ export function mountDemo(report: (key: MessageKey | null) => void, showRetry: (
         if (newTransition) runtime.beginScrollTransition(presentationFor(fromScene), presentationFor(toScene), blend);
         else runtime.setScrollProgress(blend);
       }
-      lastPage = progress < 0.5 ? from.id : next.id;
-      return;
-    }
-    if (!motion.matches && from.dataset.scene !== undefined && next && next.dataset.scene === undefined) {
-      const progress = Math.max(0, Math.min(1, 1 - (next.offsetTop - viewport.scrollTop) / viewport.clientHeight));
-      const key = `${from.id}:${next.id}:exit`;
-      delete stage.dataset.opening;
-      stage.style.removeProperty('--demo-chrome');
-      transition?.cancel(); transition = undefined;
-      transitionKey = key;
-      stage.dataset.layout = progress === 1 ? 'none' : layoutFor(Number(from.dataset.scene));
-      stage.dataset.scene = progress === 1 ? 'none' : from.dataset.scene;
-      stage.dataset.progress = String(progress);
-      stage.dataset.settled = 'true';
-      stage.dataset.chrome = progress < 1 ? 'visible' : 'hidden';
-      const fade = Math.max(0, Math.min(1, (progress - 0.4) / 0.2));
-      stage.style.opacity = String(1 - fade * fade * (3 - 2 * fade));
-      runtime?.setBackdrop(progress < 1 ? 1 : 0);
-      if (ready && lastPage !== from.id) present(Number(from.dataset.scene));
       lastPage = progress < 0.5 ? from.id : next.id;
       return;
     }
@@ -180,7 +163,7 @@ export function mountDemo(report: (key: MessageKey | null) => void, showRetry: (
     if (runtime) runtime.scheduleRender();
     else syncPage();
   };
-  const observer = new ResizeObserver(() => { transitionKey = ''; measureCopies(); scheduleSync(); });
+  const observer = new ResizeObserver(() => { transition?.cancel(); transition = undefined; transitionKey = ''; lastPage = ''; measureCopies(); scheduleSync(); });
   observer.observe(viewport);
   viewport.addEventListener('scroll', scheduleSync, { signal: abort.signal });
   motion.addEventListener('change', () => { measureCopies(); scheduleSync(); }, { signal: abort.signal });
