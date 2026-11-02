@@ -1,10 +1,8 @@
-import application from '../content/ui-translations.json' with { type: 'json' };
 import site from '../content/site-translations.json' with { type: 'json' };
 
 export type Language = 'vi' | 'en';
-const messages = { ...application.messages, ...site.messages };
+const messages = site.messages;
 export type MessageKey = keyof typeof messages;
-export type MessageValues = Record<string, string | number>;
 const languageStorageKey = 'human-atlas-language';
 let language: Language = 'vi';
 
@@ -13,18 +11,12 @@ export function getInitialLanguage(): Language {
   catch { return 'vi'; }
 }
 
-export function translateMessage(key: MessageKey, language: Language, values: MessageValues = {}): string {
-  const template = messages[key][language];
-  const pluralized = template.replace(/\{(\w+), plural, one \{([^{}]*)\} other \{([^{}]*)\}\}/g,
-    (_, name: string, one: string, other: string) => {
-      const count = Number(values[name] ?? 0);
-      return (language === 'en' && count === 1 ? one : other).replaceAll('#', String(count));
-    });
-  return pluralized.replace(/\{(\w+)\}/g, (token, name: string) => String(values[name] ?? token));
+export function translateMessage(key: MessageKey, language: Language): string {
+  return messages[key][language];
 }
 
-export function t(key: MessageKey, values?: MessageValues): string {
-  return translateMessage(key, language, values);
+export function t(key: MessageKey): string {
+  return translateMessage(key, language);
 }
 
 export function applyTranslations(): void {

@@ -67,7 +67,7 @@ export function initTheme(): void {
       root.style.setProperty('--theme-reveal-x', `${x}px`);
       root.style.setProperty('--theme-reveal-y', `${y}px`);
       root.style.setProperty('--theme-reveal-radius', `${Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y))}px`);
-      const startViewTransition = document.querySelector(':popover-open:not([data-hand-visual])') ? undefined : (document as Document & {
+      const startViewTransition = (document as Document & {
         startViewTransition?: (callback: () => void) => ThemeTransition;
       }).startViewTransition;
       let transition: ThemeTransition | undefined;

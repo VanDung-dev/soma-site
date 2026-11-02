@@ -178,7 +178,6 @@ export function mountDemo(report: (key: MessageKey | null) => void, showRetry: (
         onSettled: () => { stage.dataset.settled = 'true'; revealChrome(); },
       });
       const canvas = stage.querySelector('canvas')!;
-      canvas.tabIndex = -1;
       canvas.dataset.i18nAriaLabel = 'demo.title';
       canvas.setAttribute('aria-label', t('demo.title'));
       await runtime.start(catalog);
