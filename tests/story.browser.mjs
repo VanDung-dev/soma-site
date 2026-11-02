@@ -120,6 +120,8 @@ try {
     await page.waitForSelector('.stage[data-ready][data-settled="true"]');
     await page.waitForFunction(() => getComputedStyle(document.querySelector('.stage>canvas')).opacity === '1');
     assert.equal(await page.locator('.product-section').count(), 4);
+    assert.equal(await page.locator('#start .download-option:disabled').count(), 2);
+    assert.equal(await page.locator('#start .download-option [aria-hidden="true"] svg').count(), 2);
     const frame = page.locator('.demo-window');
     const heroFrame = await frame.boundingBox();
     let initialFrame;
@@ -319,6 +321,7 @@ try {
     await visit('app-overview', 2);
     assert.equal(await page.locator('.stage>canvas').getAttribute('aria-label'), 'One window. Many ways to explore.');
     assert.equal(await page.locator('#download .download-option:disabled').count(), 2);
+    assert.equal(await page.locator('#download .download-option [aria-hidden="true"] svg').count(), 2);
     assert.equal(models.length, 1);
     assert.ok(models[0].endsWith('/models/z-anatomy/skeletal-system.glb.br'));
     assert.equal(await page.locator('.site-scroll').evaluate(el => el.scrollWidth > el.clientWidth), false);

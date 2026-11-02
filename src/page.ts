@@ -15,8 +15,12 @@ function layout(root: HTMLElement, content: string, footer = ''): void {
   root.querySelector<HTMLButtonElement>('.skip-link')!.addEventListener('click', () => root.querySelector<HTMLElement>('main')!.focus());
 }
 
+function downloadOptions(): string {
+  return `<div class="download-options" role="group" data-i18n-aria-label="product.release.platforms"><button type="button" class="download-option" disabled><span>${icon('windows')}Windows</span>${text('site.download.unavailable', 'small')}</button><button type="button" class="download-option" disabled><span>${icon('apple')}macOS</span>${text('site.download.unavailable', 'small')}</button></div>`;
+}
+
 function introductionSection(): string {
-  return `<section id="start" class="product-section intro-section" data-scene="0" aria-labelledby="hero-title"><div class="product-inner" tabindex="0" role="region" aria-labelledby="hero-title"><header class="product-header">${text('site.hero.eyebrow', 'p', 'class="eyebrow"')}<h1 id="hero-title" data-i18n-aria-label="study.heroTitle">${text('site.hero.title1')}<br />${text('site.hero.title2', 'em')}</h1>${text('site.hero.description', 'p', 'class="description"')}</header>${text('site.hero.note', 'p', 'class="intro-note"')}</div></section>`;
+  return `<section id="start" class="product-section intro-section" data-scene="0" aria-labelledby="hero-title"><div class="product-inner" tabindex="0" role="region" aria-labelledby="hero-title"><header class="product-header">${text('site.hero.eyebrow', 'p', 'class="eyebrow"')}<h1 id="hero-title" data-i18n-aria-label="study.heroTitle">${text('site.hero.title1')}<br />${text('site.hero.title2', 'em')}</h1>${text('site.hero.description', 'p', 'class="description"')}</header>${downloadOptions()}${text('site.hero.note', 'p', 'class="intro-note"')}</div></section>`;
 }
 
 function appOverviewSection(): string {
@@ -32,7 +36,7 @@ function demoInterface(): string {
 }
 
 function releaseSection(): string {
-  return `<section id="download" class="product-section closing-section" data-scene="3" aria-labelledby="sources-title"><div class="product-inner" tabindex="0" role="region" aria-labelledby="sources-title"><header class="product-header">${text('product.trust.title', 'h2', 'id="sources-title"')}${text('product.trust.body', 'p', 'class="description"')}</header><a class="source-link" href="./credits.html">${text('product.trust.action')}${arrow}</a>${text('product.release.description', 'p', 'class="release-note"')}<div class="download-options" role="group" data-i18n-aria-label="product.release.platforms"><button type="button" class="download-option" disabled><span>Windows</span>${text('site.download.unavailable', 'small')}</button><button type="button" class="download-option" disabled><span>macOS</span>${text('site.download.unavailable', 'small')}</button></div></div></section>`;
+  return `<section id="download" class="product-section closing-section" data-scene="3" aria-labelledby="sources-title"><div class="product-inner" tabindex="0" role="region" aria-labelledby="sources-title"><header class="product-header">${text('product.trust.title', 'h2', 'id="sources-title"')}${text('product.trust.body', 'p', 'class="description"')}</header><a class="source-link" href="./credits.html">${text('product.trust.action')}${arrow}</a>${text('product.release.description', 'p', 'class="release-note"')}${downloadOptions()}</div></section>`;
 }
 
 export function renderLandingPage(root: HTMLElement): void {
@@ -48,6 +52,6 @@ export function renderCreditsPage(root: HTMLElement): void {
   layout(root, `<main id="journey" tabindex="-1" class="credits-page">${link('credits.back', './')}<h1>${text('credits.heading1')}<br />${text('credits.heading2', 'em')}</h1>${text('credits.code', 'p')}${link('credits.codeLink', './LICENSE')}
     ${text('credits.models.heading', 'h2')}${text('credits.models.source', 'p')}${text('credits.models.terms', 'p')}${link('credits.models.link', './models/z-anatomy/ATTRIBUTION.md')}${text('credits.models.changes', 'p')}
     ${text('credits.images.heading', 'h2')}${text('credits.images.description', 'p')}<ul><li>${link('credits.images.preview', './home/ATTRIBUTION.md')}</li><li>${link('credits.images.icon', './icons/ATTRIBUTION.md')}</li></ul>
-    ${text('credits.fonts.heading', 'h2')}${text('credits.fonts.description', 'p')}<ul><li>${link('credits.lato', './fonts/Lato-OFL.txt')}</li><li>${link('credits.merriweather', './fonts/Merriweather-OFL.txt')}</li><li>${link('credits.icons', './licenses/line-md-MIT.txt')}</li></ul>
+    ${text('credits.fonts.heading', 'h2')}${text('credits.fonts.description', 'p')}<ul><li>${link('credits.lato', './fonts/Lato-OFL.txt')}</li><li>${link('credits.merriweather', './fonts/Merriweather-OFL.txt')}</li><li>${link('credits.icons', './licenses/line-md-MIT.txt')}</li><li>${link('credits.bootstrap', './licenses/bootstrap-icons-MIT.txt')}</li></ul>
     ${text('credits.scope.heading', 'h2')}${text('credits.scope.description', 'p')}</main>`);
 }

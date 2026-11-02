@@ -26,7 +26,7 @@ test('the compressed skeletal package preserves the original geometry and source
 });
 
 test('redistributed source assets include attribution and licenses', () => {
-  for (const path of ['LICENSE', 'NOTICE', 'public/models/z-anatomy/ATTRIBUTION.md', 'public/home/ATTRIBUTION.md', 'public/icons/ATTRIBUTION.md', 'public/fonts/Lato-OFL.txt', 'public/fonts/Merriweather-OFL.txt', 'public/licenses/line-md-MIT.txt']) {
+  for (const path of ['LICENSE', 'NOTICE', 'public/models/z-anatomy/ATTRIBUTION.md', 'public/home/ATTRIBUTION.md', 'public/icons/ATTRIBUTION.md', 'public/fonts/Lato-OFL.txt', 'public/fonts/Merriweather-OFL.txt', 'public/licenses/line-md-MIT.txt', 'public/licenses/bootstrap-icons-MIT.txt']) {
     assert.ok(fs.statSync(new URL(`../${path}`, import.meta.url)).size > 100, path);
   }
 });
