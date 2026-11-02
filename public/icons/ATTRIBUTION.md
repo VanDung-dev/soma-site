@@ -1,9 +1,9 @@
 # Human Atlas app icons
 
-The web and desktop icons are derived from [the Cranium Home preview](../home/anatomy.png).
+The web and desktop icons are derived from the Cranium Home preview from Human Atlas Rust.
 Only transparent margins were cropped before centering and resizing the image.
 The 1024px master is `app-icon.png`; desktop formats were generated with Tauri's
-icon command. The original preview is unchanged.
+icon command. The source preview is not bundled with this site.
 
 Credit: Gauthier Kervyn and the Z-Anatomy contributors, based on BodyParts3D by
 the Database Center for Life Science. These source-derived icons retain the
