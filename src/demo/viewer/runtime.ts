@@ -20,7 +20,6 @@ export class ViewerRuntime {
   private disposed = false;
   private failed = false;
   private loading = true;
-  private animating = false;
   private ready = false;
   private structureIds: string[] = [];
   private renderFrame = 0;
@@ -49,21 +48,18 @@ export class ViewerRuntime {
 
   async start(catalog: Catalog) {
     try {
-      const wasm = await getWasm();
-      if (this.disposed) return;
       if (catalog.roots.length !== 1) throw new Error('The demo requires one model package');
-      const prepared = await loadModel(catalog.roots[0]!, this.abort.signal, (root, json) => catalog.ingestMetadata(root, json));
+      const [wasm, prepared] = await Promise.all([
+        getWasm(),
+        loadModel(catalog.roots[0]!, this.abort.signal, (root, json) => catalog.ingestMetadata(root, json)),
+      ]);
       if (this.disposed) return;
       this.viewer = wasm.AnatomyViewer.fromPrepared(this.canvas, prepared);
       const gl = this.canvas.getContext('webgl2')!;
       this.renderLimit = Math.min(4096, gl.getParameter(gl.MAX_RENDERBUFFER_SIZE));
-      this.viewer.begin_reconstruction(performance.now(), true);
-      const animate = !this.motion.matches;
-      this.viewer.start_reconstruction(performance.now(), animate);
       this.resizeCanvas();
       this.structureIds = catalog.identities();
       this.loading = false;
-      this.animating = animate;
       this.scheduleRender();
     } catch (cause) {
       if (!this.disposed) this.fail(cause, 'loadError');
@@ -72,7 +68,6 @@ export class ViewerRuntime {
 
   private fail(cause: unknown, status: ViewerError) {
     this.failed = true;
-    this.animating = false;
     this.abort.abort();
     console.error(cause);
     this.options.onError(status);
@@ -84,6 +79,7 @@ export class ViewerRuntime {
       this.renderFrame = 0;
       if (this.disposed) return;
       try {
+        if (!this.loading && this.viewer && !this.failed && !this.ready) this.options.onReady(this.structureIds);
         this.options.onBeforeRender();
         if (this.loading || !this.viewer || this.failed) return;
         if (this.resizePending) {
@@ -93,14 +89,10 @@ export class ViewerRuntime {
         const now = performance.now();
         const cameraAnimating = this.viewer!.advance_camera(now);
         this.viewer!.set_backdrop(this.backdrop);
-        const revealing = !this.animating && this.viewer!.advance_reconstruction(now);
-        if (this.animating) this.animating = this.viewer!.render_reconstruction(now);
-        else this.viewer!.render();
-        if (!this.animating && !this.ready) {
-          this.ready = true;
-          this.options.onReady(this.structureIds);
-        }
-        if (cameraAnimating || revealing || this.animating) this.scheduleRender();
+        const revealing = this.viewer!.advance_reconstruction(now);
+        this.viewer!.render();
+        this.ready = true;
+        if (cameraAnimating || revealing) this.scheduleRender();
         else if (!this.renderFrame) this.options.onSettled();
       } catch (cause) { this.fail(cause, 'renderError'); }
     });
@@ -150,7 +142,7 @@ export class ViewerRuntime {
     this.scrollPresentation = undefined;
     this.presentation = { visible, focus, yaw, spread, viewport };
     try {
-      this.applyPresentation(!this.motion.matches);
+      this.applyPresentation(this.ready && !this.motion.matches);
       this.scheduleRender();
     } catch (cause) { this.fail(cause, 'processError'); }
   }
@@ -194,7 +186,6 @@ export class ViewerRuntime {
     if (this.loading || !this.motion.matches || !this.viewer || this.failed || this.disposed) return;
     try {
       this.viewer.finish_reconstruction();
-      this.animating = false;
       this.viewer.finish_camera_transition();
       this.scheduleRender();
     } catch (cause) { this.fail(cause, 'renderError'); }
