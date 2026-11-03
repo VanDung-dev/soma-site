@@ -1,12 +1,12 @@
-import '../fonts.css';
-import '../theme.css';
-import '../pages.css';
-import '../style.css';
-import { renderLandingPage } from './page.ts';
-import { initLanguage, t } from './i18n.ts';
-import type { MessageKey } from './i18n.ts';
-import { initTheme } from './theme.ts';
-import { mountDemo } from './demo.ts';
+import '../styles/fonts.css';
+import '../styles/theme.css';
+import '../styles/layout.css';
+import '../styles/site.css';
+import { renderLandingPage } from './templates.ts';
+import { initLanguage, t } from '../i18n/index.ts';
+import type { MessageKey } from '../i18n/index.ts';
+import { initTheme } from '../ui/theme.ts';
+import { mountDemo } from '../demo/scroll.ts';
 
 renderLandingPage(document.querySelector<HTMLElement>('#root')!);
 initLanguage();

@@ -1,4 +1,4 @@
-import site from '../content/site-translations.json' with { type: 'json' };
+import site from './messages.json' with { type: 'json' };
 
 export type Language = 'vi' | 'en';
 const messages = site.messages;

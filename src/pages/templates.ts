@@ -1,5 +1,5 @@
-import type { MessageKey } from './i18n.ts';
-import { icon } from './icons.ts';
+import type { MessageKey } from '../i18n/index.ts';
+import { icon } from '../ui/icons.ts';
 
 const text = (key: MessageKey, tag = 'span', attributes = '') => `<${tag} data-i18n="${key}" ${attributes}></${tag}>`;
 const arrow = icon('right');

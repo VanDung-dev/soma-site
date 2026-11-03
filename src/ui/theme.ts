@@ -1,5 +1,5 @@
 import { icons } from './icons.ts';
-import { t } from './i18n.ts';
+import { t } from '../i18n/index.ts';
 
 export type Theme = 'auto' | 'light' | 'dark';
 type ThemeTransition = { finished: Promise<void>; skipTransition: () => void };

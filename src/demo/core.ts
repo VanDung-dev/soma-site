@@ -1,6 +1,6 @@
 import { Catalog } from "./catalog";
-import * as bindings from "../wasm/wasm";
-import * as content from "../content/content";
+import * as bindings from "../generated/viewer/wasm";
+import * as content from "../generated/content/content";
 
 let wasm: Promise<typeof bindings> | undefined;
 let data: Promise<typeof content> | undefined;

@@ -7,7 +7,7 @@ import { createHash } from 'node:crypto';
 import snapshot from '../demo/UPSTREAM.json' with { type: 'json' };
 import catalog from '../demo/content/catalog.json' with { type: 'json' };
 import metadata from '../public/models/z-anatomy/skeletal-system.json' with { type: 'json' };
-import regions from '../demo/web/regions.json' with { type: 'json' };
+import regions from '../demo/fixtures/regions.json' with { type: 'json' };
 
 const root = path.resolve(fileURLToPath(new URL('..', import.meta.url)));
 const hash = (file: string) => createHash('sha256').update(fs.readFileSync(path.join(root, file))).digest('hex');
@@ -15,9 +15,9 @@ const hash = (file: string) => createHash('sha256').update(fs.readFileSync(path.
 test('fork records removed files and preserves hashes for retained upstream sources', () => {
   const adapted = new Set(snapshot.adaptations.map(item => item.path));
   for (const [source, expected] of Object.entries(snapshot.files)) {
-    const local = source.startsWith('apps/web/src/') ? `demo/web/${source.slice('apps/web/src/'.length)}`
+    const local = source.startsWith('apps/web/src/') ? `src/demo/${source.slice('apps/web/src/'.length).replace(/^anatomy\//, '')}`
       : source.startsWith('apps/web/public/') ? `public/${source.slice('apps/web/public/'.length)}`
-      : source === 'content/catalog.json' ? 'demo/content/upstream-catalog.json' : `demo/${source}`;
+      : source === 'content/catalog.json' ? 'demo/fixtures/upstream-catalog.json' : `demo/${source}`;
     if (snapshot.removed.includes(local)) assert.equal(fs.existsSync(path.join(root, local)), false, local);
     else if (!adapted.has(local)) assert.equal(hash(local), expected, local);
   }
@@ -36,7 +36,7 @@ test('demo catalog and metadata cover the same skeletal source identities', () =
 
 test('demo source imports stay inside the standalone site', () => {
   const walk = (folder: string): string[] => fs.readdirSync(folder, { withFileTypes: true }).flatMap(item => item.isDirectory() ? walk(path.join(folder, item.name)) : /\.[cm]?[jt]sx?$/.test(item.name) ? [path.join(folder, item.name)] : []);
-  for (const file of [...walk(path.join(root, 'src')), ...walk(path.join(root, 'demo/web'))]) {
+  for (const file of walk(path.join(root, 'src'))) {
     for (const match of fs.readFileSync(file, 'utf8').matchAll(/(?:from\s*|import\s*\(|new URL\()\s*["'](\.[^"']+)["']/g)) {
       assert.ok(path.resolve(path.dirname(file), match[1]!).startsWith(`${root}${path.sep}`), `${file}: ${match[1]}`);
     }

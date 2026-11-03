@@ -80,15 +80,15 @@
       "reason": "Add frame_region to compose guided regions and the demo workspace with the existing Rust camera"
     },
     {
-      "path": "demo/web/anatomy/core.ts",
+      "path": "src/demo/core.ts",
       "reason": "Initialize local WASM and catalog without Tauri"
     },
     {
-      "path": "demo/web/anatomy/viewer/runtime.ts",
+      "path": "src/demo/viewer/runtime.ts",
       "reason": "Passive presentation runtime: load, reconstruct, frame, resize, reduced motion, error and disposal callbacks; fixed viewport-sized pixel-dense canvas outside the scaled app window, clipped to the workspace and synchronized through projection with model draws in one requestAnimationFrame loop at the display refresh rate"
     },
     {
-      "path": "demo/web/anatomy/viewer/loader.ts",
+      "path": "src/demo/viewer/loader.ts",
       "reason": "Use a demo-only cache and preserve the original app cache"
     },
     {
@@ -156,15 +156,15 @@
       "reason": "Keep presentation, camera framing, source geometry and rendering; remove interaction APIs and GPU picking/outline resources"
     },
     {
-      "path": "demo/web/anatomy/catalog/index.ts",
+      "path": "src/demo/catalog/index.ts",
       "reason": "Keep only the passive presentation lifecycle; remove study, input and interactive commands"
     },
     {
-      "path": "demo/web/anatomy/catalog/types.ts",
+      "path": "src/demo/catalog/types.ts",
       "reason": "Keep only the passive presentation lifecycle; remove study, input and interactive commands"
     },
     {
-      "path": "demo/web/anatomy/viewer/contracts.ts",
+      "path": "src/demo/viewer/contracts.ts",
       "reason": "Keep only the passive presentation lifecycle; remove study, input and interactive commands"
     },
     {
@@ -192,7 +192,7 @@
       "reason": "Test passive framing, validated rotations and camera interpolation instead of removed manual camera commands"
     },
     {
-      "path": "demo/web/anatomy/viewer/model-worker.ts",
+      "path": "src/demo/viewer/model-worker.ts",
       "reason": "Prepare exactly one presentation model using the reduced WASM API"
     },
     {
@@ -215,11 +215,11 @@
     "demo/content/anatomy-terminology.json",
     "demo/content/wikipedia-references.json",
     "demo/content/openstax-references.json",
-    "demo/web/anatomy/viewer/input.ts",
-    "demo/web/anatomy/viewer/graphics.ts",
-    "demo/web/anatomy/study/session.ts",
-    "demo/web/anatomy/camera-controls.ts",
-    "demo/web/shortcuts.ts",
+    "src/demo/viewer/input.ts",
+    "src/demo/viewer/graphics.ts",
+    "src/demo/study/session.ts",
+    "src/demo/camera-controls.ts",
+    "src/demo/shortcuts.ts",
     "demo/crates/renderer/tests/assembly.rs",
     "demo/crates/renderer/tests/explosion.rs",
     "demo/crates/renderer/tests/hand_input.rs"

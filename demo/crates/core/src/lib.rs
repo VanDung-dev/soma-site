@@ -177,7 +177,7 @@ pub fn catalog_json() -> Result<String, CatalogError> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    const STARTER: &str = include_str!("../../../content/upstream-catalog.json");
+    const STARTER: &str = include_str!("../../../fixtures/upstream-catalog.json");
 
     #[test]
     fn demo_catalog_is_valid_and_contains_only_the_skeletal_asset() {

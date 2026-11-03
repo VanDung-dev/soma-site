@@ -1,9 +1,9 @@
-import { getCatalog } from '../demo/web/anatomy/core';
-import { ViewerRuntime } from '../demo/web/anatomy/viewer/runtime';
-import type { Catalog } from '../demo/web/anatomy/catalog/types';
-import type { Viewport } from '../demo/web/anatomy/viewer/contracts';
-import { t } from './i18n.ts';
-import type { MessageKey } from './i18n.ts';
+import { getCatalog } from './core';
+import { ViewerRuntime } from './viewer/runtime';
+import type { Catalog } from './catalog/types';
+import type { Viewport } from './viewer/contracts';
+import { t } from '../i18n/index.ts';
+import type { MessageKey } from '../i18n/index.ts';
 
 export function mountDemo(report: (key: MessageKey | null) => void, showRetry: () => void): () => void {
   const stage = document.querySelector<HTMLElement>('.stage')!;

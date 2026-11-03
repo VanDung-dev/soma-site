@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import { getInitialLanguage, translateMessage } from '../src/i18n.ts';
-import type { MessageKey } from '../src/i18n.ts';
-import site from '../content/site-translations.json' with { type: 'json' };
+import { getInitialLanguage, translateMessage } from '../src/i18n/index.ts';
+import type { MessageKey } from '../src/i18n/index.ts';
+import site from '../src/i18n/messages.json' with { type: 'json' };
 
 test('every website message has complete Vietnamese and English text', () => {
   for (const [key, messages] of Object.entries(site.messages)) {

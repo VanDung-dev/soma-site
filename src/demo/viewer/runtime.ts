@@ -1,6 +1,6 @@
 import type { Catalog } from '../catalog/types';
 import { getWasm } from '../core';
-import type { AnatomyViewer } from '../../wasm/wasm';
+import type { AnatomyViewer } from '../../generated/viewer/wasm';
 import type { ViewerError, Viewport } from './contracts';
 import { loadModel } from './loader';
 

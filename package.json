@@ -9,7 +9,7 @@
     "check": "tsc --noEmit",
     "preview": "vite preview --host 127.0.0.1 --port 4180",
     "test": "node --experimental-strip-types --test tests/*.test.ts && cargo test --manifest-path demo/Cargo.toml --workspace --locked",
-    "wasm:build": "wasm-pack build demo/crates/wasm --target web --out-dir ../../web/wasm --release --no-opt --locked && wasm-pack build demo/crates/content --target web --out-dir ../../web/content --release --no-opt --locked",
+    "wasm:build": "wasm-pack build demo/crates/wasm --target web --out-dir ../../../src/generated/viewer --release --no-opt --locked && wasm-pack build demo/crates/content --target web --out-dir ../../../src/generated/content --release --no-opt --locked",
     "predev": "npm run wasm:build",
     "prebuild": "npm run wasm:build"
   },

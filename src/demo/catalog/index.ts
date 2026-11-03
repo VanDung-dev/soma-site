@@ -1,4 +1,4 @@
-import type { CatalogData } from '../../content/content';
+import type { CatalogData } from '../../generated/content/content';
 import type { StudyTarget } from './types';
 
 export class Catalog {
