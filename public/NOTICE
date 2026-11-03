@@ -1,16 +1,16 @@
-Human Atlas Site
+Soma Site
 Copyright (c) 2026 Nguyễn Lê Văn Dũng
 
 Original website source code is licensed under Apache-2.0. See LICENSE.
 Design tokens, fonts, app icon and skeletal model were copied
-from Human Atlas Rust. The demo includes only the skeletal package.
+from Soma. The demo includes only the skeletal package.
 
 Model: Z-Anatomy, Gauthier Kervyn and contributors, based on BodyParts3D
 by the Database Center for Life Science. Model-derived media retain their
 upstream licenses and component-specific conditions. See public/models/
 z-anatomy/ATTRIBUTION.md, public/home/ATTRIBUTION.md and public/icons/ATTRIBUTION.md.
 Fonts: SIL Open Font License. See public/fonts/*-OFL.txt.
-The scroll-driven demo adapts the Rust renderer, catalog validation and viewer lifecycle from Human Atlas Rust. Interactive input, selection, hand controls and separation were removed. See demo/UPSTREAM.json and demo/LICENSE.
+The scroll-driven demo adapts the Rust renderer, catalog validation and viewer lifecycle from Soma. Interactive input, selection, hand controls and separation were removed. See demo/UPSTREAM.json and demo/LICENSE.
 
 Material Line Icons (line-md)
 Copyright 2020 Vjacheslav Trushkin. MIT License.

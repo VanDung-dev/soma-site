@@ -1,11 +1,11 @@
 ---
 name: nested-corner-radii
-description: Apply or review Human Atlas web UI corner radii for nested outer panels and inner surfaces. Use only in the human-atlas-rs repository when adjusting rounded panel/card geometry.
+description: Apply or review Soma web UI corner radii for nested outer panels and inner surfaces. Use only in the soma repository when adjusting rounded panel/card geometry.
 ---
 
-# Human Atlas nested corner radii
+# Soma nested corner radii
 
-Use this skill only for the Human Atlas repository's web UI. The shared panel system uses three radius tiers; the module frame has a separate exception below:
+Use this skill only for the Soma repository's web UI. The shared panel system uses three radius tiers; the module frame has a separate exception below:
 
 - **Radius 1 (workspace/panel):** the 24px workspace and main panel surfaces.
 - **Radius 2 (inner):** a bordered surface inset inside Radius 1.
@@ -19,7 +19,7 @@ For nested surfaces intended to follow the same smooth curve, measure the inset 
 
 Equivalently, `child radius = max(0, parent radius - inset)`. Apply the rule recursively for each adjacent tier; do not compare non-adjacent tiers directly. The inset is the design spacing inside the parent surface; include any visible outline that sits on the parent edge, but do not count an inset stroke twice. If the spacing changes, update every paired radius together. Do not choose radii independently: when the radius difference is much smaller than the inset, the corner arcs drift apart and the band between them looks uneven.
 
-## Human Atlas values
+## Soma values
 
 The project's 48px reference diameter sets the main geometry:
 

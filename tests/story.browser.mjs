@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { preview } from 'vite';
 
 const { chromium } = await import(process.env.BENCHMARK_PLAYWRIGHT_MODULE || 'playwright');
-const screenshots = process.env.SITE_SCREENSHOTS || path.join(os.tmpdir(), 'human-atlas-site-mini');
+const screenshots = process.env.SITE_SCREENSHOTS || path.join(os.tmpdir(), 'soma-site-mini');
 fs.mkdirSync(screenshots, { recursive: true });
 const baseUrl = process.env.SITE_TEST_URL || 'http://127.0.0.1:4188/';
 const server = process.env.SITE_TEST_URL ? undefined : await preview({ root: fileURLToPath(new URL('..', import.meta.url)), preview: { host: '127.0.0.1', port: 4188, strictPort: true } });
@@ -250,7 +250,7 @@ try {
     assert.equal(await page.locator('#download .product-inner').evaluate(panel => getComputedStyle(panel).visibility === 'visible' && Math.abs(panel.getBoundingClientRect().left - document.querySelector('.site-scroll').getBoundingClientRect().left - panel.offsetLeft) < 1), true, 'The final text must arrive with the model and remain visible');
     assert.equal(await page.locator('#sources-title').textContent(), 'Nguồn dữ liệu và giới hạn');
     assert.equal(await page.locator('#essentials,.product-facts').count(), 0);
-    assert.equal(await page.getByText('Human Atlas đang được hoàn thiện.', { exact: true }).count(), 0);
+    assert.equal(await page.getByText('Soma đang được hoàn thiện.', { exact: true }).count(), 0);
     const closingEye = await page.evaluate(() => window.demoCameraEye);
     assert.ok(closingEye[0] * cameraBefore[0][0] < 0, 'The closing camera must face the model from the opposite side');
     await visit('learn', 1);

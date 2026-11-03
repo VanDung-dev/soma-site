@@ -1,5 +1,5 @@
 {
-  "repository": "human-atlas-rs",
+  "repository": "soma",
   "commit": "be6ace3e7fa02dd06e31ce828f444f1b77055ba3",
   "files": {
     "crates/core/src/lib.rs": "907c9be19c3540f8e2189c7f3d65051aefcf8f1919b1742d2d8af63d4032841a",

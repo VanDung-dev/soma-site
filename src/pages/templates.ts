@@ -32,7 +32,7 @@ function spreadSection(): string {
 }
 
 function demoInterface(): string {
-  return `<div class="demo-shell" aria-hidden="true"><header class="demo-titlebar"><span class="demo-lights"><i></i><i></i><i></i></span><strong>Human Atlas</strong></header><div class="demo-workspace"></div></div>`;
+  return `<div class="demo-shell" aria-hidden="true"><header class="demo-titlebar"><span class="demo-lights"><i></i><i></i><i></i></span><strong>Soma</strong></header><div class="demo-workspace"></div></div>`;
 }
 
 function releaseSection(): string {

@@ -1,6 +1,6 @@
-# Human Atlas app icons
+# Soma app icons
 
-The web and desktop icons are derived from the Cranium Home preview from Human Atlas Rust.
+The web and desktop icons are derived from the Cranium Home preview from Soma.
 Only transparent margins were cropped before centering and resizing the image.
 The 1024px master is `app-icon.png`; desktop formats were generated with Tauri's
 icon command. The source preview is not bundled with this site.

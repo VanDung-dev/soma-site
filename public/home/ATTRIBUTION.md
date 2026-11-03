@@ -1,6 +1,6 @@
 # Cranium preview source
 
-The app icon derives from a Cranium preview rendered from Human Atlas Rust's
+The app icon derives from a Cranium preview rendered from Soma's
 Z-Anatomy GLB package with its WASM renderer. Source geometry and materials were
 preserved; the camera angle, lighting and transparent background were chosen
 for the app's Home page. The original PNG is not bundled with this site.
