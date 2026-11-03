@@ -179,8 +179,12 @@ try {
       assert.equal(await frame.evaluate(el => getComputedStyle(el, '::before').opacity), ['hero', 'closing'].includes(layout) ? '0' : '1');
       if (width > 700 && ['split', 'right'].includes(layout)) {
         const viewport = await page.locator('.site-scroll').boundingBox();
-        const expectedLeft = layout === 'right' ? viewport.x + viewport.width * 0.975 - bounds.width : viewport.x + viewport.width * 0.025;
-        assert.ok(Math.abs(bounds.x - expectedLeft) < 2, 'Demo chapter position: ' + JSON.stringify({ layout, x: bounds.x, expectedLeft, width: bounds.width }));
+        const copy = await page.locator(layout === 'right' ? '#learn .product-inner' : '#app-overview .product-inner').boundingBox();
+        const [left, right] = layout === 'right' ? [copy, bounds] : [bounds, copy];
+        const leftMargin = left.x - viewport.x;
+        const rightMargin = viewport.x + viewport.width - right.x - right.width;
+        assert.ok(Math.abs(leftMargin - rightMargin) < 2, 'Text and demo must be centered as a group');
+        assert.ok(right.x > left.x + left.width, 'Text and demo must have a visible gap');
       }
     };
     await checkFrame('hero');
@@ -335,7 +339,7 @@ try {
     await visit('learn', 1);
     await page.screenshot({ path: path.join(screenshots, name + '-english.png') });
     await visit('app-overview', 2);
-    assert.equal(await page.locator('.stage>canvas').getAttribute('aria-label'), 'One window. Many ways to explore.');
+    assert.equal(await page.locator('.stage>canvas').getAttribute('aria-label'), 'Explore 3D anatomy');
     assert.equal(await page.locator('#download .download-option:disabled').count(), 2);
     assert.equal(await page.locator('#download .download-option [aria-hidden="true"] svg').count(), 2);
     assert.equal(models.length, 1);

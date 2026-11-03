@@ -49,7 +49,7 @@ export function renderLandingPage(root: HTMLElement): void {
 
 export function renderCreditsPage(root: HTMLElement): void {
   const link = (key: MessageKey, href: string) => `<a href="${href}">${text(key)}</a>`;
-  layout(root, `<main id="journey" tabindex="-1" class="credits-page">${link('credits.back', './')}<h1>${text('credits.heading1')}<br />${text('credits.heading2', 'em')}</h1>${text('credits.code', 'p')}${link('credits.codeLink', './LICENSE')}
+  layout(root, `<main id="journey" tabindex="-1" class="credits-page">${link('credits.back', './')}${text('site.credits', 'h1')}${text('credits.code', 'p')}${link('credits.codeLink', './LICENSE')}
     ${text('credits.models.heading', 'h2')}${text('credits.models.source', 'p')}${text('credits.models.terms', 'p')}${link('credits.models.link', './models/z-anatomy/ATTRIBUTION.md')}${text('credits.models.changes', 'p')}
     ${text('credits.images.heading', 'h2')}${text('credits.images.description', 'p')}<ul><li>${link('credits.images.preview', './home/ATTRIBUTION.md')}</li><li>${link('credits.images.icon', './icons/ATTRIBUTION.md')}</li></ul>
     ${text('credits.fonts.heading', 'h2')}${text('credits.fonts.description', 'p')}<ul><li>${link('credits.lato', './fonts/Lato-OFL.txt')}</li><li>${link('credits.merriweather', './fonts/Merriweather-OFL.txt')}</li><li>${link('credits.icons', './licenses/line-md-MIT.txt')}</li><li>${link('credits.bootstrap', './licenses/bootstrap-icons-MIT.txt')}</li></ul>
