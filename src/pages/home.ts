@@ -6,7 +6,7 @@ import { renderLandingPage } from './templates.ts';
 import { initLanguage, t } from '../i18n/index.ts';
 import type { MessageKey } from '../i18n/index.ts';
 import { initTheme } from '../ui/theme.ts';
-import { mountDemo } from '../demo/scroll.ts';
+import { mountWindow } from '../window/scroll.ts';
 
 renderLandingPage(document.querySelector<HTMLElement>('#root')!);
 initLanguage();
@@ -22,7 +22,7 @@ function setStatus(key: MessageKey | null): void {
 function loadScene(): void {
   dispose();
   setStatus('site.loading'); retry.hidden = true;
-  dispose = mountDemo(setStatus, () => { retry.hidden = false; });
+  dispose = mountWindow(setStatus, () => { retry.hidden = false; });
 }
 retry.addEventListener('click', loadScene);
 window.addEventListener('pagehide', () => dispose());

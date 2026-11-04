@@ -15,7 +15,7 @@ const hash = (file: string) => createHash('sha256').update(fs.readFileSync(path.
 test('fork records removed files and preserves hashes for retained upstream sources', () => {
   const adapted = new Set(snapshot.adaptations.map(item => item.path));
   for (const [source, expected] of Object.entries(snapshot.files)) {
-    const local = source.startsWith('apps/web/src/') ? `src/demo/${source.slice('apps/web/src/'.length).replace(/^anatomy\//, '')}`
+    const local = source.startsWith('apps/web/src/') ? `src/window/${source.slice('apps/web/src/'.length).replace(/^anatomy\//, '')}`
       : source.startsWith('apps/web/public/') ? `public/${source.slice('apps/web/public/'.length)}`
       : source === 'content/catalog.json' ? 'fixtures/upstream-catalog.json' : source;
     if (snapshot.removed.includes(local)) assert.equal(fs.existsSync(path.join(root, local)), false, local);

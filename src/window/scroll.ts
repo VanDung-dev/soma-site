@@ -5,11 +5,11 @@ import type { Viewport } from './viewer/contracts';
 import { t } from '../i18n/index.ts';
 import type { MessageKey } from '../i18n/index.ts';
 
-export function mountDemo(report: (key: MessageKey | null) => void, showRetry: () => void): () => void {
+export function mountWindow(report: (key: MessageKey | null) => void, showRetry: () => void): () => void {
   const stage = document.querySelector<HTMLElement>('.stage')!;
-  const host = document.querySelector<HTMLElement>('#demo-viewer-host')!;
+  const host = document.querySelector<HTMLElement>('#window-viewer-host')!;
   const viewport = document.querySelector<HTMLElement>('.site-scroll')!;
-  const demoWindow = document.querySelector<HTMLElement>('.demo-window')!;
+  const windowEl = document.querySelector<HTMLElement>('.window')!;
   const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const pages = [...document.querySelectorAll<HTMLElement>('.product-section')];
   const copies = pages.slice(1).map((page, index) => ({ page, panel: page.querySelector<HTMLElement>('.product-inner')!, left: index === 0, top: 0, height: 1, hold: 0, distance: 0, entrance: 0.2 }));
@@ -82,15 +82,15 @@ export function mountDemo(report: (key: MessageKey | null) => void, showRetry: (
       transition = undefined;
       transitionKey = key;
       stage.dataset.layout = fromLayout;
-      const before = ready ? demoWindow.getBoundingClientRect() : undefined;
+      const before = ready ? windowEl.getBoundingClientRect() : undefined;
       stage.dataset.layout = layout;
       if (before) {
-        const after = demoWindow.getBoundingClientRect();
-        const transform = demoWindow.style.transform;
-        demoWindow.style.transform = 'none';
-        const anchor = demoWindow.getBoundingClientRect();
-        demoWindow.style.transform = transform;
-        transition = demoWindow.animate([before, after].map(rect => ({
+        const after = windowEl.getBoundingClientRect();
+        const transform = windowEl.style.transform;
+        windowEl.style.transform = 'none';
+        const anchor = windowEl.getBoundingClientRect();
+        windowEl.style.transform = transform;
+        transition = windowEl.animate([before, after].map(rect => ({
           transformOrigin: 'top left',
           transform: `translate(${rect.left - anchor.left}px,${rect.top - anchor.top}px) scale(${rect.width / anchor.width})`,
         })), { duration: 900, easing: 'linear', fill: 'both' });
@@ -104,7 +104,7 @@ export function mountDemo(report: (key: MessageKey | null) => void, showRetry: (
       transition?.cancel(); transition = undefined; transitionKey = ''; lastPage = '';
     }
     stage.style.removeProperty('opacity');
-    stage.style.removeProperty('--demo-chrome');
+    stage.style.removeProperty('--window-chrome');
     if (active.id === lastPage && ready) return;
     delete stage.dataset.opening;
     lastPage = active.id;
@@ -149,7 +149,7 @@ export function mountDemo(report: (key: MessageKey | null) => void, showRetry: (
       stage.dataset.settled = 'true';
       const reveal = fromScene === 0 ? Math.max(0, Math.min(1, (progress - 0.82) / 0.18)) : toScene === 3 ? Math.max(0, 1 - progress / 0.18) : 1;
       const chrome = reveal * reveal * (3 - 2 * reveal);
-      stage.style.setProperty('--demo-chrome', String(chrome));
+      stage.style.setProperty('--window-chrome', String(chrome));
       stage.dataset.chrome = chrome > 0 ? 'visible' : 'hidden';
       runtime?.setBackdrop(chrome);
       if (ready && runtime && catalog) {
@@ -198,8 +198,8 @@ export function mountDemo(report: (key: MessageKey | null) => void, showRetry: (
         onSettled: () => { stage.dataset.settled = 'true'; revealChrome(); },
       });
       const canvas = stage.querySelector('canvas')!;
-      canvas.dataset.i18nAriaLabel = 'demo.title';
-      canvas.setAttribute('aria-label', t('demo.title'));
+      canvas.dataset.i18nAriaLabel = 'window.title';
+      canvas.setAttribute('aria-label', t('window.title'));
       await runtime.start(catalog);
     } catch {
       if (!abort.signal.aborted) { report('site.loadError'); showRetry(); }
@@ -213,7 +213,7 @@ export function mountDemo(report: (key: MessageKey | null) => void, showRetry: (
     delete stage.dataset.ready; delete stage.dataset.scene; delete stage.dataset.settled;
     delete stage.dataset.chrome; delete stage.dataset.progress;
     delete stage.dataset.opening;
-    stage.style.removeProperty('--demo-chrome');
+    stage.style.removeProperty('--window-chrome');
     pages[0]!.style.removeProperty('opacity');
     pages[0]!.inert = false;
     viewport.removeAttribute('data-copy-motion');

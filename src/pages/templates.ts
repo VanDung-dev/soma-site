@@ -24,15 +24,15 @@ function introductionSection(): string {
 }
 
 function appOverviewSection(): string {
-  return `<section id="learn" class="product-section feature-section overview-section" data-scene="1" aria-labelledby="overview-title"><div class="product-inner" tabindex="0" role="region" aria-labelledby="overview-title"><header class="product-header">${text('demo.scope', 'p', 'class="eyebrow"')}${text('demo.title', 'h2', 'id="overview-title"')}${text('demo.overview', 'p', 'class="description"')}</header>${text('demo.hint', 'p', 'class="feature-note"')}</div></section>`;
+  return `<section id="learn" class="product-section feature-section overview-section" data-scene="1" aria-labelledby="overview-title"><div class="product-inner" tabindex="0" role="region" aria-labelledby="overview-title"><header class="product-header">${text('window.scope', 'p', 'class="eyebrow"')}${text('window.title', 'h2', 'id="overview-title"')}${text('window.overview', 'p', 'class="description"')}</header>${text('window.hint', 'p', 'class="feature-note"')}</div></section>`;
 }
 
 function spreadSection(): string {
-  return `<section id="app-overview" class="product-section feature-section" data-scene="2" aria-labelledby="spread-title"><div class="product-inner" tabindex="0" role="region" aria-labelledby="spread-title"><header class="product-header">${text('demo.spread.title', 'h2', 'id="spread-title"')}${text('demo.spread.body', 'p', 'class="description"')}</header></div></section>`;
+  return `<section id="app-overview" class="product-section feature-section" data-scene="2" aria-labelledby="spread-title"><div class="product-inner" tabindex="0" role="region" aria-labelledby="spread-title"><header class="product-header">${text('window.spread.title', 'h2', 'id="spread-title"')}${text('window.spread.body', 'p', 'class="description"')}</header></div></section>`;
 }
 
-function demoInterface(): string {
-  return `<div class="demo-shell" aria-hidden="true"><header class="demo-titlebar"><span class="demo-lights"><i></i><i></i><i></i></span><strong>Soma</strong></header><div class="demo-workspace"></div></div>`;
+function windowInterface(): string {
+  return `<div class="window-shell" aria-hidden="true"><header class="window-titlebar"><span class="window-lights"><i></i><i></i><i></i></span><strong>Soma</strong></header><div class="window-workspace"></div></div>`;
 }
 
 function releaseSection(): string {
@@ -42,7 +42,7 @@ function releaseSection(): string {
 export function renderLandingPage(root: HTMLElement): void {
   layout(root, `
     <main id="journey" tabindex="-1"><div class="anatomy-journey">
-      <div class="stage" data-layout="hero"><div class="demo-window">${demoInterface()}<div id="demo-viewer-host"></div></div>${text('site.loading', 'p', 'id="load-status" class="load-status" role="status"')}<button id="retry" class="retry" type="button" hidden data-i18n="site.retry"></button></div>
+      <div class="stage" data-layout="hero"><div class="window">${windowInterface()}<div id="window-viewer-host"></div></div>${text('site.loading', 'p', 'id="load-status" class="load-status" role="status"')}<button id="retry" class="retry" type="button" hidden data-i18n="site.retry"></button></div>
       ${introductionSection()}
     ${appOverviewSection()}${spreadSection()}${releaseSection()}</div></main>`);
 }

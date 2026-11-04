@@ -56,7 +56,7 @@ export async function loadModel(root: StudyTarget, signal: AbortSignal,
         const manifest = await response.json() as { models: { file: string; sha256: string }[] };
         const versions = new Map(manifest.models.map(model => [`models/z-anatomy/${model.file}`, model.sha256]));
         const storage = await new Promise<IDBDatabase>((resolve, reject) => {
-          const request = indexedDB.open("human-atlas-site-demo-v1", 1);
+          const request = indexedDB.open("human-atlas-site-v1", 1);
           request.onupgradeneeded = () => request.result.createObjectStore("models");
           request.onsuccess = () => resolve(request.result);
           request.onerror = () => reject(request.error);
