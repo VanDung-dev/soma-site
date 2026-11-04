@@ -92,7 +92,7 @@ impl CatalogData {
 mod tests {
     use super::*;
     const CATALOG: &str = include_str!("../../../content/catalog.json");
-    const METADATA: &str = include_str!("../../../../public/models/z-anatomy/skeletal-system.json");
+    const METADATA: &str = include_str!("../../../public/models/z-anatomy/skeletal-system.json");
 
     #[test]
     fn presentation_catalog_preserves_membership_and_validated_source_names() {

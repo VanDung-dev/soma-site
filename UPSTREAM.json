@@ -68,15 +68,19 @@
   },
   "adaptations": [
     {
-      "path": "demo/content/catalog.json",
+      "path": "NOTICE",
+      "reason": "Standalone site NOTICE describing the site assets instead of the fork NOTICE"
+    },
+    {
+      "path": "content/catalog.json",
       "reason": "One skeletal root; intersect source folder membership with the IDs in its geometry package"
     },
     {
-      "path": "demo/crates/core/src/lib.rs",
+      "path": "crates/core/src/lib.rs",
       "reason": "Keep upstream tests against the original catalog fixture and validate the demo catalog separately"
     },
     {
-      "path": "demo/crates/wasm/src/renderer/camera.rs",
+      "path": "crates/wasm/src/renderer/camera.rs",
       "reason": "Add frame_region to compose guided regions and the demo workspace with the existing Rust camera"
     },
     {
@@ -92,67 +96,67 @@
       "reason": "Use a demo-only cache and preserve the original app cache"
     },
     {
-      "path": "demo/Cargo.lock",
+      "path": "Cargo.lock",
       "reason": "Resolve only the independent demo workspace dependencies"
     },
     {
-      "path": "demo/crates/content/src/bindings.rs",
+      "path": "crates/content/src/bindings.rs",
       "reason": "Expose validated model metadata, identities and source names; omit unused membership and metadata-reset APIs"
     },
     {
-      "path": "demo/crates/content/src/data.rs",
+      "path": "crates/content/src/data.rs",
       "reason": "Preserve catalog and metadata validation for the presentation; omit unused membership and metadata-reset APIs"
     },
     {
-      "path": "demo/crates/content/Cargo.toml",
+      "path": "crates/content/Cargo.toml",
       "reason": "Keep only validated catalog membership and model source metadata needed by the presentation"
     },
     {
-      "path": "demo/crates/renderer/src/lib.rs",
+      "path": "crates/renderer/src/lib.rs",
       "reason": "Keep presentation, camera framing, source geometry and rendering; remove interaction APIs and GPU picking/outline resources"
     },
     {
-      "path": "demo/crates/wasm/src/lib.rs",
+      "path": "crates/wasm/src/lib.rs",
       "reason": "Keep presentation, camera framing, source geometry and rendering; remove interaction APIs and GPU picking/outline resources"
     },
     {
-      "path": "demo/crates/wasm/src/renderer/api.rs",
+      "path": "crates/wasm/src/renderer/api.rs",
       "reason": "Keep presentation, camera framing, source geometry and rendering; remove interaction APIs and GPU picking/outline resources"
     },
     {
-      "path": "demo/crates/wasm/src/renderer/draw.rs",
+      "path": "crates/wasm/src/renderer/draw.rs",
       "reason": "Keep presentation, camera framing, source geometry and rendering; remove interaction APIs and GPU picking/outline resources; crop the virtual app projection to the visible canvas region at screen pixel density during CSS scroll transforms"
     },
     {
-      "path": "demo/crates/wasm/src/renderer/graphics.rs",
+      "path": "crates/wasm/src/renderer/graphics.rs",
       "reason": "Keep presentation, camera framing, source geometry and rendering; remove interaction APIs and GPU picking/outline resources; validate finite render regions including viewport margins beyond the app projection independently of the drawing buffer size"
     },
     {
-      "path": "demo/crates/wasm/src/renderer/io.rs",
+      "path": "crates/wasm/src/renderer/io.rs",
       "reason": "Keep presentation, camera framing, source geometry and rendering; remove interaction APIs and GPU picking/outline resources"
     },
     {
-      "path": "demo/crates/wasm/src/renderer/resources.rs",
+      "path": "crates/wasm/src/renderer/resources.rs",
       "reason": "Keep presentation, camera framing, source geometry and rendering; remove interaction APIs and GPU picking/outline resources"
     },
     {
-      "path": "demo/crates/wasm/src/renderer/scene.rs",
+      "path": "crates/wasm/src/renderer/scene.rs",
       "reason": "Keep presentation, camera framing, source geometry and rendering; remove interaction APIs and GPU picking/outline resources"
     },
     {
-      "path": "demo/crates/wasm/src/renderer/shaders.rs",
+      "path": "crates/wasm/src/renderer/shaders.rs",
       "reason": "Keep presentation, camera framing, source geometry and rendering; remove interaction APIs and GPU picking/outline resources"
     },
     {
-      "path": "demo/crates/wasm/src/renderer/uniforms.rs",
+      "path": "crates/wasm/src/renderer/uniforms.rs",
       "reason": "Keep presentation, camera framing, source geometry and rendering; remove interaction APIs and GPU picking/outline resources"
     },
     {
-      "path": "demo/crates/wasm/src/renderer.rs",
+      "path": "crates/wasm/src/renderer.rs",
       "reason": "Keep presentation, camera framing, source geometry and rendering; remove interaction APIs and GPU picking/outline resources; retain the visible render region separately from camera framing"
     },
     {
-      "path": "demo/crates/wasm/Cargo.toml",
+      "path": "crates/wasm/Cargo.toml",
       "reason": "Keep presentation, camera framing, source geometry and rendering; remove interaction APIs and GPU picking/outline resources"
     },
     {
@@ -168,27 +172,27 @@
       "reason": "Keep only the passive presentation lifecycle; remove study, input and interactive commands"
     },
     {
-      "path": "demo/crates/renderer/src/scene.rs",
+      "path": "crates/renderer/src/scene.rs",
       "reason": "Remove manual selection and multi-package state while retaining source geometry and descriptor validation"
     },
     {
-      "path": "demo/crates/renderer/src/glb.rs",
+      "path": "crates/renderer/src/glb.rs",
       "reason": "Remove manual selection and multi-package state while retaining source geometry and descriptor validation"
     },
     {
-      "path": "demo/crates/renderer/src/packed.rs",
+      "path": "crates/renderer/src/packed.rs",
       "reason": "Remove manual selection and multi-package state while retaining source geometry and descriptor validation"
     },
     {
-      "path": "demo/crates/renderer/src/camera.rs",
+      "path": "crates/renderer/src/camera.rs",
       "reason": "Retain presentation framing, interpolation and lighting math; remove manual camera and shadow-map helpers"
     },
     {
-      "path": "demo/crates/renderer/src/geometry.rs",
+      "path": "crates/renderer/src/geometry.rs",
       "reason": "Retain presentation framing, interpolation and lighting math; remove manual camera and shadow-map helpers"
     },
     {
-      "path": "demo/crates/renderer/tests/camera.rs",
+      "path": "crates/renderer/tests/camera.rs",
       "reason": "Test passive framing, validated rotations and camera interpolation instead of removed manual camera commands"
     },
     {
@@ -196,32 +200,32 @@
       "reason": "Prepare exactly one presentation model using the reduced WASM API"
     },
     {
-      "path": "demo/crates/renderer/src/inventory.rs",
+      "path": "crates/renderer/src/inventory.rs",
       "reason": "Retain the upstream shelf layout for the guided 100% separation scene; omit manual controls and intermediate explosion stages"
     },
     {
-      "path": "demo/crates/wasm/src/shaders/sphere.frag.glsl",
+      "path": "crates/wasm/src/shaders/sphere.frag.glsl",
       "reason": "Fade the app grid in after the model settles; omit it entirely on the opening chapter"
     }
   ],
   "removed": [
-    "demo/crates/renderer/src/explosion.rs",
-    "demo/crates/renderer/src/hand_input.rs",
-    "demo/crates/renderer/src/separation.rs",
-    "demo/crates/wasm/src/renderer/explosion.rs",
-    "demo/crates/wasm/src/renderer/separation.rs",
-    "demo/crates/wasm/src/shaders/outline.frag.glsl",
-    "demo/crates/wasm/src/shaders/outline.vert.glsl",
-    "demo/content/anatomy-terminology.json",
-    "demo/content/wikipedia-references.json",
-    "demo/content/openstax-references.json",
+    "crates/renderer/src/explosion.rs",
+    "crates/renderer/src/hand_input.rs",
+    "crates/renderer/src/separation.rs",
+    "crates/wasm/src/renderer/explosion.rs",
+    "crates/wasm/src/renderer/separation.rs",
+    "crates/wasm/src/shaders/outline.frag.glsl",
+    "crates/wasm/src/shaders/outline.vert.glsl",
+    "content/anatomy-terminology.json",
+    "content/wikipedia-references.json",
+    "content/openstax-references.json",
     "src/demo/viewer/input.ts",
     "src/demo/viewer/graphics.ts",
     "src/demo/study/session.ts",
     "src/demo/camera-controls.ts",
     "src/demo/shortcuts.ts",
-    "demo/crates/renderer/tests/assembly.rs",
-    "demo/crates/renderer/tests/explosion.rs",
-    "demo/crates/renderer/tests/hand_input.rs"
+    "crates/renderer/tests/assembly.rs",
+    "crates/renderer/tests/explosion.rs",
+    "crates/renderer/tests/hand_input.rs"
   ]
 }

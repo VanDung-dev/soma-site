@@ -4,10 +4,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
-import snapshot from '../demo/UPSTREAM.json' with { type: 'json' };
-import catalog from '../demo/content/catalog.json' with { type: 'json' };
+import snapshot from '../UPSTREAM.json' with { type: 'json' };
+import catalog from '../content/catalog.json' with { type: 'json' };
 import metadata from '../public/models/z-anatomy/skeletal-system.json' with { type: 'json' };
-import regions from '../demo/fixtures/regions.json' with { type: 'json' };
+import regions from '../fixtures/regions.json' with { type: 'json' };
 
 const root = path.resolve(fileURLToPath(new URL('..', import.meta.url)));
 const hash = (file: string) => createHash('sha256').update(fs.readFileSync(path.join(root, file))).digest('hex');
@@ -17,7 +17,7 @@ test('fork records removed files and preserves hashes for retained upstream sour
   for (const [source, expected] of Object.entries(snapshot.files)) {
     const local = source.startsWith('apps/web/src/') ? `src/demo/${source.slice('apps/web/src/'.length).replace(/^anatomy\//, '')}`
       : source.startsWith('apps/web/public/') ? `public/${source.slice('apps/web/public/'.length)}`
-      : source === 'content/catalog.json' ? 'demo/fixtures/upstream-catalog.json' : `demo/${source}`;
+      : source === 'content/catalog.json' ? 'fixtures/upstream-catalog.json' : source;
     if (snapshot.removed.includes(local)) assert.equal(fs.existsSync(path.join(root, local)), false, local);
     else if (!adapted.has(local)) assert.equal(hash(local), expected, local);
   }

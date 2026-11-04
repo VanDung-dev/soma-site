@@ -10,7 +10,10 @@ by the Database Center for Life Science. Model-derived media retain their
 upstream licenses and component-specific conditions. See public/models/
 z-anatomy/ATTRIBUTION.md, public/home/ATTRIBUTION.md and public/icons/ATTRIBUTION.md.
 Fonts: SIL Open Font License. See public/fonts/*-OFL.txt.
-The scroll-driven demo adapts the Rust renderer, catalog validation and viewer lifecycle from Soma. Interactive input, selection and hand controls were removed. The guided separated-bone scene retains the source renderer’s shelf layout. See demo/UPSTREAM.json and demo/LICENSE.
+The scroll-driven demo adapts the Rust renderer, catalog validation and
+viewer lifecycle from Soma. Interactive input, selection and hand controls
+were removed. The guided separated-bone scene retains the source renderer’s
+shelf layout. See UPSTREAM.json and LICENSE.
 
 Material Line Icons (line-md)
 Copyright 2020 Vjacheslav Trushkin. MIT License.
