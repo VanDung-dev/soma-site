@@ -1,0 +1,3 @@
+# Exclude tests from GitHub language statistics
+tests/** linguist-vendored
+crates/renderer/tests/** linguist-vendored
