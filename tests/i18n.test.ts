@@ -21,7 +21,6 @@ test('shared preference labels and English landing content use the selected lang
   assert.equal(translateMessage('appearance.mode.auto', 'en'), 'Auto');
   assert.equal(translateMessage('site.hero.title1', 'en'), 'Study anatomy.');
   assert.notEqual(translateMessage('site.loadError', 'en'), translateMessage('site.loadError', 'vi'));
-  assert.equal(translateMessage('credits.models.heading', 'en'), 'Anatomy models');
 });
 
 test('initial language defaults safely when storage is unavailable', () => {
@@ -29,7 +28,7 @@ test('initial language defaults safely when storage is unavailable', () => {
 });
 
 test('HTML metadata uses available translations', () => {
-  for (const file of ['index.html', 'credits.html']) {
+  for (const file of ['index.html']) {
     const html = fs.readFileSync(new URL('../' + file, import.meta.url), 'utf8');
     for (const match of html.matchAll(/data-i18n(?:-[\w-]+)?="([^"]+)"/g)) {
       assert.ok(translateMessage(match[1] as MessageKey, 'vi').trim(), match[1]);

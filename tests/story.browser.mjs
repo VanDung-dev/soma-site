@@ -120,7 +120,7 @@ try {
     await page.waitForSelector('.stage[data-ready][data-settled="true"]');
     await page.waitForFunction(() => getComputedStyle(document.querySelector('.stage>canvas')).opacity === '1');
     assert.equal(await page.locator('.product-section').count(), 4);
-    assert.equal(await page.locator('.intro-note,.release-note,a[href$="credits.html"]').count(), 0);
+    assert.equal(await page.locator('.intro-note,.release-note').count(), 0);
     const corners = await page.locator('.has-footer .site-scroll').evaluate(viewport => {
       const frame = viewport.closest('.module-content');
       const box = frame.getBoundingClientRect();
@@ -386,20 +386,13 @@ try {
   await failed.mouse.click(retryBounds.x + retryBounds.width / 2, retryBounds.y + retryBounds.height / 2);
   await failed.waitForSelector('.stage[data-ready][data-scene="1"][data-settled="true"]');
   assert.ok(Math.abs(await failed.locator('.site-scroll').evaluate(el => el.scrollTop) - retryPosition) < 2);
+  const noticeTabPromise = failed.context().waitForEvent('page');
   await failed.locator('.site-footer a').click();
-  assert.equal(new URL(failed.url()).pathname, '/credits');
-  await failed.reload();
-  assert.equal(await failed.locator('.credits-page h1').count(), 1);
-  assert.equal(await failed.locator('.site-footer').count(), 1);
-  const creditsFooter = await failed.locator('.site-footer').boundingBox();
-  await failed.locator('.site-scroll').evaluate(el => el.scrollTo({ top: el.scrollHeight, behavior: 'instant' }));
-  assert.deepEqual(await failed.locator('.site-footer').boundingBox(), creditsFooter, 'The credits footer must stay visible while its content scrolls');
-  assert.ok(creditsFooter.y + creditsFooter.height <= 760 - 5);
-
-  await failed.keyboard.press('Tab');
-  await failed.keyboard.press('Enter');
-  assert.equal(await failed.locator('#journey').evaluate(el => el === document.activeElement), true);
-  assert.equal(new URL(failed.url()).hash, '');
+  const noticeTab = await noticeTabPromise;
+  await noticeTab.waitForLoadState();
+  assert.equal(new URL(noticeTab.url()).pathname, '/NOTICE.txt');
+  assert.match(await noticeTab.locator('body').innerText(), /Soma Site/);
+  await noticeTab.close();
   await failed.close();
   const wasmFailure = await browser.newPage({ viewport: { width: 390, height: 844 }, reducedMotion: 'reduce' });
   wasmFailure.setDefaultTimeout(10000);

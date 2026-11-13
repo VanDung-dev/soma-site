@@ -10,7 +10,7 @@ function layout(root: HTMLElement, content: string): void {
       <a class="module-brand" href="./" data-i18n-aria-label="home.brand.label">${text('site.brand')}</a>
       <div class="module-preferences"><button id="language" class="page-toggle" type="button" data-i18n-aria-label="language.selector.label"></button><button id="theme" class="page-toggle theme-toggle" type="button"></button></div>
     </header><div class="module-content"><div class="model-space has-footer">
-      <div class="site-scroll">${content}</div><footer class="site-footer">${text('site.copyright')}${text('site.modelCredit', 'span', 'class="footer-credit"')}<a href="./credits">${text('site.credits')}${arrow}</a></footer>
+      <div class="site-scroll">${content}</div><footer class="site-footer">${text('site.copyright')}${text('site.modelCredit', 'span', 'class="footer-credit"')}<a href="./NOTICE.txt" target="_blank" rel="noopener noreferrer">${text('site.credits')}${arrow}</a></footer>
     </div></div></div>`;
   root.querySelector<HTMLButtonElement>('.skip-link')!.addEventListener('click', () => root.querySelector<HTMLElement>('main')!.focus());
 }
@@ -36,7 +36,7 @@ function windowInterface(): string {
 }
 
 function releaseSection(): string {
-  return `<section id="download" class="product-section closing-section" data-scene="3" aria-labelledby="sources-title"><div class="product-inner" tabindex="0" role="region" aria-labelledby="sources-title"><header class="product-header">${text('product.trust.title', 'h2', 'id="sources-title"')}${text('product.trust.body', 'p', 'class="description"')}</header><a class="source-link" href="./credits">${text('product.trust.action')}${arrow}</a>${downloadOptions()}</div></section>`;
+  return `<section id="download" class="product-section closing-section" data-scene="3" aria-labelledby="sources-title"><div class="product-inner" tabindex="0" role="region" aria-labelledby="sources-title"><header class="product-header">${text('product.trust.title', 'h2', 'id="sources-title"')}${text('product.trust.body', 'p', 'class="description"')}</header><a class="source-link" href="./NOTICE.txt" target="_blank" rel="noopener noreferrer">${text('product.trust.action')}${arrow}</a>${downloadOptions()}</div></section>`;
 }
 
 export function renderLandingPage(root: HTMLElement): void {
@@ -45,13 +45,4 @@ export function renderLandingPage(root: HTMLElement): void {
       <div class="stage" data-layout="hero"><div class="window">${windowInterface()}<div id="window-viewer-host"></div></div>${text('site.loading', 'p', 'id="load-status" class="load-status" role="status"')}<button id="retry" class="retry" type="button" hidden data-i18n="site.retry"></button></div>
       ${introductionSection()}
     ${appOverviewSection()}${spreadSection()}${releaseSection()}</div></main>`);
-}
-
-export function renderCreditsPage(root: HTMLElement): void {
-  const link = (key: MessageKey, href: string) => `<a href="${href}">${text(key)}</a>`;
-  layout(root, `<main id="journey" tabindex="-1" class="credits-page">${link('credits.back', './')}${text('site.credits', 'h1')}${text('credits.code', 'p')}${link('credits.codeLink', './LICENSE')}
-    ${text('credits.models.heading', 'h2')}${text('credits.models.source', 'p')}${text('credits.models.terms', 'p')}${link('credits.models.link', './models/z-anatomy/ATTRIBUTION.md')}${text('credits.models.changes', 'p')}
-    ${text('credits.images.heading', 'h2')}${text('credits.images.description', 'p')}<ul><li>${link('credits.images.preview', './home/ATTRIBUTION.md')}</li><li>${link('credits.images.icon', './icons/ATTRIBUTION.md')}</li></ul>
-    ${text('credits.fonts.heading', 'h2')}${text('credits.fonts.description', 'p')}<ul><li>${link('credits.lato', './fonts/Lato-OFL.txt')}</li><li>${link('credits.merriweather', './fonts/Merriweather-OFL.txt')}</li><li>${link('credits.icons', './licenses/line-md-MIT.txt')}</li><li>${link('credits.bootstrap', './licenses/bootstrap-icons-MIT.txt')}</li></ul>
-    ${text('credits.scope.heading', 'h2')}${text('credits.scope.description', 'p')}</main>`);
 }

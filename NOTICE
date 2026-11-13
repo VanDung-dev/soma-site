@@ -2,25 +2,22 @@ Soma Site
 Copyright (c) 2026 Nguyễn Lê Văn Dũng
 
 Original website source code is licensed under Apache-2.0. See LICENSE.
-Design tokens, fonts, app icon and skeletal model were copied
-from Soma. The demo includes only the skeletal package.
+The source revision and site-specific adaptations are recorded in UPSTREAM.json.
 
-Model: Z-Anatomy, Gauthier Kervyn and contributors, based on BodyParts3D
-by the Database Center for Life Science. Model-derived media retain their
-upstream licenses and component-specific conditions. See public/models/
-z-anatomy/ATTRIBUTION.md, public/home/ATTRIBUTION.md and public/icons/ATTRIBUTION.md.
-Fonts: SIL Open Font License. See public/fonts/*-OFL.txt.
-The scroll-driven demo adapts the Rust renderer, catalog validation and
-viewer lifecycle from Soma. Interactive input, selection and hand controls
-were removed. The guided separated-bone scene retains the source renderer’s
-shelf layout. See UPSTREAM.json and LICENSE.
+Anatomy models and source-derived catalog data retain their source licenses.
+Attribution and component terms are documented at models/z-anatomy/ATTRIBUTION.md.
+The home preview and app icons retain those terms; see home/ATTRIBUTION.md and
+icons/ATTRIBUTION.md. These paths are served from the public directory in the site.
+
+Fonts are licensed under the SIL Open Font License; texts are in fonts/. Dependencies
+retain their own licenses.
 
 Material Line Icons (line-md)
 Copyright 2020 Vjacheslav Trushkin. MIT License.
-See public/licenses/line-md-MIT.txt.
+See licenses/line-md-MIT.txt.
 https://github.com/cyberalien/line-md/blob/main/license.txt
 
 Bootstrap Icons (Windows and Apple logos)
 Copyright (c) 2019-2024 The Bootstrap Authors. MIT License.
-See public/licenses/bootstrap-icons-MIT.txt.
+See licenses/bootstrap-icons-MIT.txt.
 https://github.com/twbs/icons
