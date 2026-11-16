@@ -15,6 +15,7 @@
     "site.hero.title1": {"vi": "Học giải phẫu.", "en": "Study anatomy."},
     "site.hero.title2": {"vi": "Trong không gian 3D.", "en": "In 3D."},
     "site.hero.description": {"vi": "Soma giúp bạn tìm cấu trúc, quan sát vị trí và mối liên hệ trên mô hình 3D, rồi mở tài liệu để đọc tiếp. Một công cụ dùng cùng giáo trình và buổi thực hành giải phẫu của bạn.", "en": "Soma helps you find structures, explore their positions and relationships on a 3D model, and open related readings. A tool to use alongside your anatomy textbook and practical classes."},
+    "site.exploreDemo": {"vi": "Khám phá demo", "en": "Explore the demo"},
     "site.copyright": {"vi": "© 2026 Nguyễn Lê Văn Dũng", "en": "© 2026 Nguyễn Lê Văn Dũng"},
     "site.modelCredit": {"vi": "Mô hình: Z-Anatomy / BodyParts3D", "en": "Models: Z-Anatomy / BodyParts3D"},
     "site.credits": {"vi": "Tài nguyên và giấy phép", "en": "Assets and licenses"},
