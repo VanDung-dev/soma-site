@@ -17,4 +17,8 @@ the Database Center for Life Science. The adapted model packages retain the
 upstream CC BY-SA 4.0 license and the component-specific notices.
 The source-derived preview and icon retain those terms.
 
+## Windows demo previews
+
+`preview-learn-light.webp`, `preview-learn-dark.webp`, `preview-spread-light.webp` and `preview-spread-dark.webp` are static captures of the Soma WASM renderer. The learn images show the assembled skeletal system; the spread images show the separated structures. Their model-derived pixels retain the upstream CC BY-SA 4.0 license and component-specific notices.
+
 See [the full source credits, component terms and model limitations](../models/z-anatomy/ATTRIBUTION.md).

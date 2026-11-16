@@ -14,6 +14,7 @@ initTheme();
 const status = document.querySelector<HTMLElement>('#load-status')!;
 const retry = document.querySelector<HTMLButtonElement>('#retry')!;
 let dispose = () => {};
+const desktop = window.matchMedia('(min-width: 1280px)');
 function setStatus(key: MessageKey | null): void {
   if (key) status.dataset.i18n = key;
   else delete status.dataset.i18n;
@@ -21,10 +22,17 @@ function setStatus(key: MessageKey | null): void {
 }
 function loadScene(): void {
   dispose();
+  dispose = () => {};
+  if (!desktop.matches) {
+    setStatus(null);
+    retry.hidden = true;
+    return;
+  }
   setStatus('site.loading'); retry.hidden = true;
   dispose = mountWindow(setStatus, () => { retry.hidden = false; });
 }
 retry.addEventListener('click', loadScene);
+desktop.addEventListener('change', loadScene);
 window.addEventListener('pagehide', () => dispose());
 window.addEventListener('pageshow', event => { if (event.persisted) loadScene(); });
 loadScene();
