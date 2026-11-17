@@ -16,7 +16,7 @@ function layout(root: HTMLElement, content: string): void {
 }
 
 function downloadOptions(): string {
-  return `<div class="download-options" role="group" data-i18n-aria-label="product.release.platforms"><button type="button" class="download-option" disabled><span>${icon('windows')}Windows</span>${text('site.download.unavailable', 'small')}</button><button type="button" class="download-option" disabled><span>${icon('apple')}macOS</span>${text('site.download.unavailable', 'small')}</button></div>`;
+  return `<div class="download-options" role="group" data-i18n-aria-label="product.release.platforms"><a class="download-option" data-platform="windows" aria-disabled="true"><span>${icon('windows')}Windows <span class="platform-arch" data-i18n="site.download.arch.windows">x64</span></span>${text('site.download.unavailable', 'small')}</a><a class="download-option" data-platform="macos" aria-disabled="true"><span>${icon('apple')}macOS <span class="platform-arch" data-i18n="site.download.arch.macos">Apple Silicon</span></span>${text('site.download.unavailable', 'small')}</a></div>`;
 }
 
 function demoPreview(page: 'learn' | 'spread'): string {

@@ -130,7 +130,7 @@ try {
     });
     assert.ok(corners.matched && corners.radius === 12 && corners.outerBackground !== 'none' && corners.footerShadow === 'none' && corners.contentBottom <= corners.footerTop, 'Round the content viewport above the footer and keep its outside corners clear');
     assert.ok(corners.insets.every(inset => Math.abs(inset - 6) < 1), 'The workspace frame must keep its 6px outer spacing');
-    assert.equal(await page.locator('#start .download-option:disabled').count(), 2);
+    assert.equal(await page.locator('#start .download-option').count(), 2);
     assert.equal(await page.locator('#start .download-option [aria-hidden="true"] svg').count(), 2);
     const frame = page.locator('.window');
     const heroFrame = await frame.boundingBox();
@@ -341,7 +341,7 @@ try {
     await page.screenshot({ path: path.join(screenshots, name + '-english.png') });
     await visit('app-overview', 2);
     assert.equal(await page.locator('.stage>canvas').getAttribute('aria-label'), 'Explore 3D anatomy');
-    assert.equal(await page.locator('#download .download-option:disabled').count(), 2);
+    assert.equal(await page.locator('#download .download-option').count(), 2);
     assert.equal(await page.locator('#download .download-option [aria-hidden="true"] svg').count(), 2);
     assert.equal(models.length, 1);
     assert.ok(models[0].endsWith('/models/z-anatomy/skeletal-system.glb.br'));
