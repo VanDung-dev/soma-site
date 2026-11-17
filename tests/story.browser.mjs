@@ -121,13 +121,14 @@ try {
     await page.waitForFunction(() => getComputedStyle(document.querySelector('.stage>canvas')).opacity === '1');
     assert.equal(await page.locator('.product-section').count(), 4);
     assert.equal(await page.locator('.intro-note,.release-note').count(), 0);
-    const corners = await page.locator('.has-footer .site-scroll').evaluate(viewport => {
+    const corners = await page.locator('.module-content .site-scroll').evaluate(viewport => {
       const frame = viewport.closest('.module-content');
       const box = frame.getBoundingClientRect();
       const parent = getComputedStyle(frame), child = getComputedStyle(viewport);
-      return { matched: child.borderBottomLeftRadius === parent.borderBottomLeftRadius && child.borderBottomRightRadius === parent.borderBottomRightRadius, radius: parseFloat(child.borderBottomLeftRadius), background: child.backgroundImage, outerBackground: getComputedStyle(viewport.parentElement).backgroundImage, footerShadow: getComputedStyle(document.querySelector('.site-footer')).boxShadow, insets: [box.left, innerWidth - box.right, innerHeight - box.bottom] };
+      const footer = document.querySelector('.site-footer').getBoundingClientRect();
+      return { matched: child.borderBottomLeftRadius === parent.borderBottomLeftRadius && child.borderBottomRightRadius === parent.borderBottomRightRadius, radius: parseFloat(parent.borderBottomLeftRadius), outerBackground: getComputedStyle(viewport.parentElement).backgroundImage, footerShadow: getComputedStyle(document.querySelector('.site-footer')).boxShadow, insets: [box.left, innerWidth - box.right], footerTop: footer.top, contentBottom: box.bottom };
     });
-    assert.ok(corners.matched && corners.radius === 24 && corners.background !== 'none' && corners.outerBackground === 'none' && corners.footerShadow === 'none', 'Round the content viewport above the footer and keep its outside corners clear');
+    assert.ok(corners.matched && corners.radius === 12 && corners.outerBackground !== 'none' && corners.footerShadow === 'none' && corners.contentBottom <= corners.footerTop, 'Round the content viewport above the footer and keep its outside corners clear');
     assert.ok(corners.insets.every(inset => Math.abs(inset - 6) < 1), 'The workspace frame must keep its 6px outer spacing');
     assert.equal(await page.locator('#start .download-option:disabled').count(), 2);
     assert.equal(await page.locator('#start .download-option [aria-hidden="true"] svg').count(), 2);
@@ -251,7 +252,7 @@ try {
     assert.equal(await page.locator('.stage').getAttribute('data-progress'), '1', 'The closing scene must finish before reaching the final section anchor');
     const earlyClosing = await frame.boundingBox();
     for (const key of ['x', 'y', 'width', 'height']) assert.ok(Math.abs(earlyClosing[key] - completedClosing[key]) < 1, 'The final model must already be at its reading position');
-    assert.equal(await page.locator('#download .product-inner').evaluate(panel => getComputedStyle(panel).visibility === 'visible' && Math.abs(panel.getBoundingClientRect().left - document.querySelector('.site-scroll').getBoundingClientRect().left - panel.offsetLeft) < 1), true, 'The final text must arrive with the model and remain visible');
+    assert.equal(await page.locator('#download .product-inner').evaluate(panel => getComputedStyle(panel).visibility === 'visible' && Math.abs(panel.getBoundingClientRect().left - panel.closest('.product-section').getBoundingClientRect().left - panel.offsetLeft) < 1), true, 'The final text must arrive with the model and remain visible');
     assert.equal(await page.locator('#sources-title').textContent(), 'Nguồn dữ liệu và giới hạn');
     assert.equal(await page.locator('#essentials,.product-facts').count(), 0);
     assert.equal(await page.getByText('Soma đang được hoàn thiện.', { exact: true }).count(), 0);
@@ -314,7 +315,7 @@ try {
             const panel = section.querySelector('.product-inner');
             const rect = panel.getBoundingClientRect();
             const visible = getComputedStyle(panel).visibility !== 'hidden' && rect.right > 0 && rect.left < viewport.getBoundingClientRect().right && rect.bottom > viewport.getBoundingClientRect().top && rect.top < viewport.getBoundingClientRect().bottom;
-            return { id: section.id, x: rect.x, y: rect.y, restX: viewport.getBoundingClientRect().left + panel.offsetLeft, visible, pinned: Math.abs(rect.top - viewport.getBoundingClientRect().top - parseFloat(getComputedStyle(section).paddingTop)) < 1, overlap: appVisible && rect.left < app.right - 1 && rect.right > app.left + 1 && rect.top < app.bottom - 1 && rect.bottom > app.top + 1 };
+            return { id: section.id, x: rect.x, y: rect.y, restX: section.getBoundingClientRect().left + panel.offsetLeft, visible, pinned: Math.abs(rect.top - viewport.getBoundingClientRect().top - parseFloat(getComputedStyle(section).paddingTop)) < 1, overlap: appVisible && rect.left < app.right - 1 && rect.right > app.left + 1 && rect.top < app.bottom - 1 && rect.bottom > app.top + 1 };
           });
           return copies;
         }, { index, progress });

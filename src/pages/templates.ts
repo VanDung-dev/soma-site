@@ -5,13 +5,13 @@ const text = (key: MessageKey, tag = 'span', attributes = '') => `<${tag} data-i
 const arrow = icon('right');
 
 function layout(root: HTMLElement, content: string): void {
-  root.innerHTML = `<div class="module-page"><button class="skip-link" type="button" data-i18n="site.skip"></button>
+  root.innerHTML = `<button class="skip-link" type="button" data-i18n="site.skip"></button><div class="module-page">
     <header class="module-header">
       <a class="module-brand" href="./" data-i18n-aria-label="home.brand.label">${text('site.brand')}</a>
       <div class="module-preferences"><button id="language" class="page-toggle" type="button" data-i18n-aria-label="language.selector.label"></button><button id="theme" class="page-toggle theme-toggle" type="button"></button></div>
-    </header><div class="module-content"><div class="model-space has-footer">
-      <div class="site-scroll">${content}</div><footer class="site-footer">${text('site.copyright')}${text('site.modelCredit', 'span', 'class="footer-credit"')}<a href="./NOTICE.txt" target="_blank" rel="noopener noreferrer">${text('site.credits')}${arrow}</a></footer>
-    </div></div></div>`;
+    </header><div class="module-content"><div class="model-space">
+      <div class="site-scroll">${content}</div>
+    </div></div><footer class="site-footer">${text('site.copyright')}${text('site.modelCredit', 'span', 'class="footer-credit"')}<a href="./NOTICE.txt" target="_blank" rel="noopener noreferrer">${text('site.credits')}${arrow}</a></footer></div>`;
   root.querySelector<HTMLButtonElement>('.skip-link')!.addEventListener('click', () => root.querySelector<HTMLElement>('main')!.focus());
 }
 
