@@ -1,24 +1,10 @@
 import { icons } from './icons.ts';
 import { t } from '../i18n/index.ts';
+import { getEffectiveTheme, getInitialTheme, nextTheme, storeTheme, type Theme } from './theme-preference.ts';
 
-export type Theme = 'auto' | 'light' | 'dark';
+export type { Theme } from './theme-preference.ts';
+
 type ThemeTransition = { finished: Promise<void>; skipTransition: () => void };
-const themeStorageKey = 'human-atlas-theme';
-
-export function getInitialTheme(): Theme {
-  try {
-    const theme = window.localStorage.getItem(themeStorageKey);
-    return theme === 'light' || theme === 'dark' ? theme : 'auto';
-  } catch { return 'auto'; }
-}
-
-export function getEffectiveTheme(theme: Theme): 'light' | 'dark' {
-  return theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : theme === 'dark' ? 'dark' : 'light';
-}
-
-export function nextTheme(theme: Theme): Theme {
-  return theme === 'auto' ? 'light' : theme === 'light' ? 'dark' : 'auto';
-}
 
 export function initTheme(): void {
   let theme = getInitialTheme();
@@ -94,7 +80,7 @@ export function initTheme(): void {
   applyTheme();
   toggle.addEventListener('click', () => {
     theme = nextTheme(theme);
-    try { window.localStorage.setItem(themeStorageKey, theme); } catch {}
+    storeTheme(theme);
     applyTheme();
   });
   mediaQuery.addEventListener('change', () => { if (theme === 'auto') applyTheme(); });

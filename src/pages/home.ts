@@ -3,7 +3,8 @@ import '../styles/theme.css';
 import '../styles/layout.css';
 import '../styles/site.css';
 import { renderLandingPage } from './templates.ts';
-import { fetchReleaseInfo, updateDownloadOptions } from './releases.ts';
+import { fetchReleaseInfo } from './releases.ts';
+import { updateDownloadOptions } from './releases-dom.ts';
 import { initLanguage, t } from '../i18n/index.ts';
 import type { MessageKey } from '../i18n/index.ts';
 import { initTheme } from '../ui/theme.ts';
@@ -31,7 +32,13 @@ function loadScene(): void {
     return;
   }
   setStatus('site.loading'); retry.hidden = true;
-  dispose = mountWindow(setStatus, () => { retry.hidden = false; });
+  try {
+    dispose = mountWindow(setStatus, () => { retry.hidden = false; });
+  } catch (cause) {
+    console.error(cause);
+    setStatus('site.loadError');
+    retry.hidden = false;
+  }
 }
 retry.addEventListener('click', loadScene);
 desktop.addEventListener('change', loadScene);

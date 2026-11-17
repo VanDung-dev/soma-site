@@ -1,18 +1,17 @@
 import type { Catalog } from '../catalog/types';
 import { getWasm } from '../core';
 import type { AnatomyViewer } from '../../generated/viewer/wasm';
-import type { ViewerError, Viewport } from './contracts';
+import type { Presentation, ViewerError, ViewerOptions } from './contracts';
 import { loadModel } from './loader';
-
-type Presentation = { visible: string[]; focus: string[]; yaw: number; spread: boolean; viewport: Viewport };
+import { PresentationController } from './presentation-controller';
+import { renderPixelSize, SurfaceMetrics } from './surface';
 
 export class ViewerRuntime {
   private viewer: AnatomyViewer | undefined;
   private canvas = document.createElement('canvas');
   private viewport: HTMLElement;
-  private viewportBounds = new DOMRect();
-  private hostWidth = 1;
-  private hostRadius = 0;
+  private surface: SurfaceMetrics;
+  private presentation = new PresentationController();
   private renderLimit = 4096;
   private abort = new AbortController();
   private motion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -25,17 +24,10 @@ export class ViewerRuntime {
   private renderFrame = 0;
   private resizePending = false;
   private backdrop = 0;
-  private presentation: Presentation | undefined;
-  private scrollPresentation: { from: Presentation; to: Presentation; progress: number } | undefined;
 
-  constructor(private host: HTMLElement, private options: {
-    viewport: Viewport;
-    onBeforeRender: () => void;
-    onReady: (ids: string[]) => void;
-    onError: (status: ViewerError) => void;
-    onSettled: () => void;
-  }) {
+  constructor(private host: HTMLElement, private options: ViewerOptions) {
     this.viewport = host.closest<HTMLElement>('.stage')!;
+    this.surface = new SurfaceMetrics(host, this.viewport);
     this.canvas.setAttribute('role', 'img');
     this.canvas.tabIndex = -1;
     this.viewport.appendChild(this.canvas);
@@ -82,15 +74,13 @@ export class ViewerRuntime {
         if (!this.loading && this.viewer && !this.failed && !this.ready) this.options.onReady(this.structureIds);
         this.options.onBeforeRender();
         if (this.loading || !this.viewer || this.failed) return;
-        if (this.resizePending) {
-          this.resizeCanvas();
-        }
+        if (this.resizePending) this.resizeCanvas();
         this.updateRenderRegion();
         const now = performance.now();
-        const cameraAnimating = this.viewer!.advance_camera(now);
-        this.viewer!.set_backdrop(this.backdrop);
-        const revealing = this.viewer!.advance_reconstruction(now);
-        this.viewer!.render();
+        const cameraAnimating = this.viewer.advance_camera(now);
+        this.viewer.set_backdrop(this.backdrop);
+        const revealing = this.viewer.advance_reconstruction(now);
+        this.viewer.render();
         this.ready = true;
         if (cameraAnimating || revealing) this.scheduleRender();
         else if (!this.renderFrame) this.options.onSettled();
@@ -105,44 +95,25 @@ export class ViewerRuntime {
 
   private resizeCanvas() {
     this.resizePending = false;
-    this.viewportBounds = this.viewport.getBoundingClientRect();
-    const { width, height } = this.viewportBounds;
-    if (width > 0 && height > 0) {
-      const style = getComputedStyle(this.host);
-      this.hostWidth = parseFloat(style.width);
-      this.hostRadius = parseFloat(style.borderTopLeftRadius);
-      const ratio = Math.min(window.devicePixelRatio, 2, this.renderLimit / width, this.renderLimit / height);
-      const renderWidth = Math.max(1, Math.round(width * ratio));
-      const renderHeight = Math.max(1, Math.round(height * ratio));
-      if (this.canvas.width !== renderWidth || this.canvas.height !== renderHeight) this.viewer!.resize(renderWidth, renderHeight);
-      this.updateRenderRegion();
-      if (this.scrollPresentation) {
-        const { from, to, progress } = this.scrollPresentation;
-        this.presentation = from;
-        this.applyPresentation(false);
-        this.viewer!.begin_scroll_transition(to.focus, to.viewport, to.yaw, to.spread);
-        this.presentation = to;
-        this.viewer!.set_scroll_progress(progress);
-      } else if (this.presentation) this.applyPresentation(!this.motion.matches);
-      else this.viewer!.reframe(...this.options.viewport);
-    }
+    const viewport = this.surface.measureViewport();
+    if (viewport.width <= 0 || viewport.height <= 0) return;
+    const size = renderPixelSize(viewport, this.renderLimit);
+    if (this.canvas.width !== size.width || this.canvas.height !== size.height) this.viewer!.resize(size.width, size.height);
+    this.updateRenderRegion();
+    this.presentation.reflow(this.viewer!, this.options.viewport, !this.motion.matches);
   }
 
   private updateRenderRegion() {
-    const host = this.host.getBoundingClientRect();
-    const viewport = this.viewportBounds;
-    if (host.width <= 0 || host.height <= 0) return;
-    const radius = this.hostRadius * host.width / this.hostWidth;
-    this.canvas.style.clipPath = `inset(${host.top - viewport.top}px ${viewport.right - host.right}px ${viewport.bottom - host.bottom}px ${host.left - viewport.left}px round ${radius}px)`;
-    this.viewer!.set_render_region((viewport.left - host.left) / host.width, (viewport.top - host.top) / host.height, viewport.width / host.width, viewport.height / host.height, host.width / host.height);
+    const region = this.surface.region();
+    if (!region) return;
+    this.canvas.style.clipPath = region.clipPath;
+    this.viewer!.set_render_region(region.left, region.top, region.width, region.height, region.aspect);
   }
 
-  present(visible: string[], focus: string[], yaw: number, spread: boolean, viewport: Viewport) {
+  present(visible: string[], focus: string[], yaw: number, spread: boolean, viewport: Presentation['viewport']) {
     if (!this.viewer || this.failed || this.disposed) return;
-    this.scrollPresentation = undefined;
-    this.presentation = { visible, focus, yaw, spread, viewport };
     try {
-      this.applyPresentation(this.ready && !this.motion.matches);
+      this.presentation.present(this.viewer, { visible, focus, yaw, spread, viewport }, this.ready && !this.motion.matches);
       this.scheduleRender();
     } catch (cause) { this.fail(cause, 'processError'); }
   }
@@ -150,21 +121,15 @@ export class ViewerRuntime {
   beginScrollTransition(from: Presentation, to: Presentation, progress: number) {
     if (!this.viewer || this.failed || this.disposed) return;
     try {
-      this.presentation = from;
-      this.applyPresentation(false);
-      this.viewer.begin_scroll_transition(to.focus, to.viewport, to.yaw, to.spread);
-      this.presentation = to;
-      this.scrollPresentation = { from, to, progress };
-      this.viewer.set_scroll_progress(progress);
+      this.presentation.beginScroll(this.viewer, from, to, progress);
       this.scheduleRender();
     } catch (cause) { this.fail(cause, 'processError'); }
   }
 
   setScrollProgress(progress: number) {
-    if (!this.viewer || !this.scrollPresentation || this.failed || this.disposed) return;
+    if (!this.viewer || this.failed || this.disposed) return;
     try {
-      this.scrollPresentation.progress = progress;
-      this.viewer.set_scroll_progress(progress);
+      this.presentation.setScrollProgress(this.viewer, progress);
       this.scheduleRender();
     } catch (cause) { this.fail(cause, 'processError'); }
   }
@@ -175,16 +140,10 @@ export class ViewerRuntime {
     this.scheduleRender();
   }
 
-  private applyPresentation(animate: boolean) {
-    const { visible, focus, yaw, spread, viewport } = this.presentation!;
-    const now = animate ? performance.now() : undefined;
-    this.viewer!.set_visibility(visible, now);
-    this.viewer!.frame_region(focus, viewport, yaw, spread, now);
-  }
-
   private motionChanged = () => {
     if (this.loading || !this.motion.matches || !this.viewer || this.failed || this.disposed) return;
     try {
+      this.presentation.finishScroll(this.viewer);
       this.viewer.finish_reconstruction();
       this.viewer.finish_camera_transition();
       this.scheduleRender();
