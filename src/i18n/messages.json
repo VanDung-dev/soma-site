@@ -19,6 +19,7 @@
     "site.copyright": {"vi": "© 2026 Nguyễn Lê Văn Dũng", "en": "© 2026 Nguyễn Lê Văn Dũng"},
     "site.modelCredit": {"vi": "Mô hình: Z-Anatomy / BodyParts3D", "en": "Models: Z-Anatomy / BodyParts3D"},
     "site.credits": {"vi": "Tài nguyên và giấy phép", "en": "Assets and licenses"},
+    "site.github": {"vi": "Soma trên GitHub", "en": "Soma on GitHub"},
     "study.heroTitle": {"vi": "Học giải phẫu. Trong không gian 3D.", "en": "Study anatomy. In 3D."},
     "site.download.unavailable": {"vi": "Chưa phát hành", "en": "Not yet released"},
     "site.download.prerelease": {"vi": "Bản thử nghiệm", "en": "Pre-release"},

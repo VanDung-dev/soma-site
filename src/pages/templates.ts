@@ -3,15 +3,20 @@ import { icon } from '../ui/icons.ts';
 
 const text = (key: MessageKey, tag = 'span', attributes = '') => `<${tag} data-i18n="${key}" ${attributes}></${tag}>`;
 const arrow = icon('right');
+const somaRepositoryUrl = 'https://github.com/VanDung-dev/soma';
 
 function layout(root: HTMLElement, content: string): void {
   root.innerHTML = `<button class="skip-link" type="button" data-i18n="site.skip"></button><div class="module-page">
     <header class="module-header">
       <a class="module-brand" href="./" data-i18n-aria-label="home.brand.label">${text('site.brand')}</a>
-      <div class="module-preferences"><button id="language" class="page-toggle" type="button" data-i18n-aria-label="language.selector.label"></button><button id="theme" class="page-toggle theme-toggle" type="button"></button></div>
+      <div class="module-preferences">
+        <a class="page-toggle github-link" href="${somaRepositoryUrl}" target="_blank" rel="noopener noreferrer" data-i18n-aria-label="site.github" data-i18n-title="site.github">${icon('github')}</a>
+        <button id="language" class="page-toggle" type="button" data-i18n-aria-label="language.selector.label"></button>
+        <button id="theme" class="page-toggle theme-toggle" type="button"></button>
+      </div>
     </header><div class="module-content"><div class="model-space">
       <div class="site-scroll">${content}</div>
-    </div></div><footer class="site-footer">${text('site.copyright')}${text('site.modelCredit', 'span', 'class="footer-credit"')}<a href="./NOTICE.txt" target="_blank" rel="noopener noreferrer">${text('site.credits')}${arrow}</a></footer></div>`;
+    </div></div></div>`;
   root.querySelector<HTMLButtonElement>('.skip-link')!.addEventListener('click', () => root.querySelector<HTMLElement>('main')!.focus());
 }
 
@@ -44,7 +49,20 @@ function windowInterface(): string {
 }
 
 function releaseSection(): string {
-  return `<section id="download" class="product-section closing-section" data-scene="3" aria-labelledby="sources-title"><div class="product-inner" tabindex="0" role="region" aria-labelledby="sources-title"><header class="product-header">${text('product.trust.title', 'h2', 'id="sources-title"')}${text('product.trust.body', 'p', 'class="description"')}</header><a class="source-link" href="./NOTICE.txt" target="_blank" rel="noopener noreferrer">${text('product.trust.action')}${arrow}</a>${downloadOptions()}</div></section>`;
+  return `<section id="download" class="product-section closing-section" data-scene="3" aria-labelledby="sources-title">
+    <div class="product-inner" tabindex="0" role="region" aria-labelledby="sources-title">
+      <header class="product-header">${text('product.trust.title', 'h2', 'id="sources-title"')}${text('product.trust.body', 'p', 'class="description"')}</header>
+      <a class="source-link" href="./NOTICE.txt" target="_blank" rel="noopener noreferrer">${text('product.trust.action')}${arrow}</a>
+      ${downloadOptions()}
+      <footer class="site-footer">
+        ${text('site.copyright')}${text('site.modelCredit')}
+        <div class="footer-links">
+          <a href="./NOTICE.txt" target="_blank" rel="noopener noreferrer">${text('site.credits')}${arrow}</a>
+          <a href="${somaRepositoryUrl}" target="_blank" rel="noopener noreferrer">${text('site.github')}${arrow}</a>
+        </div>
+      </footer>
+    </div>
+  </section>`;
 }
 
 export function renderLandingPage(root: HTMLElement): void {

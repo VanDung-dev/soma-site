@@ -125,11 +125,13 @@ try {
       const frame = viewport.closest('.module-content');
       const box = frame.getBoundingClientRect();
       const parent = getComputedStyle(frame), child = getComputedStyle(viewport);
-      const footer = document.querySelector('.site-footer').getBoundingClientRect();
-      return { matched: child.borderBottomLeftRadius === parent.borderBottomLeftRadius && child.borderBottomRightRadius === parent.borderBottomRightRadius, radius: parseFloat(parent.borderBottomLeftRadius), outerBackground: getComputedStyle(viewport.parentElement).backgroundImage, footerShadow: getComputedStyle(document.querySelector('.site-footer')).boxShadow, insets: [box.left, innerWidth - box.right], footerTop: footer.top, contentBottom: box.bottom };
+      return { matched: child.borderBottomLeftRadius === parent.borderBottomLeftRadius && child.borderBottomRightRadius === parent.borderBottomRightRadius, radius: parseFloat(parent.borderBottomLeftRadius), outerBackground: getComputedStyle(viewport.parentElement).backgroundImage, insets: [box.left, innerWidth - box.right, innerHeight - box.bottom] };
     });
-    assert.ok(corners.matched && corners.radius === 12 && corners.outerBackground !== 'none' && corners.footerShadow === 'none' && corners.contentBottom <= corners.footerTop, 'Round the content viewport above the footer and keep its outside corners clear');
+    assert.ok(corners.matched && corners.radius === 12 && corners.outerBackground !== 'none', 'The scroll viewport must inherit the workspace frame corners');
     assert.ok(corners.insets.every(inset => Math.abs(inset - 6) < 1), 'The workspace frame must keep its 6px outer spacing');
+    const footer = page.locator('#download .product-inner > .download-options + .site-footer');
+    assert.equal(await footer.count(), 1);
+    assert.equal(await footer.locator('a[href="https://github.com/VanDung-dev/soma"]').textContent(), 'Soma trên GitHub');
     assert.equal(await page.locator('#start .download-option').count(), 2);
     assert.equal(await page.locator('#start .download-option [aria-hidden="true"] svg').count(), 2);
     const frame = page.locator('.window');
@@ -337,6 +339,12 @@ try {
     await visit('download', 3);
     assert.equal(await page.locator('#sources-title').textContent(), 'Sources and limitations');
     assert.equal(await page.locator('html').getAttribute('lang'), 'en');
+    assert.equal(await footer.getByRole('link', { name: 'Soma on GitHub' }).count(), 1);
+    assert.ok(await footer.evaluate(el => {
+      const box = el.getBoundingClientRect();
+      const frame = el.closest('.module-content').getBoundingClientRect();
+      return box.left > frame.left && box.right < frame.right && getComputedStyle(el).boxShadow === 'none';
+    }), 'The footer must sit inside the final section with space from the workspace frame');
     await visit('learn', 1);
     await page.screenshot({ path: path.join(screenshots, name + '-english.png') });
     await visit('app-overview', 2);
@@ -388,7 +396,7 @@ try {
   await failed.waitForSelector('.stage[data-ready][data-scene="1"][data-settled="true"]');
   assert.ok(Math.abs(await failed.locator('.site-scroll').evaluate(el => el.scrollTop) - retryPosition) < 2);
   const noticeTabPromise = failed.context().waitForEvent('page');
-  await failed.locator('.site-footer a').click();
+  await failed.locator('.site-footer a[href="./NOTICE.txt"]').click();
   const noticeTab = await noticeTabPromise;
   await noticeTab.waitForLoadState();
   assert.equal(new URL(noticeTab.url()).pathname, '/NOTICE.txt');
