@@ -1,0 +1,23 @@
+Soma Site
+Copyright (c) 2026 Nguyễn Lê Văn Dũng
+
+Original website source code is licensed under Apache-2.0. See LICENSE.
+The source revision and site-specific adaptations are recorded in UPSTREAM.json.
+
+Anatomy models and source-derived catalog data retain their source licenses.
+Attribution and component terms are documented at models/z-anatomy/ATTRIBUTION.md.
+The home preview and app icons retain those terms; see home/ATTRIBUTION.md and
+icons/ATTRIBUTION.md. These paths are served from the public directory in the site.
+
+Fonts are licensed under the SIL Open Font License; texts are in fonts/. Dependencies
+retain their own licenses.
+
+Material Line Icons (line-md)
+Copyright 2020 Vjacheslav Trushkin. MIT License.
+See licenses/line-md-MIT.txt.
+https://github.com/cyberalien/line-md/blob/main/license.txt
+
+Bootstrap Icons (Windows, Apple, and GitHub logos)
+Copyright (c) 2019-2024 The Bootstrap Authors. MIT License.
+See licenses/bootstrap-icons-MIT.txt.
+https://github.com/twbs/icons
