@@ -20,6 +20,10 @@ export interface ReleaseInfo {
   macosUrl: string;
 }
 
+export type ReleaseResult =
+  | { status: 'available'; release: ReleaseInfo }
+  | { status: 'unpublished' | 'error' };
+
 export const RELEASES_API_URL = 'https://api.github.com/repos/VanDung-dev/soma/releases';
 export const RELEASES_PAGE_URL = 'https://github.com/VanDung-dev/soma/releases';
 
@@ -48,17 +52,18 @@ export function pickRelease(releases: GitHubRelease[]): ReleaseInfo | null {
   };
 }
 
-export async function fetchReleaseInfo(fetchFn: typeof fetch = fetch): Promise<ReleaseInfo | null> {
+export async function fetchReleaseInfo(fetchFn: typeof fetch = fetch): Promise<ReleaseResult> {
   try {
     const res = await fetchFn(RELEASES_API_URL, {
       headers: { Accept: 'application/vnd.github.v3+json' },
     });
-    if (!res.ok) return null;
+    if (!res.ok) return { status: 'error' };
     const data = (await res.json()) as GitHubRelease[];
-    if (!Array.isArray(data)) return null;
-    return pickRelease(data);
+    if (!Array.isArray(data)) return { status: 'error' };
+    const release = pickRelease(data);
+    return release ? { status: 'available', release } : { status: 'unpublished' };
   } catch {
-    return null;
+    return { status: 'error' };
   }
 }
 

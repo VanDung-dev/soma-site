@@ -120,7 +120,7 @@ try {
     await page.waitForSelector('.stage[data-ready][data-settled="true"]');
     await page.waitForFunction(() => getComputedStyle(document.querySelector('.stage>canvas')).opacity === '1');
     assert.equal(await page.locator('.product-section').count(), 4);
-    assert.equal(await page.locator('.intro-note,.release-note').count(), 0);
+    assert.equal(await page.locator('.intro-note').count(), 0);
     const corners = await page.locator('.module-content .site-scroll').evaluate(viewport => {
       const frame = viewport.closest('.module-content');
       const box = frame.getBoundingClientRect();
@@ -129,7 +129,7 @@ try {
     });
     assert.ok(corners.matched && corners.radius === 12 && corners.outerBackground !== 'none', 'The scroll viewport must inherit the workspace frame corners');
     assert.ok(corners.insets.every(inset => Math.abs(inset - 6) < 1), 'The workspace frame must keep its 6px outer spacing');
-    const footer = page.locator('#download .product-inner > .download-options + .site-footer');
+    const footer = page.locator('#download .product-inner > .download-options + .release-note + .site-footer');
     assert.equal(await footer.count(), 1);
     assert.equal(await footer.locator('a[href="https://github.com/VanDung-dev/soma"]').textContent(), 'Soma trên GitHub');
     assert.equal(await page.locator('#start .download-option').count(), 2);
@@ -255,7 +255,7 @@ try {
     const earlyClosing = await frame.boundingBox();
     for (const key of ['x', 'y', 'width', 'height']) assert.ok(Math.abs(earlyClosing[key] - completedClosing[key]) < 1, 'The final model must already be at its reading position');
     assert.equal(await page.locator('#download .product-inner').evaluate(panel => getComputedStyle(panel).visibility === 'visible' && Math.abs(panel.getBoundingClientRect().left - panel.closest('.product-section').getBoundingClientRect().left - panel.offsetLeft) < 1), true, 'The final text must arrive with the model and remain visible');
-    assert.equal(await page.locator('#sources-title').textContent(), 'Nguồn dữ liệu và giới hạn');
+    assert.equal(await page.locator('#download-title').textContent(), 'Tải Soma');
     assert.equal(await page.locator('#essentials,.product-facts').count(), 0);
     assert.equal(await page.getByText('Soma đang được hoàn thiện.', { exact: true }).count(), 0);
     const closingEye = await page.evaluate(() => window.CameraEye);
@@ -337,7 +337,7 @@ try {
     }
     await page.locator('#language').click();
     await visit('download', 3);
-    assert.equal(await page.locator('#sources-title').textContent(), 'Sources and limitations');
+    assert.equal(await page.locator('#download-title').textContent(), 'Download Soma');
     assert.equal(await page.locator('html').getAttribute('lang'), 'en');
     assert.equal(await footer.getByRole('link', { name: 'Soma on GitHub' }).count(), 1);
     assert.ok(await footer.evaluate(el => {
@@ -348,7 +348,7 @@ try {
     await visit('learn', 1);
     await page.screenshot({ path: path.join(screenshots, name + '-english.png') });
     await visit('app-overview', 2);
-    assert.equal(await page.locator('.stage>canvas').getAttribute('aria-label'), 'Explore 3D anatomy');
+    assert.equal(await page.locator('.stage>canvas').getAttribute('aria-label'), 'View the skeletal system');
     assert.equal(await page.locator('#download .download-option').count(), 2);
     assert.equal(await page.locator('#download .download-option [aria-hidden="true"] svg').count(), 2);
     assert.equal(models.length, 1);

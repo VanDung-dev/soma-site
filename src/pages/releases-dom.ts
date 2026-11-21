@@ -1,38 +1,33 @@
 import { t } from '../i18n/index.ts';
 import type { MessageKey } from '../i18n/index.ts';
-import type { ReleaseInfo } from './releases.ts';
+import type { ReleaseResult } from './releases.ts';
 
-export function updateDownloadOptions(release: ReleaseInfo | null): void {
+export function updateDownloadOptions(result: ReleaseResult): void {
+  const release = result.status === 'available' ? result.release : null;
   const options = document.querySelectorAll<HTMLAnchorElement>('.download-option');
   for (const option of options) {
-    if (!release) {
+    let statusKey: MessageKey = result.status === 'error' ? 'site.download.error' : 'site.download.unpublished';
+    if (release) {
+      const url = option.dataset.platform === 'windows' ? release.windowsUrl : release.macosUrl;
+      option.href = url;
+      option.target = '_blank';
+      option.rel = 'noopener noreferrer';
+      option.removeAttribute('aria-disabled');
+      const downloadStatus = release.isPrerelease ? 'site.download.prerelease' : 'site.download.stable';
+      statusKey = url === release.releaseUrl ? 'site.download.releasePage' : downloadStatus;
+    } else {
       option.setAttribute('aria-disabled', 'true');
       option.removeAttribute('href');
       option.removeAttribute('target');
       option.removeAttribute('rel');
-      const small = option.querySelector<HTMLElement>('small');
-      if (small) {
-        small.dataset.i18n = 'site.download.unavailable';
-        small.textContent = t('site.download.unavailable');
-      }
-      continue;
     }
 
-    const platform = option.dataset.platform;
-    if (platform === 'windows') {
-      option.href = release.windowsUrl;
-    } else if (platform === 'macos') {
-      option.href = release.macosUrl;
+    const status = option.querySelector<HTMLElement>('.release-status');
+    if (status) {
+      status.dataset.i18n = statusKey;
+      status.textContent = t(statusKey);
     }
-    option.removeAttribute('aria-disabled');
-    option.target = '_blank';
-    option.rel = 'noopener noreferrer';
-
-    const small = option.querySelector<HTMLElement>('small');
-    if (small) {
-      delete small.dataset.i18n;
-      const statusKey: MessageKey = release.isPrerelease ? 'site.download.prerelease' : 'site.download.latest';
-      small.innerHTML = `<span class="release-status" data-i18n="${statusKey}">${t(statusKey)}</span> · <span class="release-tag">${release.tagName}</span>`;
-    }
+    const tag = option.querySelector<HTMLElement>('.release-tag');
+    if (tag) tag.textContent = release ? ` · ${release.tagName}` : '';
   }
 }

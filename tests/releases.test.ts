@@ -128,7 +128,10 @@ test('pickRelease falls back to html_url when platform assets are missing', () =
   assert.equal(result.macosUrl, 'https://github.com/VanDung-dev/soma/releases/tag/v0.1.0-dev1');
 });
 
-test('fetchReleaseInfo returns null without fallback on network error or non-200 status', async () => {
+test('fetchReleaseInfo distinguishes an empty release list from a failed request', async () => {
+  const emptyFetch = async () => Response.json([]);
+  assert.deepEqual(await fetchReleaseInfo(emptyFetch), { status: 'unpublished' });
+
   const failingFetch = async () => ({
     ok: false,
     status: 403,
@@ -136,11 +139,11 @@ test('fetchReleaseInfo returns null without fallback on network error or non-200
   } as Response);
 
   const result = await fetchReleaseInfo(failingFetch as unknown as typeof fetch);
-  assert.equal(result, null);
+  assert.deepEqual(result, { status: 'error' });
 
   const throwingFetch = async () => {
     throw new Error('Network failure');
   };
   const result2 = await fetchReleaseInfo(throwingFetch as unknown as typeof fetch);
-  assert.equal(result2, null);
+  assert.deepEqual(result2, { status: 'error' });
 });

@@ -21,11 +21,27 @@ function layout(root: HTMLElement, content: string): void {
 }
 
 function downloadOptions(): string {
-  return `<div class="download-options" role="group" data-i18n-aria-label="product.release.platforms"><a class="download-option" data-platform="windows" aria-disabled="true"><span>${icon('windows')}Windows <span class="platform-arch" data-i18n="site.download.arch.windows">x64</span></span>${text('site.download.unavailable', 'small')}</a><a class="download-option" data-platform="macos" aria-disabled="true"><span>${icon('apple')}macOS <span class="platform-arch" data-i18n="site.download.arch.macos">Apple Silicon</span></span>${text('site.download.unavailable', 'small')}</a></div>`;
+  const status = `<small>${text('site.download.loading', 'span', 'class="release-status"')}<span class="release-tag"></span></small>`;
+  return `<div class="download-options" role="group" data-i18n-aria-label="product.release.platforms">
+    <a class="download-option" data-platform="windows" aria-disabled="true">
+      <span>${icon('windows')}Windows <span class="platform-arch" data-i18n="site.download.arch.windows">x64</span></span>
+      ${status}
+    </a>
+    <a class="download-option" data-platform="macos" aria-disabled="true">
+      <span>${icon('apple')}macOS <span class="platform-arch" data-i18n="site.download.arch.macos">Apple Silicon</span></span>
+      ${status}
+    </a>
+  </div>`;
 }
 
 function demoPreview(page: 'learn' | 'spread'): string {
-  return `<figure class="compact-preview" aria-hidden="true"><img class="preview-light" src="./home/preview-${page}-light.webp" width="1200" height="800" alt="" /><img class="preview-dark" src="./home/preview-${page}-dark.webp" width="1200" height="800" alt="" /></figure>`;
+  return `<figure class="compact-preview">
+    <div class="preview-frame">
+      <img class="preview-light" src="./home/preview-${page}-light.webp" width="1200" height="800" alt="" />
+      <img class="preview-dark" src="./home/preview-${page}-dark.webp" width="1200" height="800" alt="" />
+    </div>
+    ${text(`window.preview.${page}`, 'figcaption')}
+  </figure>`;
 }
 
 function appLogoPreview(): string {
@@ -33,11 +49,11 @@ function appLogoPreview(): string {
 }
 
 function introductionSection(): string {
-  return `<section id="start" class="product-section intro-section" data-scene="0" aria-labelledby="hero-title"><div class="product-inner" tabindex="0" role="region" aria-labelledby="hero-title">${appLogoPreview()}<header class="product-header">${text('site.hero.eyebrow', 'p', 'class="eyebrow"')}<h1 id="hero-title" data-i18n-aria-label="study.heroTitle">${text('site.hero.title1')}<br />${text('site.hero.title2', 'em')}</h1>${text('site.hero.description', 'p', 'class="description"')}</header><a class="compact-explore" href="#learn">${text('site.exploreDemo')}${arrow}</a>${downloadOptions()}</div></section>`;
+  return `<section id="start" class="product-section intro-section" data-scene="0" aria-labelledby="hero-title"><div class="product-inner" tabindex="0" role="region" aria-labelledby="hero-title">${appLogoPreview()}<header class="product-header"><h1 id="hero-title" data-i18n-aria-label="study.heroTitle">${text('site.hero.title1')}<br />${text('site.hero.title2', 'span', 'class="hero-accent"')}</h1>${text('site.hero.description', 'p', 'class="description"')}</header><a class="compact-explore" href="#learn">${text('site.exploreDemo')}${arrow}</a>${downloadOptions()}</div></section>`;
 }
 
 function appOverviewSection(): string {
-  return `<section id="learn" class="product-section feature-section overview-section" data-scene="1" aria-labelledby="overview-title"><div class="product-inner" tabindex="0" role="region" aria-labelledby="overview-title"><header class="product-header">${text('window.scope', 'p', 'class="eyebrow"')}${text('window.title', 'h2', 'id="overview-title"')}${text('window.overview', 'p', 'class="description"')}</header>${text('window.hint', 'p', 'class="feature-note"')}${demoPreview('learn')}</div></section>`;
+  return `<section id="learn" class="product-section feature-section overview-section" data-scene="1" aria-labelledby="overview-title"><div class="product-inner" tabindex="0" role="region" aria-labelledby="overview-title"><header class="product-header">${text('window.title', 'h2', 'id="overview-title"')}${text('window.overview', 'p', 'class="description"')}</header>${text('window.hint', 'p', 'class="feature-note"')}${demoPreview('learn')}</div></section>`;
 }
 
 function spreadSection(): string {
@@ -49,13 +65,13 @@ function windowInterface(): string {
 }
 
 function releaseSection(): string {
-  return `<section id="download" class="product-section closing-section" data-scene="3" aria-labelledby="sources-title">
-    <div class="product-inner" tabindex="0" role="region" aria-labelledby="sources-title">
-      <header class="product-header">${text('product.trust.title', 'h2', 'id="sources-title"')}${text('product.trust.body', 'p', 'class="description"')}</header>
-      <a class="source-link" href="./NOTICE.txt" target="_blank" rel="noopener noreferrer">${text('product.trust.action')}${arrow}</a>
+  return `<section id="download" class="product-section closing-section" data-scene="3" aria-labelledby="download-title">
+    <div class="product-inner" tabindex="0" role="region" aria-labelledby="download-title">
+      <header class="product-header">${text('site.download.title', 'h2', 'id="download-title"')}</header>
       ${downloadOptions()}
+      ${text('product.trust.body', 'p', 'class="release-note"')}
       <footer class="site-footer">
-        ${text('site.copyright')}${text('site.modelCredit')}
+        ${text('site.copyright')}
         <div class="footer-links">
           <a href="./NOTICE.txt" target="_blank" rel="noopener noreferrer">${text('site.credits')}${arrow}</a>
           <a href="${somaRepositoryUrl}" target="_blank" rel="noopener noreferrer">${text('site.github')}${arrow}</a>
